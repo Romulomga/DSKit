@@ -35,7 +35,7 @@ public struct DSNumberField: View {
                     .foregroundStyle(.secondary)
             }
             TextField(placeholder, text: $text)
-                .keyboardType(.numbersAndPunctuation)
+                .keyboardType(.numberPad)
                 .textFieldStyle(.plain)
                 .font(DSTypography.body())
                 .focused($isFocused)
@@ -49,6 +49,16 @@ public struct DSNumberField: View {
                 )
                 .animation(.easeOut(duration: 0.15), value: isFocused)
                 .animation(.easeOut(duration: 0.15), value: hasAnyError)
+                .toolbar {
+                    if isFocused {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button(LocalizedStringKey(String(localized: "Done", bundle: .dsKit))) {
+                                isFocused = false
+                            }
+                        }
+                    }
+                }
                 .onAppear {
                     let target = value.map(String.init) ?? ""
                     if text != target { text = target }

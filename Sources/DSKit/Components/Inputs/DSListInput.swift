@@ -12,25 +12,21 @@ public struct DSListInput: View {
     @Binding private var text: String
     private let helperText: LocalizedStringKey?
 
-    private let itemLabel: (Int) -> String
-    private let duplicateLabel: (Int) -> String
+    private let itemLabel: (Int) -> LocalizedStringKey
+    private let duplicateLabel: (Int) -> LocalizedStringKey
     private let pasteTitle: LocalizedStringKey
     private let clearTitle: LocalizedStringKey
     private let onClearRequested: (() -> Void)?
 
     public init(
         title: LocalizedStringKey? = nil,
-        placeholder: LocalizedStringKey = LocalizedStringKey(String(localized: "One item per line", bundle: .dsKit)),
+        placeholder: LocalizedStringKey = "One item per line",
         text: Binding<String>,
         helperText: LocalizedStringKey? = nil,
-        itemLabel: @escaping (Int) -> String = { count in
-            String(localized: "\(count) items", bundle: .dsKit)
-        },
-        duplicateLabel: @escaping (Int) -> String = { count in
-            String(localized: "\(count) duplicates", bundle: .dsKit)
-        },
-        pasteTitle: LocalizedStringKey = LocalizedStringKey(String(localized: "Paste", bundle: .dsKit)),
-        clearTitle: LocalizedStringKey = LocalizedStringKey(String(localized: "Clear", bundle: .dsKit)),
+        itemLabel: @escaping (Int) -> LocalizedStringKey = { count in "\(count) items" },
+        duplicateLabel: @escaping (Int) -> LocalizedStringKey = { count in "\(count) duplicates" },
+        pasteTitle: LocalizedStringKey = "Paste",
+        clearTitle: LocalizedStringKey = "Clear",
         onClearRequested: (() -> Void)? = nil
     ) {
         self.title = title
@@ -54,7 +50,7 @@ public struct DSListInput: View {
 
             ZStack(alignment: .topLeading) {
                 if text.isEmpty {
-                    Text(placeholder)
+                    Text(placeholder, bundle: .dsKit)
                         .font(DSTypography.body())
                         .foregroundStyle(.tertiary)
                         .padding(.horizontal, DSSpacing.md + 4)
@@ -72,8 +68,10 @@ public struct DSListInput: View {
                         if isFocused {
                             ToolbarItemGroup(placement: .keyboard) {
                                 Spacer()
-                                Button(LocalizedStringKey(String(localized: "Done", bundle: .dsKit))) {
+                                Button {
                                     isFocused = false
+                                } label: {
+                                    Text("Done", bundle: .dsKit)
                                 }
                             }
                         }
@@ -92,13 +90,13 @@ public struct DSListInput: View {
 
             HStack(spacing: DSSpacing.md) {
                 Label {
-                    Text(itemLabel(itemCount))
+                    Text(itemLabel(itemCount), bundle: .dsKit)
                 } icon: {
                     Image(systemName: "list.bullet")
                 }
                 if duplicateCount > 0 {
                     Label {
-                        Text(duplicateLabel(duplicateCount))
+                        Text(duplicateLabel(duplicateCount), bundle: .dsKit)
                     } icon: {
                         Image(systemName: "doc.on.doc")
                     }
@@ -108,14 +106,22 @@ public struct DSListInput: View {
                 Button {
                     paste()
                 } label: {
-                    Label(pasteTitle, systemImage: "doc.on.clipboard")
+                    Label {
+                        Text(pasteTitle, bundle: .dsKit)
+                    } icon: {
+                        Image(systemName: "doc.on.clipboard")
+                    }
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(DSColor.primary)
                 Button(role: .destructive) {
                     handleClearTap()
                 } label: {
-                    Label(clearTitle, systemImage: "trash")
+                    Label {
+                        Text(clearTitle, bundle: .dsKit)
+                    } icon: {
+                        Image(systemName: "trash")
+                    }
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(text.isEmpty ? Color.secondary : DSColor.error)

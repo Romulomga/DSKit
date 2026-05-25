@@ -18,7 +18,7 @@ public struct DSNumberField: View {
         placeholder: LocalizedStringKey = "0",
         value: Binding<Int?>,
         errorMessage: LocalizedStringKey? = nil,
-        invalidNumberMessage: LocalizedStringKey = LocalizedStringKey(String(localized: "Enter a valid number", bundle: .dsKit))
+        invalidNumberMessage: LocalizedStringKey = "Enter a valid number"
     ) {
         self.title = title
         self.placeholder = placeholder
@@ -53,8 +53,10 @@ public struct DSNumberField: View {
                     if isFocused {
                         ToolbarItemGroup(placement: .keyboard) {
                             Spacer()
-                            Button(LocalizedStringKey(String(localized: "Done", bundle: .dsKit))) {
+                            Button {
                                 isFocused = false
+                            } label: {
+                                Text("Done", bundle: .dsKit)
                             }
                         }
                     }
@@ -97,7 +99,7 @@ public struct DSNumberField: View {
     @ViewBuilder
     private func errorLabel(_ key: LocalizedStringKey) -> some View {
         Label {
-            Text(key)
+            Text(key, bundle: .dsKit)
         } icon: {
             Image(systemName: "exclamationmark.circle.fill")
         }

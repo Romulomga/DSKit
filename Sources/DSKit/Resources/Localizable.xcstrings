@@ -1,0 +1,258 @@
+{
+  "sourceLanguage" : "en",
+  "version" : "1.0",
+  "strings" : {
+    "%lld duplicates" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld duplicate" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld duplicates" } }
+            }
+          }
+        },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld duplicata" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld duplicatas" } }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld duplicado" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld duplicados" } }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld doublon" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld doublons" } }
+            }
+          }
+        },
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld Duplikat" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld Duplikate" } }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld duplicato" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld duplicati" } }
+            }
+          }
+        },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld件の重複" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "중복 %lld개" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 个重复" } },
+        "ar" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld مكرر" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld مكررات" } }
+            }
+          }
+        }
+      }
+    },
+    "%lld items" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld item" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld items" } }
+            }
+          }
+        },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld item" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld itens" } }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld elemento" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld elementos" } }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld élément" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld éléments" } }
+            }
+          }
+        },
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld Eintrag" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld Einträge" } }
+            }
+          }
+        },
+        "it" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld elemento" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld elementi" } }
+            }
+          }
+        },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld件" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "%lld개 항목" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "%lld 个项目" } },
+        "ar" : {
+          "variations" : {
+            "plural" : {
+              "one" : { "stringUnit" : { "state" : "translated", "value" : "عنصر %lld" } },
+              "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld عناصر" } }
+            }
+          }
+        }
+      }
+    },
+    "Clear" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Clear" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Limpar" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Borrar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Effacer" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Löschen" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Cancella" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "クリア" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지우기" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "清除" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "مسح" } }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Continue" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Continuar" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Continuar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Continuer" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Weiter" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Continua" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "続ける" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "계속" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "继续" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "متابعة" } }
+      }
+    },
+    "Enter a valid number" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enter a valid number" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Digite um número válido" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Introduce un número válido" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Saisissez un nombre valide" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Gib eine gültige Zahl ein" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Inserisci un numero valido" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "有効な数字を入力してください" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "유효한 숫자를 입력해 주세요" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请输入有效的数字" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "أدخل رقمًا صالحًا" } }
+      }
+    },
+    "One item per line" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "One item per line" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Um item por linha" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Un elemento por línea" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un élément par ligne" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein Eintrag pro Zeile" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Un elemento per riga" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "1行に1項目" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "한 줄에 한 항목" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "每行一个项目" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "عنصر واحد في كل سطر" } }
+      }
+    },
+    "Paste" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Paste" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Colar" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pegar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Coller" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Einsetzen" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Incolla" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ペースト" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "붙여넣기" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "粘贴" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "لصق" } }
+      }
+    },
+    "PRO" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "PRO" } }
+      }
+    },
+    "Restore purchases" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Restore purchases" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Restaurar compras" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Restaurar compras" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Restaurer les achats" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Käufe wiederherstellen" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Ripristina acquisti" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "購入を復元" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구매 복원" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "恢复购买" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "استعادة المشتريات" } }
+      }
+    },
+    "Try again" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Try again" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Tentar de novo" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Reintentar" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Réessayer" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Erneut versuchen" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Riprova" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "再試行" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "다시 시도" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "重试" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "حاول مجددًا" } }
+      }
+    },
+    "Upgrade to Pro" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Upgrade to Pro" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Fazer upgrade para o Pro" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mejorar a Pro" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Passer à Pro" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Auf Pro upgraden" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Passa a Pro" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Proにアップグレード" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Pro로 업그레이드" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "升级到 Pro" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "الترقية إلى Pro" } }
+      }
+    }
+  }
+}

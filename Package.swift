@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "DSKit",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v17)
     ],
@@ -15,7 +16,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "DSKit"
+            name: "DSKit",
+            resources: [
+                .process("Resources")
+            ]
         ),
         .testTarget(
             name: "DSKitTests",

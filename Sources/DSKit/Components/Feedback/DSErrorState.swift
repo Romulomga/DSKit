@@ -12,7 +12,7 @@ public struct DSErrorState: View {
         systemImage: String = "exclamationmark.triangle",
         title: LocalizedStringKey,
         message: LocalizedStringKey,
-        retryTitle: LocalizedStringKey? = "Try again",
+        retryTitle: LocalizedStringKey? = LocalizedStringKey(String(localized: "Try again", bundle: .dsKit)),
         onRetry: (() -> Void)? = nil
     ) {
         self.systemImage = systemImage

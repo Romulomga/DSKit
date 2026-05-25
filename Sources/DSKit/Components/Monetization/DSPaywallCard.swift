@@ -15,11 +15,11 @@ public struct DSPaywallCard: View {
     private let onRestore: () -> Void
 
     public init(
-        title: LocalizedStringKey = "Upgrade to Pro",
+        title: LocalizedStringKey = LocalizedStringKey(String(localized: "Upgrade to Pro", bundle: .dsKit)),
         features: [LocalizedStringKey],
         priceText: LocalizedStringKey? = nil,
-        purchaseTitle: LocalizedStringKey = "Continue",
-        restoreTitle: LocalizedStringKey = "Restore purchases",
+        purchaseTitle: LocalizedStringKey = LocalizedStringKey(String(localized: "Continue", bundle: .dsKit)),
+        restoreTitle: LocalizedStringKey = LocalizedStringKey(String(localized: "Restore purchases", bundle: .dsKit)),
         onPurchase: @escaping () -> Void,
         onRestore: @escaping () -> Void
     ) {

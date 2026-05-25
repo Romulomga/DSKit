@@ -17,7 +17,7 @@ public struct DSNumberField: View {
         placeholder: LocalizedStringKey = "0",
         value: Binding<Int?>,
         errorMessage: LocalizedStringKey? = nil,
-        invalidNumberMessage: LocalizedStringKey = "Enter a valid number"
+        invalidNumberMessage: LocalizedStringKey = LocalizedStringKey(String(localized: "Enter a valid number", bundle: .dsKit))
     ) {
         self.title = title
         self.placeholder = placeholder

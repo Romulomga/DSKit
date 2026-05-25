@@ -4,7 +4,7 @@ import SwiftUI
 public struct DSProBadge: View {
     private let text: LocalizedStringKey
 
-    public init(_ text: LocalizedStringKey = "PRO") {
+    public init(_ text: LocalizedStringKey = LocalizedStringKey(String(localized: "PRO", bundle: .dsKit))) {
         self.text = text
     }
 

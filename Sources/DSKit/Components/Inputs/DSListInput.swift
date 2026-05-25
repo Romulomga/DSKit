@@ -19,13 +19,17 @@ public struct DSListInput: View {
 
     public init(
         title: LocalizedStringKey? = nil,
-        placeholder: LocalizedStringKey = "One item per line",
+        placeholder: LocalizedStringKey = LocalizedStringKey(String(localized: "One item per line", bundle: .dsKit)),
         text: Binding<String>,
         helperText: LocalizedStringKey? = nil,
-        itemLabel: @escaping (Int) -> String = { "\($0) items" },
-        duplicateLabel: @escaping (Int) -> String = { "\($0) duplicates" },
-        pasteTitle: LocalizedStringKey = "Paste",
-        clearTitle: LocalizedStringKey = "Clear",
+        itemLabel: @escaping (Int) -> String = { count in
+            String(localized: "\(count) items", bundle: .dsKit)
+        },
+        duplicateLabel: @escaping (Int) -> String = { count in
+            String(localized: "\(count) duplicates", bundle: .dsKit)
+        },
+        pasteTitle: LocalizedStringKey = LocalizedStringKey(String(localized: "Paste", bundle: .dsKit)),
+        clearTitle: LocalizedStringKey = LocalizedStringKey(String(localized: "Clear", bundle: .dsKit)),
         onClearRequested: (() -> Void)? = nil
     ) {
         self.title = title

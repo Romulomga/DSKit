@@ -11,6 +11,7 @@ public struct DSNumberField: View {
 
     @State private var text: String = ""
     @State private var hasInternalError: Bool = false
+    @FocusState private var isFocused: Bool
 
     public init(
         title: LocalizedStringKey? = nil,
@@ -37,15 +38,17 @@ public struct DSNumberField: View {
                 .keyboardType(.numbersAndPunctuation)
                 .textFieldStyle(.plain)
                 .font(DSTypography.body())
+                .focused($isFocused)
                 .padding(.horizontal, DSSpacing.md)
                 .padding(.vertical, DSSpacing.sm + 2)
-                .background(DSColor.surface)
+                .background(DSColor.elevatedSurface)
                 .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
-                        .strokeBorder(hasAnyError ? DSColor.error.opacity(0.6) : Color.clear,
-                                      lineWidth: 1)
+                        .strokeBorder(borderColor, lineWidth: borderWidth)
                 )
+                .animation(.easeOut(duration: 0.15), value: isFocused)
+                .animation(.easeOut(duration: 0.15), value: hasAnyError)
                 .onAppear {
                     let target = value.map(String.init) ?? ""
                     if text != target { text = target }
@@ -70,6 +73,16 @@ public struct DSNumberField: View {
     }
 
     private var hasAnyError: Bool { externalError != nil || hasInternalError }
+
+    private var borderColor: Color {
+        if hasAnyError { return DSColor.error.opacity(0.7) }
+        if isFocused   { return DSColor.primary.opacity(0.7) }
+        return DSColor.border.opacity(0.5)
+    }
+
+    private var borderWidth: CGFloat {
+        (isFocused || hasAnyError) ? 1.5 : 1
+    }
 
     @ViewBuilder
     private func errorLabel(_ key: LocalizedStringKey) -> some View {

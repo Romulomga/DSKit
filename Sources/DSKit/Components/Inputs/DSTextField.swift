@@ -3,6 +3,7 @@ import SwiftUI
 /// Styled text field with title, optional helper/error and optional clear button.
 public struct DSTextField: View {
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
+    @FocusState private var isFocused: Bool
 
     private let title: LocalizedStringKey?
     private let placeholder: LocalizedStringKey
@@ -38,6 +39,7 @@ public struct DSTextField: View {
                 TextField(placeholder, text: $text)
                     .textFieldStyle(.plain)
                     .font(DSTypography.body())
+                    .focused($isFocused)
                 if showsClearButton && !text.isEmpty {
                     Button {
                         text = ""
@@ -52,13 +54,14 @@ public struct DSTextField: View {
             }
             .padding(.horizontal, DSSpacing.md)
             .padding(.vertical, DSSpacing.sm + 2)
-            .background(DSColor.surface)
+            .background(DSColor.elevatedSurface)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
-                    .strokeBorder(errorMessage != nil ? DSColor.error.opacity(0.6) : Color.clear,
-                                  lineWidth: 1)
+                    .strokeBorder(borderColor, lineWidth: borderWidth)
             )
+            .animation(.easeOut(duration: 0.15), value: isFocused)
+            .animation(.easeOut(duration: 0.15), value: errorMessage != nil)
 
             if let errorMessage {
                 Label {
@@ -74,6 +77,16 @@ public struct DSTextField: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+
+    private var borderColor: Color {
+        if errorMessage != nil { return DSColor.error.opacity(0.7) }
+        if isFocused           { return DSColor.primary.opacity(0.7) }
+        return DSColor.border.opacity(0.5)
+    }
+
+    private var borderWidth: CGFloat {
+        (isFocused || errorMessage != nil) ? 1.5 : 1
     }
 }
 

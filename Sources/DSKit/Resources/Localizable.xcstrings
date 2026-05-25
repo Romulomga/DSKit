@@ -156,6 +156,20 @@
         "ar" : { "stringUnit" : { "state" : "translated", "value" : "متابعة" } }
       }
     },
+    "Done" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Done" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Concluído" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Listo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Terminé" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Fertig" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Fine" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "完了" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "완료" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "完成" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "تم" } }
+      }
+    },
     "Enter a valid number" : {
       "localizations" : {
         "en" : { "stringUnit" : { "state" : "translated", "value" : "Enter a valid number" } },

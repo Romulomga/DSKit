@@ -3,24 +3,27 @@ import SwiftUI
 /// Text field specialised for integer input. Exposes a `Binding<Int?>` so
 /// `nil` cleanly represents an empty/invalid state.
 public struct DSNumberField: View {
-    private let title: String?
-    private let placeholder: String
+    private let title: LocalizedStringKey?
+    private let placeholder: LocalizedStringKey
     @Binding private var value: Int?
-    private let externalError: String?
+    private let externalError: LocalizedStringKey?
+    private let invalidNumberMessage: LocalizedStringKey
 
     @State private var text: String = ""
-    @State private var internalError: String? = nil
+    @State private var hasInternalError: Bool = false
 
     public init(
-        title: String? = nil,
-        placeholder: String = "0",
+        title: LocalizedStringKey? = nil,
+        placeholder: LocalizedStringKey = "0",
         value: Binding<Int?>,
-        errorMessage: String? = nil
+        errorMessage: LocalizedStringKey? = nil,
+        invalidNumberMessage: LocalizedStringKey = "Enter a valid number"
     ) {
         self.title = title
         self.placeholder = placeholder
         self._value = value
         self.externalError = errorMessage
+        self.invalidNumberMessage = invalidNumberMessage
     }
 
     public var body: some View {
@@ -40,41 +43,58 @@ public struct DSNumberField: View {
                 .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
-                        .strokeBorder(displayedError != nil ? DSColor.error.opacity(0.6) : Color.clear,
+                        .strokeBorder(hasAnyError ? DSColor.error.opacity(0.6) : Color.clear,
                                       lineWidth: 1)
                 )
                 .onAppear {
-                    if let v = value, text.isEmpty {
-                        text = String(v)
-                    }
+                    let target = value.map(String.init) ?? ""
+                    if text != target { text = target }
                 }
                 .onChange(of: text) { _, newValue in
                     validate(newValue)
                 }
+                .onChange(of: value) { _, newValue in
+                    let target = newValue.map(String.init) ?? ""
+                    if text != target {
+                        text = target
+                        hasInternalError = false
+                    }
+                }
 
-            if let msg = displayedError {
-                Label(msg, systemImage: "exclamationmark.circle.fill")
-                    .font(DSTypography.footnote())
-                    .foregroundStyle(DSColor.error)
+            if let externalError {
+                errorLabel(externalError)
+            } else if hasInternalError {
+                errorLabel(invalidNumberMessage)
             }
         }
     }
 
-    private var displayedError: String? { externalError ?? internalError }
+    private var hasAnyError: Bool { externalError != nil || hasInternalError }
+
+    @ViewBuilder
+    private func errorLabel(_ key: LocalizedStringKey) -> some View {
+        Label {
+            Text(key)
+        } icon: {
+            Image(systemName: "exclamationmark.circle.fill")
+        }
+        .font(DSTypography.footnote())
+        .foregroundStyle(DSColor.error)
+    }
 
     private func validate(_ raw: String) {
         let trimmed = raw.trimmingCharacters(in: .whitespaces)
         if trimmed.isEmpty {
             value = nil
-            internalError = nil
+            hasInternalError = false
             return
         }
         if let n = Int(trimmed) {
             value = n
-            internalError = nil
+            hasInternalError = false
         } else {
             value = nil
-            internalError = "Enter a valid number"
+            hasInternalError = true
         }
     }
 }
@@ -84,9 +104,15 @@ private struct DSNumberFieldPreviewHost: View {
     @State private var minimum: Int? = 1
     @State private var maximum: Int? = 100
     var body: some View {
-        HStack(spacing: DSSpacing.md) {
-            DSNumberField(title: "Min", value: $minimum)
-            DSNumberField(title: "Max", value: $maximum)
+        VStack(spacing: DSSpacing.md) {
+            HStack(spacing: DSSpacing.md) {
+                DSNumberField(title: "Min", value: $minimum)
+                DSNumberField(title: "Max", value: $maximum)
+            }
+            DSSecondaryButton("Reset") {
+                minimum = 1
+                maximum = 100
+            }
         }
     }
 }

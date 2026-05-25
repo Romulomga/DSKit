@@ -2,9 +2,9 @@ import SwiftUI
 
 /// Small "PRO" pill used to flag premium features in lists or headers.
 public struct DSProBadge: View {
-    private let text: String
+    private let text: LocalizedStringKey
 
-    public init(_ text: String = "PRO") {
+    public init(_ text: LocalizedStringKey = "PRO") {
         self.text = text
     }
 
@@ -22,7 +22,6 @@ public struct DSProBadge: View {
                 )
             )
             .clipShape(Capsule())
-            .accessibilityLabel("\(text) feature")
     }
 }
 

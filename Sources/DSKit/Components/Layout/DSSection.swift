@@ -2,10 +2,10 @@ import SwiftUI
 
 /// A titled vertical stack — group related content under a single headline.
 public struct DSSection<Content: View>: View {
-    private let title: String?
+    private let title: LocalizedStringKey?
     private let content: Content
 
-    public init(_ title: String? = nil, @ViewBuilder content: () -> Content) {
+    public init(_ title: LocalizedStringKey? = nil, @ViewBuilder content: () -> Content) {
         self.title = title
         self.content = content()
     }

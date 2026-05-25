@@ -3,16 +3,16 @@ import SwiftUI
 /// Full-screen error placeholder with an optional retry action.
 public struct DSErrorState: View {
     private let systemImage: String
-    private let title: String
-    private let message: String
-    private let retryTitle: String?
+    private let title: LocalizedStringKey
+    private let message: LocalizedStringKey
+    private let retryTitle: LocalizedStringKey?
     private let onRetry: (() -> Void)?
 
     public init(
         systemImage: String = "exclamationmark.triangle",
-        title: String,
-        message: String,
-        retryTitle: String? = "Try again",
+        title: LocalizedStringKey,
+        message: LocalizedStringKey,
+        retryTitle: LocalizedStringKey? = "Try again",
         onRetry: (() -> Void)? = nil
     ) {
         self.systemImage = systemImage
@@ -45,7 +45,6 @@ public struct DSErrorState: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, DSSpacing.xl)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(DSAccessibility.combinedLabel(title, message))
     }
 }
 

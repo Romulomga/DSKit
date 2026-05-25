@@ -5,14 +5,14 @@ import SwiftUI
 public struct DSToggleRow: View {
     @Environment(\.dsTheme) private var theme
 
-    private let title: String
-    private let subtitle: String?
+    private let title: LocalizedStringKey
+    private let subtitle: LocalizedStringKey?
     private let systemImage: String?
     @Binding private var isOn: Bool
 
     public init(
-        _ title: String,
-        subtitle: String? = nil,
+        _ title: LocalizedStringKey,
+        subtitle: LocalizedStringKey? = nil,
         systemImage: String? = nil,
         isOn: Binding<Bool>
     ) {
@@ -50,7 +50,6 @@ public struct DSToggleRow: View {
         .padding(.vertical, DSSpacing.xs)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(DSAccessibility.combinedLabel(title, subtitle))
     }
 }
 

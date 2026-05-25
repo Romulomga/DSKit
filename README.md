@@ -59,17 +59,19 @@ struct PickrApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .microToolsTheme(
-                    DSTheme(appName: "Pickr", primary: .orange)
-                )
+                .dsTheme(DSTheme(appName: "Pickr", primary: .orange))
+                .dsHapticsEnabled(userSettings.hapticsOn)
         }
     }
 }
 ```
 
-The modifier injects the theme into the SwiftUI environment **and** sets
+The `.dsTheme(_:)` modifier injects the theme into the SwiftUI environment **and** sets
 `.tint(theme.primary)` so native controls (Toggle, Picker, NavigationLink)
-inherit the same color.
+inherit the same color. `.dsHapticsEnabled(_:)` toggles every DSKit haptic
+emission for the entire subtree — wire it to your app's setting.
+
+> `.microToolsTheme(_:)` is still available but marked deprecated and forwards to `.dsTheme(_:)`.
 
 ## Component map
 
@@ -100,12 +102,14 @@ Open any file in Xcode and the canvas will pick them up.
 ## Design principles
 
 1. **Look like Apple, not like a brand.** Semantic system colors, system fonts, system materials. Themes only override tint and app name.
-2. **Respect the user.** Dynamic Type scales every text style; Reduce Motion suppresses press scale; VoiceOver gets combined labels on cards.
+2. **Respect the user.** Dynamic Type scales every text style; Reduce Motion suppresses press scale; VoiceOver gets `.combine`d cards.
 3. **One primary action per screen.** `DSPrimaryButton` is bold; secondary actions are tinted; destructive actions are explicit and red.
 4. **Soft surfaces.** `DSColor.surface` / `DSColor.elevatedSurface` over `DSColor.groupedBackground`. Shadows are extremely subtle and reserved for `DSCard(.elevated)` and floating overlays.
 5. **No fixed heights that break accessibility.** Buttons use `minHeight` rather than `frame(height:)`. Result text uses `minimumScaleFactor`.
-6. **Haptics are the punctuation.** Every interactive component nudges with `DSHaptics.light()` / `.medium()` — toggle off at call site if needed by using primitive SwiftUI controls.
-7. **UI-only.** Logic for random draws, parsing or storage lives in the app, not in the package. `DSListInput` exposes `lines`/`itemCount`/`duplicateCount` as conveniences, nothing more.
+6. **Haptics are punctuation, not noise.** Every interactive component nudges with `DSHaptics.light()` / `.medium()`. Disable globally with `.dsHapticsEnabled(false)`.
+7. **Strings are localizable by default.** Title/label/message props accept `LocalizedStringKey`, so passing string literals automatically participates in String Catalog localization in the consumer app. Dynamic content (a drawn name, a user-typed item) stays `String`.
+8. **No destructive shortcuts without consent.** `DSListInput`'s clear button calls `onClearRequested` if provided — let the app decide whether to confirm. Without the closure, it clears directly.
+9. **UI-only.** Logic for random draws, parsing or storage lives in the app, not in the package. `DSListInput` exposes `lines`/`itemCount`/`duplicateCount` as conveniences, nothing more.
 
 ## Architecture
 

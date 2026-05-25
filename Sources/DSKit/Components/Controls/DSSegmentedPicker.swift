@@ -3,9 +3,9 @@ import SwiftUI
 /// One option in a `DSSegmentedPicker`.
 public struct DSSegmentedOption<Value: Hashable>: Identifiable {
     public let id: Value
-    public let label: String
+    public let label: LocalizedStringKey
 
-    public init(_ value: Value, label: String) {
+    public init(_ value: Value, label: LocalizedStringKey) {
         self.id = value
         self.label = label
     }
@@ -16,12 +16,12 @@ public struct DSSegmentedOption<Value: Hashable>: Identifiable {
 public struct DSSegmentedPicker<Value: Hashable>: View {
     @Environment(\.dsTheme) private var theme
 
-    private let title: String?
+    private let title: LocalizedStringKey?
     @Binding private var selection: Value
     private let options: [DSSegmentedOption<Value>]
 
     public init(
-        _ title: String? = nil,
+        _ title: LocalizedStringKey? = nil,
         selection: Binding<Value>,
         options: [DSSegmentedOption<Value>]
     ) {
@@ -42,7 +42,11 @@ public struct DSSegmentedPicker<Value: Hashable>: View {
                     Text(option.label).tag(option.id)
                 }
             } label: {
-                Text(title ?? "")
+                if let title {
+                    Text(title)
+                } else {
+                    Text(verbatim: "")
+                }
             }
             .pickerStyle(.segmented)
             .tint(theme.primary)

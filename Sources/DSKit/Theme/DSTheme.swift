@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Per-app theme. Consumers override the primary tint and app name; everything
 /// else stays Apple-native via `DSColor` semantic colors.
-public struct DSTheme: Sendable {
+public struct DSTheme {
     public var appName: String
     public var primary: Color
     public var secondary: Color

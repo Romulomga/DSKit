@@ -7,18 +7,19 @@ public struct DSIconButton: View {
     public enum IconShape: Sendable { case circle, rounded }
 
     @Environment(\.dsTheme) private var theme
+    @Environment(\.dsHapticsEnabled) private var hapticsEnabled
 
     private let systemImage: String
     private let style: Style
     private let shape: IconShape
-    private let label: String
+    private let label: LocalizedStringKey
     private let action: () -> Void
 
     public init(
         systemImage: String,
         style: Style = .tinted,
         shape: IconShape = .circle,
-        accessibilityLabel label: String,
+        accessibilityLabel label: LocalizedStringKey,
         action: @escaping () -> Void
     ) {
         self.systemImage = systemImage
@@ -30,7 +31,7 @@ public struct DSIconButton: View {
 
     public var body: some View {
         Button {
-            DSHaptics.light()
+            DSHaptics.light(if: hapticsEnabled)
             action()
         } label: {
             Image(systemName: systemImage)

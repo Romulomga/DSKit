@@ -4,12 +4,13 @@ import SwiftUI
 /// inside a wrapping `HStack` / flow layout for filter groups.
 public struct DSOptionChip: View {
     @Environment(\.dsTheme) private var theme
+    @Environment(\.dsHapticsEnabled) private var hapticsEnabled
 
-    private let title: String
+    private let title: LocalizedStringKey
     private let systemImage: String?
     @Binding private var isSelected: Bool
 
-    public init(_ title: String, systemImage: String? = nil, isSelected: Binding<Bool>) {
+    public init(_ title: LocalizedStringKey, systemImage: String? = nil, isSelected: Binding<Bool>) {
         self.title = title
         self.systemImage = systemImage
         self._isSelected = isSelected
@@ -18,7 +19,7 @@ public struct DSOptionChip: View {
     public var body: some View {
         Button {
             isSelected.toggle()
-            DSHaptics.light()
+            DSHaptics.light(if: hapticsEnabled)
         } label: {
             HStack(spacing: DSSpacing.xs) {
                 if let systemImage {

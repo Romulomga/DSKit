@@ -4,13 +4,14 @@ import SwiftUI
 public struct DSSecondaryButton: View {
     @Environment(\.dsTheme) private var theme
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.dsHapticsEnabled) private var hapticsEnabled
 
-    private let title: String
+    private let title: LocalizedStringKey
     private let systemImage: String?
     private let action: () -> Void
 
     public init(
-        _ title: String,
+        _ title: LocalizedStringKey,
         systemImage: String? = nil,
         action: @escaping () -> Void
     ) {
@@ -21,7 +22,7 @@ public struct DSSecondaryButton: View {
 
     public var body: some View {
         Button {
-            DSHaptics.light()
+            DSHaptics.light(if: hapticsEnabled)
             action()
         } label: {
             HStack(spacing: DSSpacing.sm) {

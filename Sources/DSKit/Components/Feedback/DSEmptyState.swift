@@ -3,16 +3,16 @@ import SwiftUI
 /// "Nothing here yet" view. Centered icon + title + message + optional CTA.
 public struct DSEmptyState: View {
     private let systemImage: String
-    private let title: String
-    private let message: String
-    private let actionTitle: String?
+    private let title: LocalizedStringKey
+    private let message: LocalizedStringKey
+    private let actionTitle: LocalizedStringKey?
     private let action: (() -> Void)?
 
     public init(
         systemImage: String,
-        title: String,
-        message: String,
-        actionTitle: String? = nil,
+        title: LocalizedStringKey,
+        message: LocalizedStringKey,
+        actionTitle: LocalizedStringKey? = nil,
         action: (() -> Void)? = nil
     ) {
         self.systemImage = systemImage
@@ -45,7 +45,6 @@ public struct DSEmptyState: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, DSSpacing.xl)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(DSAccessibility.combinedLabel(title, message))
     }
 }
 

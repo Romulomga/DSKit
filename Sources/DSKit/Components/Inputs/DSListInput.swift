@@ -4,21 +4,39 @@ import UIKit
 /// Multiline editor for entering a list of items (names, options). Parses by
 /// newlines and reports item/duplicate counts but never mutates user input.
 public struct DSListInput: View {
-    private let title: String?
-    private let placeholder: String
+    @Environment(\.dsHapticsEnabled) private var hapticsEnabled
+
+    private let title: LocalizedStringKey?
+    private let placeholder: LocalizedStringKey
     @Binding private var text: String
-    private let helperText: String?
+    private let helperText: LocalizedStringKey?
+
+    private let itemLabel: (Int) -> String
+    private let duplicateLabel: (Int) -> String
+    private let pasteTitle: LocalizedStringKey
+    private let clearTitle: LocalizedStringKey
+    private let onClearRequested: (() -> Void)?
 
     public init(
-        title: String? = nil,
-        placeholder: String = "One item per line",
+        title: LocalizedStringKey? = nil,
+        placeholder: LocalizedStringKey = "One item per line",
         text: Binding<String>,
-        helperText: String? = nil
+        helperText: LocalizedStringKey? = nil,
+        itemLabel: @escaping (Int) -> String = { "\($0) items" },
+        duplicateLabel: @escaping (Int) -> String = { "\($0) duplicates" },
+        pasteTitle: LocalizedStringKey = "Paste",
+        clearTitle: LocalizedStringKey = "Clear",
+        onClearRequested: (() -> Void)? = nil
     ) {
         self.title = title
         self.placeholder = placeholder
         self._text = text
         self.helperText = helperText
+        self.itemLabel = itemLabel
+        self.duplicateLabel = duplicateLabel
+        self.pasteTitle = pasteTitle
+        self.clearTitle = clearTitle
+        self.onClearRequested = onClearRequested
     }
 
     public var body: some View {
@@ -49,24 +67,31 @@ public struct DSListInput: View {
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
 
             HStack(spacing: DSSpacing.md) {
-                Label("\(itemCount) items", systemImage: "list.bullet")
+                Label {
+                    Text(itemLabel(itemCount))
+                } icon: {
+                    Image(systemName: "list.bullet")
+                }
                 if duplicateCount > 0 {
-                    Label("\(duplicateCount) duplicates", systemImage: "doc.on.doc")
-                        .foregroundStyle(DSColor.warning)
+                    Label {
+                        Text(duplicateLabel(duplicateCount))
+                    } icon: {
+                        Image(systemName: "doc.on.doc")
+                    }
+                    .foregroundStyle(DSColor.warning)
                 }
                 Spacer()
                 Button {
                     paste()
                 } label: {
-                    Label("Paste", systemImage: "doc.on.clipboard")
+                    Label(pasteTitle, systemImage: "doc.on.clipboard")
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(DSColor.primary)
                 Button(role: .destructive) {
-                    text = ""
-                    DSHaptics.light()
+                    handleClearTap()
                 } label: {
-                    Label("Clear", systemImage: "trash")
+                    Label(clearTitle, systemImage: "trash")
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(text.isEmpty ? Color.secondary : DSColor.error)
@@ -99,6 +124,15 @@ public struct DSListInput: View {
         return lowered.count - Set(lowered).count
     }
 
+    private func handleClearTap() {
+        DSHaptics.light(if: hapticsEnabled)
+        if let onClearRequested {
+            onClearRequested()
+        } else {
+            text = ""
+        }
+    }
+
     private func paste() {
         guard let s = UIPasteboard.general.string, !s.isEmpty else { return }
         if text.isEmpty {
@@ -107,19 +141,25 @@ public struct DSListInput: View {
             if !text.hasSuffix("\n") { text.append("\n") }
             text.append(s)
         }
-        DSHaptics.light()
+        DSHaptics.light(if: hapticsEnabled)
     }
 }
 
 #if DEBUG
 private struct DSListInputPreviewHost: View {
     @State private var text = "Ana\nBruno\nCarla\nAna"
+    @State private var showConfirm = false
     var body: some View {
         DSListInput(
             title: "Participants",
             text: $text,
-            helperText: "Enter one name per line. Duplicates are kept."
+            helperText: "Enter one name per line. Duplicates are kept.",
+            onClearRequested: { showConfirm = true }
         )
+        .confirmationDialog("Clear list?", isPresented: $showConfirm, titleVisibility: .visible) {
+            Button("Clear", role: .destructive) { text = "" }
+            Button("Cancel", role: .cancel) {}
+        }
     }
 }
 

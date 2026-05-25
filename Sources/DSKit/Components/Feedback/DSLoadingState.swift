@@ -2,9 +2,9 @@ import SwiftUI
 
 /// Centered `ProgressView` with an optional caption.
 public struct DSLoadingState: View {
-    private let message: String?
+    private let message: LocalizedStringKey?
 
-    public init(message: String? = nil) {
+    public init(message: LocalizedStringKey? = nil) {
         self.message = message
     }
 
@@ -21,7 +21,6 @@ public struct DSLoadingState: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, DSSpacing.xl)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(message ?? "Loading")
     }
 }
 

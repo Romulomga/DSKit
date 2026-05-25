@@ -22,32 +22,33 @@ public struct DSResultCard: View {
         case grouped(sections: [DSResultSection])
     }
 
-    private let title: String
+    private let title: LocalizedStringKey
     private let layout: Layout
 
     /// Single highlighted result, e.g. the winner of a draw.
-    public init(title: String, primaryResult: String, subtitle: String? = nil) {
+    public init(title: LocalizedStringKey, primaryResult: String, subtitle: String? = nil) {
         self.title = title
         self.layout = .single(primary: primaryResult, subtitle: subtitle)
     }
 
     /// Ordered list of results.
-    public init(title: String, results: [String], subtitle: String? = nil) {
+    public init(title: LocalizedStringKey, results: [String], subtitle: String? = nil) {
         self.title = title
         self.layout = .list(items: results, subtitle: subtitle)
     }
 
     /// Results split into named sections.
-    public init(title: String, groupedResults: [DSResultSection]) {
+    public init(title: LocalizedStringKey, groupedResults: [DSResultSection]) {
         self.title = title
         self.layout = .grouped(sections: groupedResults)
     }
 
     public var body: some View {
         VStack(alignment: .leading, spacing: DSSpacing.md) {
-            Text(title.uppercased())
+            Text(title)
                 .font(DSTypography.caption())
                 .foregroundStyle(.secondary)
+                .textCase(.uppercase)
                 .tracking(0.5)
 
             switch layout {

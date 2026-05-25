@@ -4,19 +4,20 @@ import SwiftUI
 /// optional `Pro`/`New` badge or locked state.
 public struct DSFeatureCard: View {
     @Environment(\.dsTheme) private var theme
+    @Environment(\.dsHapticsEnabled) private var hapticsEnabled
 
-    private let title: String
-    private let description: String
+    private let title: LocalizedStringKey
+    private let description: LocalizedStringKey
     private let systemImage: String
-    private let badge: String?
+    private let badge: LocalizedStringKey?
     private let isLocked: Bool
     private let action: () -> Void
 
     public init(
-        title: String,
-        description: String,
+        title: LocalizedStringKey,
+        description: LocalizedStringKey,
         systemImage: String,
-        badge: String? = nil,
+        badge: LocalizedStringKey? = nil,
         isLocked: Bool = false,
         action: @escaping () -> Void
     ) {
@@ -30,7 +31,7 @@ public struct DSFeatureCard: View {
 
     public var body: some View {
         Button {
-            DSHaptics.light()
+            DSHaptics.light(if: hapticsEnabled)
             action()
         } label: {
             HStack(spacing: DSSpacing.md) {
@@ -80,10 +81,8 @@ public struct DSFeatureCard: View {
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
         }
         .buttonStyle(DSPressableButtonStyle())
-        .dsAccessibleCard(
-            label: DSAccessibility.combinedLabel(title, badge, description),
-            hint: isLocked ? "Locked" : nil
-        )
+        .accessibilityElement(children: .combine)
+        .accessibilityHint(isLocked ? Text("Locked") : Text(""))
     }
 }
 

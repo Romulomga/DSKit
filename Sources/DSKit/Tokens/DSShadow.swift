@@ -3,7 +3,7 @@ import SwiftUI
 /// Very subtle shadow presets. Apple-like surfaces rely on materials and
 /// borders far more than shadows — use these sparingly, mostly on
 /// `DSCard(.elevated)` and floating overlays.
-public struct DSShadow: Sendable {
+public struct DSShadow {
     public let color: Color
     public let radius: CGFloat
     public let x: CGFloat

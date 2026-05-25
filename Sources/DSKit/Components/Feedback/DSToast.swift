@@ -6,11 +6,11 @@ import SwiftUI
 public struct DSToast: View {
     public enum Style: Sendable, Equatable { case info, success, error, warning }
 
-    private let message: String
+    private let message: LocalizedStringKey
     private let systemImage: String?
     private let style: Style
 
-    public init(_ message: String, systemImage: String? = nil, style: Style = .info) {
+    public init(_ message: LocalizedStringKey, systemImage: String? = nil, style: Style = .info) {
         self.message = message
         self.systemImage = systemImage
         self.style = style
@@ -31,7 +31,6 @@ public struct DSToast: View {
         .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
         .dsShadow(.subtle)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(message)
     }
 
     private var defaultSymbol: String {
@@ -55,12 +54,12 @@ public struct DSToast: View {
 
 /// Data describing a toast — wrap in `Binding<DSToastMessage?>` and pass to
 /// `.dsToast(_:)`.
-public struct DSToastMessage: Equatable, Sendable {
-    public let message: String
+public struct DSToastMessage: Equatable {
+    public let message: LocalizedStringKey
     public let systemImage: String?
     public let style: DSToast.Style
 
-    public init(_ message: String, systemImage: String? = nil, style: DSToast.Style = .info) {
+    public init(_ message: LocalizedStringKey, systemImage: String? = nil, style: DSToast.Style = .info) {
         self.message = message
         self.systemImage = systemImage
         self.style = style

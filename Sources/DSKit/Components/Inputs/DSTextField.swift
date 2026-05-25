@@ -2,19 +2,21 @@ import SwiftUI
 
 /// Styled text field with title, optional helper/error and optional clear button.
 public struct DSTextField: View {
-    private let title: String?
-    private let placeholder: String
+    @Environment(\.dsHapticsEnabled) private var hapticsEnabled
+
+    private let title: LocalizedStringKey?
+    private let placeholder: LocalizedStringKey
     @Binding private var text: String
-    private let errorMessage: String?
-    private let helperText: String?
+    private let errorMessage: LocalizedStringKey?
+    private let helperText: LocalizedStringKey?
     private let showsClearButton: Bool
 
     public init(
-        title: String? = nil,
-        placeholder: String = "",
+        title: LocalizedStringKey? = nil,
+        placeholder: LocalizedStringKey = "",
         text: Binding<String>,
-        errorMessage: String? = nil,
-        helperText: String? = nil,
+        errorMessage: LocalizedStringKey? = nil,
+        helperText: LocalizedStringKey? = nil,
         showsClearButton: Bool = false
     ) {
         self.title = title
@@ -39,13 +41,13 @@ public struct DSTextField: View {
                 if showsClearButton && !text.isEmpty {
                     Button {
                         text = ""
-                        DSHaptics.light()
+                        DSHaptics.light(if: hapticsEnabled)
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundStyle(.tertiary)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Clear")
+                    .accessibilityLabel(Text("Clear"))
                 }
             }
             .padding(.horizontal, DSSpacing.md)
@@ -59,9 +61,13 @@ public struct DSTextField: View {
             )
 
             if let errorMessage {
-                Label(errorMessage, systemImage: "exclamationmark.circle.fill")
-                    .font(DSTypography.footnote())
-                    .foregroundStyle(DSColor.error)
+                Label {
+                    Text(errorMessage)
+                } icon: {
+                    Image(systemName: "exclamationmark.circle.fill")
+                }
+                .font(DSTypography.footnote())
+                .foregroundStyle(DSColor.error)
             } else if let helperText {
                 Text(helperText)
                     .font(DSTypography.footnote())

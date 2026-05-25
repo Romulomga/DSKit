@@ -12,15 +12,15 @@ import SwiftUI
 /// }
 /// ```
 public struct DSScreen<Content: View>: View {
-    private let title: String?
-    private let subtitle: String?
+    private let title: LocalizedStringKey?
+    private let subtitle: LocalizedStringKey?
     private let trailing: AnyView?
     private let bottomAction: AnyView?
     private let content: Content
 
     public init(
-        title: String? = nil,
-        subtitle: String? = nil,
+        title: LocalizedStringKey? = nil,
+        subtitle: LocalizedStringKey? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.title = title
@@ -31,8 +31,8 @@ public struct DSScreen<Content: View>: View {
     }
 
     public init<Trailing: View>(
-        title: String? = nil,
-        subtitle: String? = nil,
+        title: LocalizedStringKey? = nil,
+        subtitle: LocalizedStringKey? = nil,
         @ViewBuilder trailing: () -> Trailing,
         @ViewBuilder content: () -> Content
     ) {
@@ -44,8 +44,8 @@ public struct DSScreen<Content: View>: View {
     }
 
     public init<BottomAction: View>(
-        title: String? = nil,
-        subtitle: String? = nil,
+        title: LocalizedStringKey? = nil,
+        subtitle: LocalizedStringKey? = nil,
         @ViewBuilder content: () -> Content,
         @ViewBuilder bottomAction: () -> BottomAction
     ) {
@@ -57,8 +57,8 @@ public struct DSScreen<Content: View>: View {
     }
 
     public init<Trailing: View, BottomAction: View>(
-        title: String? = nil,
-        subtitle: String? = nil,
+        title: LocalizedStringKey? = nil,
+        subtitle: LocalizedStringKey? = nil,
         @ViewBuilder trailing: () -> Trailing,
         @ViewBuilder content: () -> Content,
         @ViewBuilder bottomAction: () -> BottomAction

@@ -6,18 +6,20 @@ import SwiftUI
 public struct DSPaywallCard: View {
     @Environment(\.dsTheme) private var theme
 
-    private let title: String
-    private let features: [String]
-    private let priceText: String?
-    private let purchaseTitle: String
+    private let title: LocalizedStringKey
+    private let features: [LocalizedStringKey]
+    private let priceText: LocalizedStringKey?
+    private let purchaseTitle: LocalizedStringKey
+    private let restoreTitle: LocalizedStringKey
     private let onPurchase: () -> Void
     private let onRestore: () -> Void
 
     public init(
-        title: String = "Upgrade to Pro",
-        features: [String],
-        priceText: String? = nil,
-        purchaseTitle: String = "Continue",
+        title: LocalizedStringKey = "Upgrade to Pro",
+        features: [LocalizedStringKey],
+        priceText: LocalizedStringKey? = nil,
+        purchaseTitle: LocalizedStringKey = "Continue",
+        restoreTitle: LocalizedStringKey = "Restore purchases",
         onPurchase: @escaping () -> Void,
         onRestore: @escaping () -> Void
     ) {
@@ -25,6 +27,7 @@ public struct DSPaywallCard: View {
         self.features = features
         self.priceText = priceText
         self.purchaseTitle = purchaseTitle
+        self.restoreTitle = restoreTitle
         self.onPurchase = onPurchase
         self.onRestore = onRestore
     }
@@ -62,10 +65,12 @@ public struct DSPaywallCard: View {
 
             DSPrimaryButton(purchaseTitle, action: onPurchase)
 
-            Button("Restore purchases", action: onRestore)
-                .font(DSTypography.footnote())
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity)
+            Button(action: onRestore) {
+                Text(restoreTitle)
+            }
+            .font(DSTypography.footnote())
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity)
         }
         .padding(DSSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)

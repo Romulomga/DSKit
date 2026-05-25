@@ -3,13 +3,13 @@ import SwiftUI
 /// Grouped settings-style section. Contains `DSSettingsRow`s and renders a
 /// rounded grouped surface like iOS Settings.
 public struct DSSettingsSection<Content: View>: View {
-    private let title: String?
-    private let footer: String?
+    private let title: LocalizedStringKey?
+    private let footer: LocalizedStringKey?
     private let content: Content
 
     public init(
-        _ title: String? = nil,
-        footer: String? = nil,
+        _ title: LocalizedStringKey? = nil,
+        footer: LocalizedStringKey? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.title = title
@@ -20,9 +20,10 @@ public struct DSSettingsSection<Content: View>: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: DSSpacing.xs) {
             if let title {
-                Text(title.uppercased())
+                Text(title)
                     .font(DSTypography.footnote())
                     .foregroundStyle(.secondary)
+                    .textCase(.uppercase)
                     .tracking(0.5)
                     .padding(.horizontal, DSSpacing.md)
             }
@@ -43,19 +44,24 @@ public struct DSSettingsSection<Content: View>: View {
 
 /// One row inside a `DSSettingsSection`. Supports leading icon, title,
 /// subtitle, trailing content (toggle/value/chevron) and an optional action.
+/// Set `showsDivider: false` on the last row of a section for the iOS Settings look.
 public struct DSSettingsRow: View {
+    @Environment(\.dsHapticsEnabled) private var hapticsEnabled
+
     private let systemImage: String?
     private let iconColor: Color?
-    private let title: String
-    private let subtitle: String?
+    private let title: LocalizedStringKey
+    private let subtitle: LocalizedStringKey?
     private let trailing: AnyView
     private let action: (() -> Void)?
+    private let showsDivider: Bool
 
     public init(
         systemImage: String? = nil,
         iconColor: Color? = nil,
-        title: String,
-        subtitle: String? = nil,
+        title: LocalizedStringKey,
+        subtitle: LocalizedStringKey? = nil,
+        showsDivider: Bool = true,
         action: (() -> Void)? = nil
     ) {
         self.systemImage = systemImage
@@ -64,13 +70,15 @@ public struct DSSettingsRow: View {
         self.subtitle = subtitle
         self.trailing = AnyView(EmptyView())
         self.action = action
+        self.showsDivider = showsDivider
     }
 
     public init<Trailing: View>(
         systemImage: String? = nil,
         iconColor: Color? = nil,
-        title: String,
-        subtitle: String? = nil,
+        title: LocalizedStringKey,
+        subtitle: LocalizedStringKey? = nil,
+        showsDivider: Bool = true,
         action: (() -> Void)? = nil,
         @ViewBuilder trailing: () -> Trailing
     ) {
@@ -80,12 +88,13 @@ public struct DSSettingsRow: View {
         self.subtitle = subtitle
         self.trailing = AnyView(trailing())
         self.action = action
+        self.showsDivider = showsDivider
     }
 
     public var body: some View {
         Button {
             guard let action else { return }
-            DSHaptics.light()
+            DSHaptics.light(if: hapticsEnabled)
             action()
         } label: {
             HStack(spacing: DSSpacing.md) {
@@ -121,13 +130,14 @@ public struct DSSettingsRow: View {
         .buttonStyle(.plain)
         .disabled(action == nil)
         .overlay(alignment: .bottom) {
-            Rectangle()
-                .fill(DSColor.border)
-                .frame(height: 0.5)
-                .padding(.leading, DSSpacing.md + 28 + DSSpacing.md)
+            if showsDivider {
+                Rectangle()
+                    .fill(DSColor.border)
+                    .frame(height: 0.5)
+                    .padding(.leading, DSSpacing.md + 28 + DSSpacing.md)
+            }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(DSAccessibility.combinedLabel(title, subtitle))
     }
 }
 
@@ -146,7 +156,8 @@ private struct DSSettingsPreviewHost: View {
                 }
                 DSSettingsRow(systemImage: "bell.badge.fill",
                               iconColor: DSColor.warning,
-                              title: "Notifications") {
+                              title: "Notifications",
+                              showsDivider: false) {
                     Toggle("", isOn: $notifications).labelsHidden()
                 }
             }
@@ -159,6 +170,7 @@ private struct DSSettingsPreviewHost: View {
                 DSSettingsRow(systemImage: "star.fill",
                               iconColor: DSColor.warning,
                               title: "Rate the app",
+                              showsDivider: false,
                               action: {})
             }
         }

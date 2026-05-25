@@ -68,6 +68,16 @@ public struct DSListInput: View {
                     .padding(.horizontal, DSSpacing.md - 2)
                     .padding(.vertical, DSSpacing.sm)
                     .frame(minHeight: 140)
+                    .toolbar {
+                        if isFocused {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button(LocalizedStringKey(String(localized: "Done", bundle: .dsKit))) {
+                                    isFocused = false
+                                }
+                            }
+                        }
+                    }
             }
             .background(DSColor.elevatedSurface)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))

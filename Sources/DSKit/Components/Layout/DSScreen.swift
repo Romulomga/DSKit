@@ -103,6 +103,12 @@ public struct DSScreen<Content: View>: View {
                         )
                         .ignoresSafeArea(edges: .bottom)
                     )
+                    // Don't ride the keyboard — when the keyboard is up the
+                    // primary action stays pinned to the screen bottom (hidden
+                    // behind the keyboard) instead of floating over input
+                    // content. The keyboard toolbar Done button or a tap
+                    // outside dismisses the keyboard and reveals it again.
+                    .ignoresSafeArea(.keyboard, edges: .bottom)
             }
         }
     }

@@ -1,14 +1,18 @@
 import SwiftUI
 
 /// Surface variant for `DSCard`. Pick based on the surface beneath:
-/// - `.default` over a plain background
-/// - `.elevated` to lift off a busy background
-/// - `.material` for floating surfaces (sheets, overlays)
+/// - `.default` — standard card with a subtle border + soft shadow.
+///   Always reads as a distinct surface against the scroll background.
+/// - `.elevated` — stronger shadow for hero / featured cards.
+/// - `.material` — translucent glass for floating overlays / action bars.
 public enum DSCardVariant: Sendable, Equatable {
     case `default`, elevated, material
 }
 
-/// Generic card container with Apple-like soft rounded corners.
+/// Generic card container with Apple-like soft rounded corners. The
+/// `.default` variant ships with a subtle border and shadow so that cards
+/// are never visually flush with the scroll background — even on systems
+/// where `secondarySystemBackground` is very close to the canvas color.
 public struct DSCard<Content: View>: View {
     private let variant: DSCardVariant
     private let content: Content
@@ -24,15 +28,27 @@ public struct DSCard<Content: View>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(background)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
+            .overlay(border)
             .modifier(DSCardShadowModifier(variant: variant))
     }
 
     @ViewBuilder
     private var background: some View {
         switch variant {
-        case .default: DSColor.surface
+        case .default:  DSColor.elevatedSurface
         case .elevated: DSColor.elevatedSurface
         case .material: Rectangle().fill(.regularMaterial)
+        }
+    }
+
+    @ViewBuilder
+    private var border: some View {
+        switch variant {
+        case .default, .elevated:
+            RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous)
+                .strokeBorder(DSColor.border.opacity(0.35), lineWidth: 0.5)
+        case .material:
+            EmptyView()
         }
     }
 }
@@ -42,8 +58,9 @@ private struct DSCardShadowModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         switch variant {
+        case .default:  content.dsShadow(.subtle)
         case .elevated: content.dsShadow(.card)
-        case .default, .material: content
+        case .material: content
         }
     }
 }
@@ -53,13 +70,16 @@ private struct DSCardShadowModifier: ViewModifier {
     DSPreviewContainer("Card variants") {
         VStack(spacing: DSSpacing.md) {
             DSCard {
-                Text("Default surface").font(DSTypography.body())
+                Text("Default — subtle border + soft shadow")
+                    .font(DSTypography.body())
             }
             DSCard(.elevated) {
-                Text("Elevated").font(DSTypography.body())
+                Text("Elevated — stronger shadow")
+                    .font(DSTypography.body())
             }
             DSCard(.material) {
-                Text("Material").font(DSTypography.body())
+                Text("Material — translucent")
+                    .font(DSTypography.body())
             }
         }
     }

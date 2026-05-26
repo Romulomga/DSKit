@@ -95,7 +95,14 @@ public struct DSListInput: View {
 
             HStack(spacing: DSSpacing.md) {
                 Label {
-                    Text(itemLabel(itemCount), bundle: .dsKit)
+                    // CLDR groups 0 with "one" in some locales (pt-BR among them),
+                    // so the plural "%lld items" string would read "0 item" there.
+                    // Pick a dedicated empty-state key instead.
+                    if itemCount == 0 {
+                        Text("No items", bundle: .dsKit)
+                    } else {
+                        Text(itemLabel(itemCount), bundle: .dsKit)
+                    }
                 } icon: {
                     Image(systemName: "list.bullet")
                 }

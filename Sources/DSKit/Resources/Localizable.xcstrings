@@ -78,6 +78,7 @@
         "pt-BR" : {
           "variations" : {
             "plural" : {
+              "zero" : { "stringUnit" : { "state" : "translated", "value" : "Nenhum item" } },
               "one" : { "stringUnit" : { "state" : "translated", "value" : "%lld item" } },
               "other" : { "stringUnit" : { "state" : "translated", "value" : "%lld itens" } }
             }
@@ -182,6 +183,20 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "유효한 숫자를 입력해 주세요" } },
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请输入有效的数字" } },
         "ar" : { "stringUnit" : { "state" : "translated", "value" : "أدخل رقمًا صالحًا" } }
+      }
+    },
+    "No items" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No items" } },
+        "pt-BR" : { "stringUnit" : { "state" : "translated", "value" : "Nenhum item" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sin elementos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun élément" } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Keine Einträge" } },
+        "it" : { "stringUnit" : { "state" : "translated", "value" : "Nessun elemento" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "項目なし" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "항목 없음" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无项目" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "لا توجد عناصر" } }
       }
     },
     "One item per line" : {

@@ -9,7 +9,10 @@ public enum DSColor {
     public static let surface = Color(uiColor: .secondarySystemBackground)
     public static let elevatedSurface = Color(uiColor: .tertiarySystemBackground)
 
-    public static let primary = Color(uiColor: .systemBlue)
+    /// Brand accent. `Color.accentColor` mirrors the environment `.tint(_:)`,
+    /// so this follows whatever the app sets at the root — no hardcoded
+    /// system blue leaking into focus borders, links, or pill backgrounds.
+    public static let primary = Color.accentColor
     public static let secondary = Color(uiColor: .systemIndigo)
 
     public static let textPrimary = Color(uiColor: .label)

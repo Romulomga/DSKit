@@ -15,8 +15,11 @@ public struct DSProBadge: View {
             .padding(.vertical, 2)
             .foregroundStyle(.white)
             .background(
+                // `Color.accentColor` mirrors the environment `.tint(_:)`,
+                // so the badge follows the brand color across the app
+                // instead of falling back to system blue.
                 LinearGradient(
-                    colors: [Color(uiColor: .systemBlue), Color(uiColor: .systemIndigo)],
+                    colors: [Color.accentColor, Color.accentColor.opacity(0.78)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )

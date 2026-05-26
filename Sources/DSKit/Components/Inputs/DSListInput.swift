@@ -8,25 +8,30 @@ public struct DSListInput: View {
     @FocusState private var isFocused: Bool
 
     private let title: LocalizedStringKey?
-    private let placeholder: LocalizedStringKey
+    // Caller-provided localizable strings stay Optional. `nil` means "use
+    // DSKit's bundled default"; a non-nil value resolves in the caller's
+    // main bundle (where the app's xcstrings live). Without this split a
+    // caller key that doesn't exist in DSKit's bundle would fall back to
+    // the literal English value — which is what the placeholder bug was.
+    private let placeholder: LocalizedStringKey?
     @Binding private var text: String
     private let helperText: LocalizedStringKey?
 
     private let itemLabel: (Int) -> LocalizedStringKey
     private let duplicateLabel: (Int) -> LocalizedStringKey
-    private let pasteTitle: LocalizedStringKey
-    private let clearTitle: LocalizedStringKey
+    private let pasteTitle: LocalizedStringKey?
+    private let clearTitle: LocalizedStringKey?
     private let onClearRequested: (() -> Void)?
 
     public init(
         title: LocalizedStringKey? = nil,
-        placeholder: LocalizedStringKey = "One item per line",
+        placeholder: LocalizedStringKey? = nil,
         text: Binding<String>,
         helperText: LocalizedStringKey? = nil,
         itemLabel: @escaping (Int) -> LocalizedStringKey = { count in "\(count) items" },
         duplicateLabel: @escaping (Int) -> LocalizedStringKey = { count in "\(count) duplicates" },
-        pasteTitle: LocalizedStringKey = "Paste",
-        clearTitle: LocalizedStringKey = "Clear",
+        pasteTitle: LocalizedStringKey? = nil,
+        clearTitle: LocalizedStringKey? = nil,
         onClearRequested: (() -> Void)? = nil
     ) {
         self.title = title
@@ -50,7 +55,7 @@ public struct DSListInput: View {
 
             ZStack(alignment: .topLeading) {
                 if text.isEmpty {
-                    Text(placeholder, bundle: .dsKit)
+                    placeholderText
                         .font(DSTypography.body())
                         .foregroundStyle(.tertiary)
                         .padding(.horizontal, DSSpacing.md + 4)
@@ -107,7 +112,7 @@ public struct DSListInput: View {
                     paste()
                 } label: {
                     Label {
-                        Text(pasteTitle, bundle: .dsKit)
+                        pasteLabel
                     } icon: {
                         Image(systemName: "doc.on.clipboard")
                     }
@@ -118,7 +123,7 @@ public struct DSListInput: View {
                     handleClearTap()
                 } label: {
                     Label {
-                        Text(clearTitle, bundle: .dsKit)
+                        clearLabel
                     } icon: {
                         Image(systemName: "trash")
                     }
@@ -136,6 +141,33 @@ public struct DSListInput: View {
                     .font(DSTypography.footnote())
                     .foregroundStyle(.secondary)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var placeholderText: some View {
+        if let placeholder {
+            Text(placeholder)
+        } else {
+            Text("One item per line", bundle: .dsKit)
+        }
+    }
+
+    @ViewBuilder
+    private var pasteLabel: some View {
+        if let pasteTitle {
+            Text(pasteTitle)
+        } else {
+            Text("Paste", bundle: .dsKit)
+        }
+    }
+
+    @ViewBuilder
+    private var clearLabel: some View {
+        if let clearTitle {
+            Text(clearTitle)
+        } else {
+            Text("Clear", bundle: .dsKit)
         }
     }
 

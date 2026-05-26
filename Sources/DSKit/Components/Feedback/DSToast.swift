@@ -19,16 +19,17 @@ public struct DSToast: View {
     public var body: some View {
         HStack(spacing: DSSpacing.sm) {
             Image(systemName: systemImage ?? defaultSymbol)
-                .foregroundStyle(tint)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(.white)
             Text(message)
-                .font(DSTypography.subheadline())
-                .foregroundStyle(DSColor.textPrimary)
-            Spacer(minLength: 0)
+                .font(DSTypography.subheadline().weight(.semibold))
+                .foregroundStyle(.white)
+                .lineLimit(2)
+                .minimumScaleFactor(0.85)
         }
         .padding(.horizontal, DSSpacing.md)
         .padding(.vertical, DSSpacing.sm + 2)
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
+        .background(tint, in: Capsule(style: .continuous))
         .dsShadow(.subtle)
         .accessibilityElement(children: .combine)
     }

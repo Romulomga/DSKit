@@ -103,14 +103,16 @@ public struct DSScreen<Content: View>: View {
                         )
                         .ignoresSafeArea(edges: .bottom)
                     )
-                    // Don't ride the keyboard — when the keyboard is up the
-                    // primary action stays pinned to the screen bottom (hidden
-                    // behind the keyboard) instead of floating over input
-                    // content. The keyboard toolbar Done button or a tap
-                    // outside dismisses the keyboard and reveals it again.
-                    .ignoresSafeArea(.keyboard, edges: .bottom)
             }
         }
+        // Outer container ignores the keyboard's bottom safe area. Inside the
+        // ZStack the bottomAction is bottom-aligned, so without this the
+        // ZStack itself shifts up when the keyboard appears, dragging the
+        // primary action over the scroll content. With this, the action
+        // stays pinned to the device bottom (hidden behind the keyboard);
+        // the inner ScrollView still focus-scrolls to keep the active
+        // field visible above the keyboard.
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 
     @ViewBuilder

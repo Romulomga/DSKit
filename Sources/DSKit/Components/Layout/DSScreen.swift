@@ -71,26 +71,29 @@ public struct DSScreen<Content: View>: View {
     }
 
     public var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: DSSpacing.lg) {
-                    if title != nil || subtitle != nil || trailing != nil {
-                        header
-                    }
-                    content
+        ScrollView {
+            VStack(alignment: .leading, spacing: DSSpacing.lg) {
+                if title != nil || subtitle != nil || trailing != nil {
+                    header
                 }
-                .padding(.horizontal, DSSpacing.lg)
-                .padding(.top, DSSpacing.md)
-                .padding(.bottom, bottomAction == nil ? DSSpacing.xl : 96)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                content
             }
-            .background(DSColor.groupedBackground.ignoresSafeArea())
-
+            .padding(.horizontal, DSSpacing.lg)
+            .padding(.top, DSSpacing.md)
+            .padding(.bottom, DSSpacing.xl)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .background(DSColor.groupedBackground.ignoresSafeArea())
+        // `safeAreaInset` lets the bottom action ride above the keyboard so
+        // the toolbar accessory never overlaps the primary CTA, and pads the
+        // scroll content automatically so cards above it stay reachable.
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             if let bottomAction {
                 bottomAction
                     .padding(.horizontal, DSSpacing.lg)
                     .padding(.top, DSSpacing.md)
                     .padding(.bottom, DSSpacing.md)
+                    .frame(maxWidth: .infinity)
                     .background(
                         LinearGradient(
                             colors: [
@@ -101,18 +104,9 @@ public struct DSScreen<Content: View>: View {
                             startPoint: .top,
                             endPoint: .bottom
                         )
-                        .ignoresSafeArea(edges: .bottom)
                     )
             }
         }
-        // Outer container ignores the keyboard's bottom safe area. Inside the
-        // ZStack the bottomAction is bottom-aligned, so without this the
-        // ZStack itself shifts up when the keyboard appears, dragging the
-        // primary action over the scroll content. With this, the action
-        // stays pinned to the device bottom (hidden behind the keyboard);
-        // the inner ScrollView still focus-scrolls to keep the active
-        // field visible above the keyboard.
-        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 
     @ViewBuilder

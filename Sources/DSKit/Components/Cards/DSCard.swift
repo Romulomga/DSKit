@@ -35,8 +35,8 @@ public struct DSCard<Content: View>: View {
     @ViewBuilder
     private var background: some View {
         switch variant {
-        case .default:  DSColor.elevatedSurface
-        case .elevated: DSColor.elevatedSurface
+        case .default:  Color.surface
+        case .elevated: Color.surface
         case .material: Rectangle().fill(.regularMaterial)
         }
     }
@@ -46,7 +46,7 @@ public struct DSCard<Content: View>: View {
         switch variant {
         case .default, .elevated:
             RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous)
-                .strokeBorder(DSColor.border.opacity(0.35), lineWidth: 0.5)
+                .strokeBorder(Color.border.opacity(0.35), lineWidth: 0.5)
         case .material:
             EmptyView()
         }

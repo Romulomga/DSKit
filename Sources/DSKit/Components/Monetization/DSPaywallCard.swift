@@ -39,7 +39,7 @@ public struct DSPaywallCard: View {
                     .foregroundStyle(theme.primary)
                 Text(title)
                     .font(DSTypography.title3())
-                    .foregroundStyle(DSColor.textPrimary)
+                    .foregroundStyle(Color.onSurfaceHigh)
                 Spacer()
                 DSProBadge()
             }
@@ -51,7 +51,7 @@ public struct DSPaywallCard: View {
                             .foregroundStyle(theme.primary)
                         Text(feature)
                             .font(DSTypography.body())
-                            .foregroundStyle(DSColor.textPrimary)
+                            .foregroundStyle(Color.onSurfaceHigh)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -74,7 +74,7 @@ public struct DSPaywallCard: View {
         }
         .padding(DSSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DSColor.surface)
+        .background(Color.surface)
         .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
     }
 }

@@ -32,11 +32,11 @@ public struct DSDestructiveButton: View {
                 Text(title).fontWeight(.medium)
             }
             .font(DSTypography.headline())
-            .foregroundStyle(DSColor.error)
+            .foregroundStyle(Color.errorHigh)
             .frame(maxWidth: .infinity)
             .frame(minHeight: 50)
             .padding(.horizontal, DSSpacing.lg)
-            .background(DSColor.error.opacity(0.12))
+            .background(Color.errorHigh.opacity(0.12))
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
             .opacity(isEnabled ? 1.0 : 0.5)
         }

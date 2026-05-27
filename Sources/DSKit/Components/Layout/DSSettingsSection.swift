@@ -30,7 +30,7 @@ public struct DSSettingsSection<Content: View>: View {
             VStack(spacing: 0) {
                 content
             }
-            .background(DSColor.surface)
+            .background(Color.surface)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             if let footer {
                 Text(footer)
@@ -103,13 +103,13 @@ public struct DSSettingsRow: View {
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(.white)
                         .frame(width: 28, height: 28)
-                        .background(iconColor ?? DSColor.primary)
+                        .background(iconColor ?? Color.accent)
                         .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(DSTypography.body())
-                        .foregroundStyle(DSColor.textPrimary)
+                        .foregroundStyle(Color.onSurfaceHigh)
                     if let subtitle {
                         Text(subtitle)
                             .font(DSTypography.footnote())
@@ -132,7 +132,7 @@ public struct DSSettingsRow: View {
         .overlay(alignment: .bottom) {
             if showsDivider {
                 Rectangle()
-                    .fill(DSColor.border)
+                    .fill(Color.border)
                     .frame(height: 0.5)
                     .padding(.leading, DSSpacing.md + 28 + DSSpacing.md)
             }
@@ -150,12 +150,12 @@ private struct DSSettingsPreviewHost: View {
         VStack(spacing: DSSpacing.lg) {
             DSSettingsSection("Preferences") {
                 DSSettingsRow(systemImage: "iphone.radiowaves.left.and.right",
-                              iconColor: DSColor.primary,
+                              iconColor: Color.accent,
                               title: "Haptics") {
                     Toggle("", isOn: $haptics).labelsHidden()
                 }
                 DSSettingsRow(systemImage: "bell.badge.fill",
-                              iconColor: DSColor.warning,
+                              iconColor: Color.warningHigh,
                               title: "Notifications",
                               showsDivider: false) {
                     Toggle("", isOn: $notifications).labelsHidden()
@@ -163,19 +163,19 @@ private struct DSSettingsPreviewHost: View {
             }
             DSSettingsSection("About", footer: "Version 1.0.0") {
                 DSSettingsRow(systemImage: "envelope.fill",
-                              iconColor: DSColor.secondary,
+                              iconColor: Color.accent,
                               title: "Contact support",
                               subtitle: "Get help by email",
                               action: {})
                 DSSettingsRow(systemImage: "star.fill",
-                              iconColor: DSColor.warning,
+                              iconColor: Color.warningHigh,
                               title: "Rate the app",
                               showsDivider: false,
                               action: {})
             }
         }
         .padding(DSSpacing.lg)
-        .background(DSColor.groupedBackground)
+        .background(Color.background)
     }
 }
 

@@ -7,7 +7,7 @@ public struct DSBadge: View {
     private let text: LocalizedStringKey
     private let tint: Color
 
-    public init(_ text: LocalizedStringKey, tint: Color = DSColor.primary) {
+    public init(_ text: LocalizedStringKey, tint: Color = Color.accent) {
         self.text = text
         self.tint = tint
     }
@@ -27,8 +27,8 @@ public struct DSBadge: View {
 #Preview("Badge") {
     DSPreviewContainer("Badge") {
         HStack(spacing: DSSpacing.sm) {
-            DSBadge("7 days free", tint: DSColor.success)
-            DSBadge("Save 70%", tint: DSColor.warning)
+            DSBadge("7 days free", tint: Color.successHigh)
+            DSBadge("Save 70%", tint: Color.warningHigh)
             DSBadge("New")
         }
     }

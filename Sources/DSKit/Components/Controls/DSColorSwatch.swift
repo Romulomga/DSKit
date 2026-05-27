@@ -32,7 +32,7 @@ public struct DSColorSwatch: View {
                         .frame(width: 56, height: 56)
                     if isSelected {
                         Circle()
-                            .strokeBorder(DSColor.textPrimary, lineWidth: 3)
+                            .strokeBorder(Color.onSurfaceHigh, lineWidth: 3)
                             .frame(width: 64, height: 64)
                     }
                     if isLocked {
@@ -43,7 +43,7 @@ public struct DSColorSwatch: View {
                 }
                 Text(label)
                     .font(DSTypography.caption().weight(.medium))
-                    .foregroundStyle(DSColor.textPrimary)
+                    .foregroundStyle(Color.onSurfaceHigh)
             }
         }
         .buttonStyle(.plain)

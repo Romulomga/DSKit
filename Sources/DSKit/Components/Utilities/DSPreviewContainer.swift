@@ -23,6 +23,6 @@ public struct DSPreviewContainer<Content: View>: View {
         }
         .padding(DSSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DSColor.groupedBackground)
+        .background(Color.background)
     }
 }

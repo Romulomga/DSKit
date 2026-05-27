@@ -11,21 +11,21 @@ struct SettingsScreenPreview: View {
             DSSettingsSection("Preferences") {
                 DSSettingsRow(
                     systemImage: "iphone.radiowaves.left.and.right",
-                    iconColor: DSColor.primary,
+                    iconColor: Color.accent,
                     title: "Haptics"
                 ) {
                     Toggle("", isOn: $haptics).labelsHidden()
                 }
                 DSSettingsRow(
                     systemImage: "speaker.wave.2.fill",
-                    iconColor: DSColor.secondary,
+                    iconColor: Color.accent,
                     title: "Sound"
                 ) {
                     Toggle("", isOn: $sound).labelsHidden()
                 }
                 DSSettingsRow(
                     systemImage: "bell.badge.fill",
-                    iconColor: DSColor.warning,
+                    iconColor: Color.warningHigh,
                     title: "Notifications"
                 ) {
                     Toggle("", isOn: $notifications).labelsHidden()
@@ -35,14 +35,14 @@ struct SettingsScreenPreview: View {
             DSSettingsSection("Support", footer: "We usually answer in 1 business day.") {
                 DSSettingsRow(
                     systemImage: "envelope.fill",
-                    iconColor: DSColor.secondary,
+                    iconColor: Color.accent,
                     title: "Contact support",
                     subtitle: "Get help by email",
                     action: {}
                 )
                 DSSettingsRow(
                     systemImage: "star.fill",
-                    iconColor: DSColor.warning,
+                    iconColor: Color.warningHigh,
                     title: "Rate the app",
                     action: {}
                 )

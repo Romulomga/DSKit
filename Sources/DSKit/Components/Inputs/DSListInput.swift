@@ -82,12 +82,12 @@ public struct DSListInput: View {
                         }
                     }
             }
-            .background(DSColor.elevatedSurface)
+            .background(Color.surface)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
                     .strokeBorder(
-                        isFocused ? DSColor.primary.opacity(0.7) : DSColor.border.opacity(0.5),
+                        isFocused ? Color.accent.opacity(0.7) : Color.border.opacity(0.5),
                         lineWidth: isFocused ? 1.5 : 1
                     )
             )
@@ -112,7 +112,7 @@ public struct DSListInput: View {
                     } icon: {
                         Image(systemName: "doc.on.doc")
                     }
-                    .foregroundStyle(DSColor.warning)
+                    .foregroundStyle(Color.warningHigh)
                 }
                 Spacer()
                 Button {
@@ -125,7 +125,7 @@ public struct DSListInput: View {
                     }
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(DSColor.primary)
+                .foregroundStyle(Color.accent)
                 Button(role: .destructive) {
                     handleClearTap()
                 } label: {
@@ -136,7 +136,7 @@ public struct DSListInput: View {
                     }
                 }
                 .buttonStyle(.plain)
-                .foregroundStyle(text.isEmpty ? Color.secondary : DSColor.error)
+                .foregroundStyle(text.isEmpty ? Color.secondary : Color.errorHigh)
                 .disabled(text.isEmpty)
             }
             .font(DSTypography.footnote())

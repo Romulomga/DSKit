@@ -15,7 +15,7 @@ public struct DSSection<Content: View>: View {
             if let title {
                 Text(title)
                     .font(DSTypography.headline())
-                    .foregroundStyle(DSColor.textPrimary)
+                    .foregroundStyle(Color.onSurfaceHigh)
             }
             content
         }

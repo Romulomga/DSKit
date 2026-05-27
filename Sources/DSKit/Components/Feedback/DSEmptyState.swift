@@ -29,7 +29,7 @@ public struct DSEmptyState: View {
                 .foregroundStyle(.tertiary)
             Text(title)
                 .font(DSTypography.title3())
-                .foregroundStyle(DSColor.textPrimary)
+                .foregroundStyle(Color.onSurfaceHigh)
                 .multilineTextAlignment(.center)
             Text(message)
                 .font(DSTypography.subheadline())

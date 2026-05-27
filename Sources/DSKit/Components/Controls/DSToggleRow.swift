@@ -35,7 +35,7 @@ public struct DSToggleRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(DSTypography.body())
-                    .foregroundStyle(DSColor.textPrimary)
+                    .foregroundStyle(Color.onSurfaceHigh)
                 if let subtitle {
                     Text(subtitle)
                         .font(DSTypography.footnote())
@@ -65,7 +65,7 @@ private struct DSToggleRowPreviewHost: View {
             DSToggleRow("Sound", systemImage: "speaker.wave.2.fill", isOn: $sound)
         }
         .padding(DSSpacing.lg)
-        .background(DSColor.surface)
+        .background(Color.surface)
     }
 }
 

@@ -26,10 +26,10 @@ public struct DSErrorState: View {
         VStack(spacing: DSSpacing.md) {
             Image(systemName: systemImage)
                 .font(.system(size: 48, weight: .light))
-                .foregroundStyle(DSColor.error)
+                .foregroundStyle(Color.errorHigh)
             Text(title)
                 .font(DSTypography.title3())
-                .foregroundStyle(DSColor.textPrimary)
+                .foregroundStyle(Color.onSurfaceHigh)
                 .multilineTextAlignment(.center)
             Text(message)
                 .font(DSTypography.subheadline())

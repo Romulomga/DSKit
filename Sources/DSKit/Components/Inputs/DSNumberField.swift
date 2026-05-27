@@ -41,7 +41,7 @@ public struct DSNumberField: View {
                 .focused($isFocused)
                 .padding(.horizontal, DSSpacing.md)
                 .padding(.vertical, DSSpacing.sm + 2)
-                .background(DSColor.elevatedSurface)
+                .background(Color.surface)
                 .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
@@ -87,9 +87,9 @@ public struct DSNumberField: View {
     private var hasAnyError: Bool { externalError != nil || hasInternalError }
 
     private var borderColor: Color {
-        if hasAnyError { return DSColor.error.opacity(0.7) }
-        if isFocused   { return DSColor.primary.opacity(0.7) }
-        return DSColor.border.opacity(0.5)
+        if hasAnyError { return Color.errorHigh.opacity(0.7) }
+        if isFocused   { return Color.accent.opacity(0.7) }
+        return Color.border.opacity(0.5)
     }
 
     private var borderWidth: CGFloat {
@@ -104,7 +104,7 @@ public struct DSNumberField: View {
             Image(systemName: "exclamationmark.circle.fill")
         }
         .font(DSTypography.footnote())
-        .foregroundStyle(DSColor.error)
+        .foregroundStyle(Color.errorHigh)
     }
 
     private func validate(_ raw: String) {

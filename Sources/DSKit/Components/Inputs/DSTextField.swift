@@ -54,7 +54,7 @@ public struct DSTextField: View {
             }
             .padding(.horizontal, DSSpacing.md)
             .padding(.vertical, DSSpacing.sm + 2)
-            .background(DSColor.elevatedSurface)
+            .background(Color.surface)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
@@ -70,7 +70,7 @@ public struct DSTextField: View {
                     Image(systemName: "exclamationmark.circle.fill")
                 }
                 .font(DSTypography.footnote())
-                .foregroundStyle(DSColor.error)
+                .foregroundStyle(Color.errorHigh)
             } else if let helperText {
                 Text(helperText)
                     .font(DSTypography.footnote())
@@ -80,9 +80,9 @@ public struct DSTextField: View {
     }
 
     private var borderColor: Color {
-        if errorMessage != nil { return DSColor.error.opacity(0.7) }
-        if isFocused           { return DSColor.primary.opacity(0.7) }
-        return DSColor.border.opacity(0.5)
+        if errorMessage != nil { return Color.errorHigh.opacity(0.7) }
+        if isFocused           { return Color.accent.opacity(0.7) }
+        return Color.border.opacity(0.5)
     }
 
     private var borderWidth: CGFloat {

@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Per-app theme. Consumers override the primary tint and app name; everything
-/// else stays Apple-native via `DSColor` semantic colors.
+/// else is driven by the asset-backed `Color` tokens declared in this module
+/// (overridable per host app via matching `.colorset` names).
 public struct DSTheme {
     public var appName: String
     public var primary: Color
@@ -10,8 +11,8 @@ public struct DSTheme {
 
     public init(
         appName: String = "MicroTool",
-        primary: Color = DSColor.primary,
-        secondary: Color = DSColor.secondary,
+        primary: Color = Color.accent,
+        secondary: Color = Color.accent,
         accent: Color? = nil
     ) {
         self.appName = appName

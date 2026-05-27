@@ -32,34 +32,34 @@ public struct DSPlanCard<Badges: View>: View {
             HStack(alignment: .top, spacing: DSSpacing.md) {
                 Image(systemName: isSelected ? "largecircle.fill.circle" : "circle")
                     .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(isSelected ? DSColor.primary : DSColor.textSecondary)
+                    .foregroundStyle(isSelected ? Color.accent : Color.onSurfaceMedium)
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: DSSpacing.xxs) {
                     HStack(spacing: DSSpacing.xs) {
                         Text(title)
                             .font(DSTypography.headline())
-                            .foregroundStyle(DSColor.textPrimary)
+                            .foregroundStyle(Color.onSurfaceHigh)
                         Spacer(minLength: 0)
                         Text(price)
                             .font(DSTypography.headline().monospacedDigit())
-                            .foregroundStyle(DSColor.textPrimary)
+                            .foregroundStyle(Color.onSurfaceHigh)
                     }
                     HStack(spacing: DSSpacing.xs) {
                         Text(period)
                             .font(DSTypography.footnote())
-                            .foregroundStyle(DSColor.textSecondary)
+                            .foregroundStyle(Color.onSurfaceMedium)
                         badges
                         Spacer(minLength: 0)
                     }
                 }
             }
             .padding(DSSpacing.md)
-            .background(DSColor.elevatedSurface)
+            .background(Color.surface)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
                     .strokeBorder(
-                        isSelected ? DSColor.primary.opacity(0.7) : DSColor.border.opacity(0.5),
+                        isSelected ? Color.accent.opacity(0.7) : Color.border.opacity(0.5),
                         lineWidth: isSelected ? 1.5 : 1
                     )
             )
@@ -83,8 +83,8 @@ private struct DSPlanCardPreviewHost: View {
                 isSelected: selected == "yearly",
                 action: { selected = "yearly" }
             ) {
-                DSBadge("7 days free", tint: DSColor.success)
-                DSBadge("Save 70%", tint: DSColor.warning)
+                DSBadge("7 days free", tint: Color.successHigh)
+                DSBadge("Save 70%", tint: Color.warningHigh)
             }
             DSPlanCard(
                 title: "Monthly",

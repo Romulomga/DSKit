@@ -62,7 +62,7 @@ public struct DSResultCard: View {
         }
         .padding(DSSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(DSColor.surface)
+        .background(Color.surface)
         .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
         .accessibilityElement(children: .combine)
     }
@@ -71,7 +71,7 @@ public struct DSResultCard: View {
     private func singleView(primary: String, subtitle: String?) -> some View {
         Text(primary)
             .font(DSTypography.resultPrimary())
-            .foregroundStyle(DSColor.textPrimary)
+            .foregroundStyle(Color.onSurfaceHigh)
             .minimumScaleFactor(0.5)
             .lineLimit(2)
         if let subtitle {
@@ -89,7 +89,7 @@ public struct DSResultCard: View {
                     Text("\(index + 1).")
                         .foregroundStyle(.secondary)
                     Text(item)
-                        .foregroundStyle(DSColor.textPrimary)
+                        .foregroundStyle(Color.onSurfaceHigh)
                 }
                 .font(DSTypography.title3())
             }
@@ -112,7 +112,7 @@ public struct DSResultCard: View {
                     ForEach(Array(section.items.enumerated()), id: \.offset) { _, item in
                         Text(item)
                             .font(DSTypography.body())
-                            .foregroundStyle(DSColor.textPrimary)
+                            .foregroundStyle(Color.onSurfaceHigh)
                     }
                 }
             }

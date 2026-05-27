@@ -45,10 +45,10 @@ public struct DSToast: View {
 
     private var tint: Color {
         switch style {
-        case .info: DSColor.primary
-        case .success: DSColor.success
-        case .error: DSColor.error
-        case .warning: DSColor.warning
+        case .info: Color.accent
+        case .success: Color.successHigh
+        case .error: Color.errorHigh
+        case .warning: Color.warningHigh
         }
     }
 }
@@ -115,7 +115,7 @@ private struct DSToastPreviewHost: View {
         }
         .padding(DSSpacing.lg)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-        .background(DSColor.groupedBackground)
+        .background(Color.background)
         .dsToast($toast)
     }
 }

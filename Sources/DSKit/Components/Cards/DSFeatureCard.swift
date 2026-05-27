@@ -46,7 +46,7 @@ public struct DSFeatureCard: View {
                     HStack(spacing: DSSpacing.xs) {
                         Text(title)
                             .font(DSTypography.headline())
-                            .foregroundStyle(DSColor.textPrimary)
+                            .foregroundStyle(Color.onSurfaceHigh)
                         if let badge {
                             Text(badge)
                                 .font(.caption2.weight(.bold))
@@ -64,7 +64,7 @@ public struct DSFeatureCard: View {
                     }
                     Text(description)
                         .font(DSTypography.subheadline())
-                        .foregroundStyle(DSColor.textSecondary)
+                        .foregroundStyle(Color.onSurfaceMedium)
                         .multilineTextAlignment(.leading)
                 }
 
@@ -77,7 +77,7 @@ public struct DSFeatureCard: View {
             .contentShape(Rectangle())
             .padding(DSSpacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(DSColor.surface)
+            .background(Color.surface)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
         }
         .buttonStyle(DSPressableButtonStyle())

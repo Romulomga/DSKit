@@ -108,7 +108,7 @@ public struct DSScreen<Content: View>: View {
                 if let title {
                     Text(title)
                         .font(DSTypography.largeTitle())
-                        .foregroundStyle(DSColor.textPrimary)
+                        .foregroundStyle(Color.onSurfaceHigh)
                 }
                 if let subtitle {
                     Text(subtitle)

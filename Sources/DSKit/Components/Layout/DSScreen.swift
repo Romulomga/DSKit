@@ -83,7 +83,9 @@ public struct DSScreen<Content: View>: View {
             .padding(.bottom, DSSpacing.xl)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .background(DSColor.groupedBackground.ignoresSafeArea())
+        // No background painted here — the host app's screen-level backdrop
+        // (e.g. atmospheric gradient) shows through. Use `.background(...)` on
+        // the host view if a flat color is wanted.
         // `safeAreaInset` lets the bottom action ride above the keyboard so
         // the toolbar accessory never overlaps the primary CTA, and pads the
         // scroll content automatically so cards above it stay reachable.
@@ -94,17 +96,7 @@ public struct DSScreen<Content: View>: View {
                     .padding(.top, DSSpacing.md)
                     .padding(.bottom, DSSpacing.md)
                     .frame(maxWidth: .infinity)
-                    .background(
-                        LinearGradient(
-                            colors: [
-                                DSColor.groupedBackground.opacity(0),
-                                DSColor.groupedBackground,
-                                DSColor.groupedBackground
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
+                    .background(.ultraThinMaterial)
             }
         }
     }

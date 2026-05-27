@@ -23,4 +23,12 @@ public enum DSTypography {
     public static func resultSecondary() -> Font {
         .system(.title2, design: .rounded).weight(.semibold)
     }
+
+    /// Massive display type for hero text taking up most of a screen —
+    /// affirmations, mantras, single-word answers. Bypasses Dynamic Type
+    /// scaling because the layout typically can't accommodate further
+    /// growth; callers wanting Dynamic Type should use `largeTitle()`.
+    public static func display(_ size: CGFloat = 44, weight: Font.Weight = .bold) -> Font {
+        .system(size: size, weight: weight, design: .default)
+    }
 }

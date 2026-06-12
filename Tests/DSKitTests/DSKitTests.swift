@@ -1,5 +1,32 @@
 import Testing
+import SwiftUI
 @testable import DSKit
+
+// Serialized: the suite mutates the shared `DSTypography.family`.
+@Suite("Typography", .serialized)
+struct TypographyTests {
+    @Test func systemFontsByDefault() {
+        DSTypography.family = nil
+        #expect(DSTypography.body() == Font.system(.body, design: .default))
+        #expect(DSTypography.title() == Font.system(.title, design: .default).weight(.semibold))
+        #expect(DSTypography.headline() == Font.system(.headline, design: .default))
+        #expect(DSTypography.resultPrimary() == Font.system(.largeTitle, design: .rounded).weight(.bold))
+        #expect(DSTypography.display(40, weight: .heavy) == Font.system(size: 40, weight: .heavy, design: .default))
+    }
+
+    @Test func customFamilyDrivesEveryToken() {
+        DSTypography.family = DSFontFamily("Avenir Next")
+        defer { DSTypography.family = nil }
+        #expect(DSTypography.body() == Font.custom("Avenir Next", size: 17, relativeTo: .body))
+        #expect(DSTypography.title() == Font.custom("Avenir Next", size: 28, relativeTo: .title).weight(.semibold))
+        // `.headline` keeps its semibold system convention under a custom family.
+        #expect(DSTypography.headline() == Font.custom("Avenir Next", size: 17, relativeTo: .headline).weight(.semibold))
+        // The rounded design is replaced by the family for display roles.
+        #expect(DSTypography.resultPrimary() == Font.custom("Avenir Next", size: 34, relativeTo: .largeTitle).weight(.bold))
+        // `display` stays fixed-size (no Dynamic Type) on the custom path too.
+        #expect(DSTypography.display() == Font.custom("Avenir Next", fixedSize: 44).weight(.bold))
+    }
+}
 
 @Suite("Tokens")
 struct TokenTests {

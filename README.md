@@ -73,6 +73,29 @@ emission for the entire subtree — wire it to your app's setting.
 
 > `.microToolsTheme(_:)` is still available but marked deprecated and forwards to `.dsTheme(_:)`.
 
+### Custom fonts
+
+Every `DSTypography` token resolves to the system font by default. To switch
+the whole design system (and any app code using the tokens) to a custom
+family, set it once at launch, before the first view renders:
+
+```swift
+@main
+struct PickrApp: App {
+    init() {
+        DSTypography.family = DSFontFamily("Nunito")
+    }
+    ...
+}
+```
+
+The host app bundles and registers the font files (`UIAppFonts` in
+Info.plist). Pass the *family* name — weights are resolved through
+`Font.weight(_:)`, so ship the weights the tokens use (regular, semibold,
+bold). Dynamic Type keeps working: custom fonts scale relative to the same
+text styles as their system counterparts. Leave `family` as `nil` (or never
+touch it) and nothing changes — system fonts, as before.
+
 ## Component map
 
 | Group          | Components |

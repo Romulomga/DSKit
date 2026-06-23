@@ -92,52 +92,68 @@ public struct DSSettingsRow: View {
     }
 
     public var body: some View {
-        Button {
-            guard let action else { return }
-            DSHaptics.light(if: hapticsEnabled)
-            action()
-        } label: {
-            HStack(spacing: DSSpacing.md) {
-                if let systemImage {
-                    Image(systemName: systemImage)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .frame(width: 28, height: 28)
-                        .background(iconColor ?? Color.accent)
-                        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                }
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(DSTypography.body())
-                        .foregroundStyle(Color.onSurfaceHigh)
-                    if let subtitle {
-                        Text(subtitle)
-                            .font(DSTypography.footnote())
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                Spacer(minLength: 0)
-                trailing
-                if action != nil {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.tertiary)
+        rowContainer
+            .overlay(alignment: .bottom) {
+                if showsDivider {
+                    Rectangle()
+                        .fill(Color.border)
+                        .frame(height: 0.5)
+                        .padding(.leading, DSSpacing.md + 28 + DSSpacing.md)
                 }
             }
-            .padding(DSSpacing.md)
-            .contentShape(Rectangle())
+    }
+
+    // A tappable Button only when there's a row action. Otherwise a plain
+    // container — wrapping a toggle/value row in a Button forced us to
+    // `.disabled(action == nil)`, which propagated down and made the trailing
+    // control inert (and dimmed the whole row). Branching keeps it live.
+    @ViewBuilder
+    private var rowContainer: some View {
+        if let action {
+            Button {
+                DSHaptics.light(if: hapticsEnabled)
+                action()
+            } label: {
+                rowLabel
+            }
+            .buttonStyle(.plain)
+            .accessibilityElement(children: .combine)
+        } else {
+            rowLabel
         }
-        .buttonStyle(.plain)
-        .disabled(action == nil)
-        .overlay(alignment: .bottom) {
-            if showsDivider {
-                Rectangle()
-                    .fill(Color.border)
-                    .frame(height: 0.5)
-                    .padding(.leading, DSSpacing.md + 28 + DSSpacing.md)
+    }
+
+    @ViewBuilder
+    private var rowLabel: some View {
+        HStack(spacing: DSSpacing.md) {
+            if let systemImage {
+                Image(systemName: systemImage)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 28, height: 28)
+                    .background(iconColor ?? Color.accent)
+                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(DSTypography.body())
+                    .foregroundStyle(Color.onSurfaceHigh)
+                if let subtitle {
+                    Text(subtitle)
+                        .font(DSTypography.footnote())
+                        .foregroundStyle(.secondary)
+                }
+            }
+            Spacer(minLength: 0)
+            trailing
+            if action != nil {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.tertiary)
             }
         }
-        .accessibilityElement(children: .combine)
+        .padding(DSSpacing.md)
+        .contentShape(Rectangle())
     }
 }
 

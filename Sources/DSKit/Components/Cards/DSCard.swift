@@ -17,6 +17,8 @@ public struct DSCard<Content: View>: View {
     private let variant: DSCardVariant
     private let content: Content
 
+    @Environment(\.colorScheme) private var scheme
+
     public init(_ variant: DSCardVariant = .default, @ViewBuilder content: () -> Content) {
         self.variant = variant
         self.content = content()
@@ -46,10 +48,18 @@ public struct DSCard<Content: View>: View {
         switch variant {
         case .default, .elevated:
             RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous)
-                .strokeBorder(Color.border.opacity(0.35), lineWidth: 0.5)
+                .strokeBorder(borderStroke, lineWidth: 0.75)
         case .material:
             EmptyView()
         }
+    }
+
+    /// Light mode: a faint dark hairline. Dark mode: a faint *light* hairline — over a near-black
+    /// canvas a dark border vanishes into the background (the "ghost edge"), so a top-lit light
+    /// hairline is what makes the card read as a distinct surface (matching the system grouped-list
+    /// look). A flat `Color.border` token can't satisfy both, hence the appearance switch.
+    private var borderStroke: Color {
+        scheme == .dark ? Color.white.opacity(0.10) : Color.border.opacity(0.5)
     }
 }
 

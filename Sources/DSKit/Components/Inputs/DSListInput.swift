@@ -5,6 +5,7 @@ import UIKit
 /// newlines and reports item/duplicate counts but never mutates user input.
 public struct DSListInput: View {
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
+    @Environment(\.dsSurfaceLevel) private var level
     @FocusState private var isFocused: Bool
 
     private let title: LocalizedStringKey?
@@ -82,12 +83,12 @@ public struct DSListInput: View {
                         }
                     }
             }
-            .background(Color.surface)
+            .background(Color.surface(level: level))
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
                     .strokeBorder(
-                        isFocused ? Color.accent.opacity(0.7) : Color.border.opacity(0.5),
+                        isFocused ? Color.accent.opacity(0.7) : Color.hairline,
                         lineWidth: isFocused ? 1.5 : 1
                     )
             )
@@ -139,7 +140,7 @@ public struct DSListInput: View {
                 .foregroundStyle(text.isEmpty ? Color.secondary : Color.errorHigh)
                 .disabled(text.isEmpty)
             }
-            .font(DSTypography.footnote())
+            .font(DSTypography.footnote().monospacedDigit())
             .foregroundStyle(.secondary)
             .labelStyle(.titleAndIcon)
 

@@ -29,7 +29,7 @@ public struct DSSecondaryButton: View {
                 if let systemImage {
                     Image(systemName: systemImage)
                 }
-                Text(title).fontWeight(.medium)
+                Text(title).fontWeight(.semibold)
             }
             .font(DSTypography.headline())
             .foregroundStyle(theme.primary)

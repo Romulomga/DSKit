@@ -11,6 +11,7 @@ public struct DSChip: View {
     @Environment(\.dsTheme) private var theme
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.dsSurfaceLevel) private var level
 
     private let title: LocalizedStringKey
     private let emoji: String?
@@ -40,7 +41,7 @@ public struct DSChip: View {
             HStack(spacing: DSSpacing.sm) {
                 leading
                 Text(title)
-                    .font(DSTypography.subheadline().weight(.medium))
+                    .font(DSTypography.subheadline().weight(.semibold))
                     .foregroundStyle(isSelected ? theme.primary : Color.onSurfaceHigh)
                 Spacer(minLength: 0)
                 if isSelected {
@@ -53,7 +54,7 @@ public struct DSChip: View {
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity)
             .background(
-                Capsule().fill(isSelected ? theme.primary.opacity(0.12) : Color.surface)
+                Capsule().fill(isSelected ? theme.primary.opacity(0.12) : Color.surface(level: level))
             )
             .overlay(
                 Capsule().strokeBorder(

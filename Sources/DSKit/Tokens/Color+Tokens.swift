@@ -11,8 +11,24 @@ public extension Color {
     /// Light brand wash, hex value Light **#EFE7FA** Dark **#EFE7FA**
     static let appColorLight = Color("AppColorLight", bundle: .module)
 
+    /// Grouped canvas — the iOS Settings backdrop. Hex value Light **#F2F2F7** Dark **#111111**.
+    /// Pair with `surfaceElevated` cells; `surface` is too close in tone to read on it.
+    static let backgroundGrouped = Color("BackgroundGrouped", bundle: .module)
+
     /// Surface color, hex value Light **#F0F0F9** Dark **#313131**
     static let surface = Color("Surface", bundle: .module)
+
+    /// One step up from `surface`: cells on a grouped canvas, or an input /
+    /// chip nested inside a card so it doesn't vanish surface-on-surface.
+    /// Hex value Light **#FFFFFF** Dark **#3B3B3B**
+    static let surfaceElevated = Color("SurfaceElevated", bundle: .module)
+
+    /// Surface for a given nesting level (see `EnvironmentValues.dsSurfaceLevel`):
+    /// level 0 sits on the canvas and uses `surface`; anything deeper uses
+    /// `surfaceElevated`.
+    static func surface(level: Int) -> Color {
+        level > 0 ? .surfaceElevated : .surface
+    }
 
     /// On Surface High color, hex value Light **#101010** Dark **#D1D1D1**
     static let onSurfaceHigh = Color("OnSurfaceHigh", bundle: .module)
@@ -23,8 +39,15 @@ public extension Color {
     /// On Surface Light color, hex value Light **#BCBCBC** Dark **#535353**
     static let onSurfaceLight = Color("OnSurfaceLight", bundle: .module)
 
-    /// Border color, hex value Light **#E5E5E5** Dark **#414141**
+    /// Border color, hex value Light **#E5E5E5** Dark **#414141**.
+    /// Full-strength; use for dividers. For the resting outline of a surface
+    /// prefer `hairline`.
     static let border = Color("Border", bundle: .module)
+
+    /// Appearance-aware resting outline for cards and inputs. Light mode is a
+    /// faint dark line (`border` at 50%); dark mode is a faint *light* line
+    /// (**#FFFFFF** at 10%) because a dark hairline vanishes into a dark canvas.
+    static let hairline = Color("Hairline", bundle: .module)
 
     /// Brand accent — overridable per host app. DSKit default is `systemIndigo`.
     static let accent = Color("Accent", bundle: .mainIfAvailable)

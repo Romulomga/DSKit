@@ -5,6 +5,7 @@ import SwiftUI
 public struct DSNumberField: View {
     private let title: LocalizedStringKey?
     private let placeholder: LocalizedStringKey
+    @Environment(\.dsSurfaceLevel) private var level
     @Binding private var value: Int?
     private let externalError: LocalizedStringKey?
     private let invalidNumberMessage: LocalizedStringKey
@@ -37,11 +38,11 @@ public struct DSNumberField: View {
             TextField(placeholder, text: $text)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.plain)
-                .font(DSTypography.body())
+                .font(DSTypography.body().monospacedDigit())
                 .focused($isFocused)
                 .padding(.horizontal, DSSpacing.md)
                 .padding(.vertical, DSSpacing.sm + 2)
-                .background(Color.surface)
+                .background(Color.surface(level: level))
                 .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
@@ -89,7 +90,7 @@ public struct DSNumberField: View {
     private var borderColor: Color {
         if hasAnyError { return Color.errorHigh.opacity(0.7) }
         if isFocused   { return Color.accent.opacity(0.7) }
-        return Color.border.opacity(0.5)
+        return Color.hairline
     }
 
     private var borderWidth: CGFloat {

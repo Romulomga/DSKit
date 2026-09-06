@@ -4,12 +4,15 @@ import SwiftUI
 /// onboarding flows, hero CTAs, or anywhere a softer, more inviting button
 /// shape suits the content (wellness, mindfulness, lifestyle apps).
 ///
-/// Two variants:
+/// Three variants:
 /// - `.primary` — filled accent, white text. Dominant action.
 /// - `.secondary` — accent-tinted fill, accent text. Supporting action.
+/// - `.outlined` — transparent fill, accent stroke and text. Supporting
+///   action over photography or `AtmosphericBackground`, where a tinted
+///   wash would look muddy.
 public struct DSPillButton: View {
     public enum Variant {
-        case primary, secondary
+        case primary, secondary, outlined
     }
 
     @Environment(\.dsTheme) private var theme
@@ -59,6 +62,7 @@ public struct DSPillButton: View {
             .padding(.horizontal, DSSpacing.lg)
             .background(background)
             .clipShape(Capsule())
+            .overlay(outline)
             .opacity(isEnabled ? 1.0 : 0.5)
         }
         .buttonStyle(DSPressableButtonStyle())
@@ -69,8 +73,8 @@ public struct DSPillButton: View {
 
     private var foreground: Color {
         switch variant {
-        case .primary:   return .white
-        case .secondary: return theme.primary
+        case .primary:              return .white
+        case .secondary, .outlined: return theme.primary
         }
     }
 
@@ -81,6 +85,15 @@ public struct DSPillButton: View {
             theme.primary
         case .secondary:
             theme.primary.opacity(0.12)
+        case .outlined:
+            Color.clear
+        }
+    }
+
+    @ViewBuilder
+    private var outline: some View {
+        if variant == .outlined {
+            Capsule().strokeBorder(theme.primary, lineWidth: 1.5)
         }
     }
 }
@@ -93,6 +106,7 @@ public struct DSPillButton: View {
             DSPillButton("Começar jornada", systemImage: "sparkles") {}
             DSPillButton("Loading", isLoading: true) {}
             DSPillButton("Secundário", variant: .secondary) {}
+            DSPillButton("Outlined", variant: .outlined) {}
             DSPillButton("Disabled") {}
                 .disabled(true)
         }
@@ -104,8 +118,21 @@ public struct DSPillButton: View {
         VStack(spacing: DSSpacing.md) {
             DSPillButton("Continuar") {}
             DSPillButton("Secundário", variant: .secondary) {}
+            DSPillButton("Outlined", variant: .outlined) {}
         }
     }
     .preferredColorScheme(.dark)
+}
+
+#Preview("Pill button — atmospheric") {
+    ZStack {
+        AtmosphericBackground(tint: .accent)
+
+        VStack(spacing: DSSpacing.md) {
+            DSPillButton("Começar", systemImage: "sparkles") {}
+            DSPillButton("Já tenho conta", variant: .outlined) {}
+        }
+        .padding(DSSpacing.lg)
+    }
 }
 #endif

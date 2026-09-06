@@ -69,6 +69,22 @@ struct AccessibilityTests {
     }
 }
 
+@Suite("Surfaces")
+struct SurfaceTests {
+    @Test func canvasLevelUsesSurface() {
+        #expect(Color.surface(level: 0) == Color.surface)
+    }
+
+    @Test func nestedLevelsUseElevatedSurface() {
+        #expect(Color.surface(level: 1) == Color.surfaceElevated)
+        #expect(Color.surface(level: 3) == Color.surfaceElevated)
+    }
+
+    @Test func surfaceLevelDefaultsToCanvas() {
+        #expect(EnvironmentValues().dsSurfaceLevel == 0)
+    }
+}
+
 @Suite("Package metadata")
 struct MetadataTests {
     @Test func versionIsExposed() {

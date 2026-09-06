@@ -5,6 +5,7 @@ import SwiftUI
 public struct DSFeatureCard: View {
     @Environment(\.dsTheme) private var theme
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
+    @Environment(\.dsSurfaceLevel) private var level
 
     private let title: LocalizedStringKey
     private let description: LocalizedStringKey
@@ -77,7 +78,7 @@ public struct DSFeatureCard: View {
             .contentShape(Rectangle())
             .padding(DSSpacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.surface)
+            .background(Color.surface(level: level))
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
         }
         .buttonStyle(DSPressableButtonStyle())

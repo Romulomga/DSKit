@@ -17,7 +17,7 @@ public struct DSCard<Content: View>: View {
     private let variant: DSCardVariant
     private let content: Content
 
-    @Environment(\.colorScheme) private var scheme
+    @Environment(\.dsSurfaceLevel) private var level
 
     public init(_ variant: DSCardVariant = .default, @ViewBuilder content: () -> Content) {
         self.variant = variant
@@ -26,6 +26,7 @@ public struct DSCard<Content: View>: View {
 
     public var body: some View {
         content
+            .dsSurfaceContainer()
             .padding(DSSpacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(background)
@@ -37,8 +38,8 @@ public struct DSCard<Content: View>: View {
     @ViewBuilder
     private var background: some View {
         switch variant {
-        case .default:  Color.surface
-        case .elevated: Color.surface
+        case .default:  Color.surface(level: level)
+        case .elevated: Color.surface(level: level)
         case .material: Rectangle().fill(.regularMaterial)
         }
     }
@@ -48,19 +49,12 @@ public struct DSCard<Content: View>: View {
         switch variant {
         case .default, .elevated:
             RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous)
-                .strokeBorder(borderStroke, lineWidth: 0.75)
+                .strokeBorder(Color.hairline, lineWidth: 0.75)
         case .material:
             EmptyView()
         }
     }
 
-    /// Light mode: a faint dark hairline. Dark mode: a faint *light* hairline — over a near-black
-    /// canvas a dark border vanishes into the background (the "ghost edge"), so a top-lit light
-    /// hairline is what makes the card read as a distinct surface (matching the system grouped-list
-    /// look). A flat `Color.border` token can't satisfy both, hence the appearance switch.
-    private var borderStroke: Color {
-        scheme == .dark ? Color.white.opacity(0.10) : Color.border.opacity(0.5)
-    }
 }
 
 private struct DSCardShadowModifier: ViewModifier {
@@ -93,5 +87,56 @@ private struct DSCardShadowModifier: ViewModifier {
             }
         }
     }
+}
+
+private struct DSCardNestedPreviewHost: View {
+    @State private var name = ""
+
+    var body: some View {
+        DSCard {
+            VStack(alignment: .leading, spacing: DSSpacing.md) {
+                Text("Nested input reads on surfaceElevated")
+                    .font(DSTypography.headline())
+
+                DSTextField(title: "Name", placeholder: "Your name", text: $name)
+            }
+        }
+    }
+}
+
+#Preview("Card — nested input") {
+    DSPreviewContainer("Nested") {
+        DSCardNestedPreviewHost()
+    }
+}
+
+#Preview("Card — grouped canvas") {
+    ScrollView {
+        VStack(spacing: DSSpacing.md) {
+            DSCard {
+                Text("Elevated cell on grouped canvas")
+                    .font(DSTypography.body())
+            }
+
+            DSCard {
+                Text("iOS Settings look")
+                    .font(DSTypography.body())
+            }
+        }
+        .padding(DSSpacing.lg)
+    }
+    .dsGroupedCanvas()
+}
+
+#Preview("Card — grouped canvas dark") {
+    ScrollView {
+        DSCard {
+            Text("Elevated cell on grouped canvas")
+                .font(DSTypography.body())
+        }
+        .padding(DSSpacing.lg)
+    }
+    .dsGroupedCanvas()
+    .preferredColorScheme(.dark)
 }
 #endif

@@ -5,6 +5,7 @@ import SwiftUI
 /// flow at the call site.
 public struct DSPaywallCard: View {
     @Environment(\.dsTheme) private var theme
+    @Environment(\.dsSurfaceLevel) private var level
 
     private let title: LocalizedStringKey
     private let features: [LocalizedStringKey]
@@ -74,7 +75,7 @@ public struct DSPaywallCard: View {
         }
         .padding(DSSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.surface)
+        .background(Color.surface(level: level))
         .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
     }
 }

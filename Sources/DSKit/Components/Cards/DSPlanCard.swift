@@ -4,6 +4,8 @@ import SwiftUI
 /// indicator, title, price (monospaced for tabular alignment), period,
 /// and an optional row of `DSBadge`s.
 public struct DSPlanCard<Badges: View>: View {
+    @Environment(\.dsSurfaceLevel) private var level
+
     private let title: LocalizedStringKey
     private let price: LocalizedStringKey
     private let period: LocalizedStringKey
@@ -54,12 +56,12 @@ public struct DSPlanCard<Badges: View>: View {
                 }
             }
             .padding(DSSpacing.md)
-            .background(Color.surface)
+            .background(Color.surface(level: level))
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
                     .strokeBorder(
-                        isSelected ? Color.accent.opacity(0.7) : Color.border.opacity(0.5),
+                        isSelected ? Color.accent.opacity(0.7) : Color.hairline,
                         lineWidth: isSelected ? 1.5 : 1
                     )
             )

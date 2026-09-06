@@ -16,6 +16,8 @@ public struct DSResultSection: Sendable {
 /// - `list` for ranked picks
 /// - `grouped` for results split into named buckets
 public struct DSResultCard: View {
+    @Environment(\.dsSurfaceLevel) private var level
+
     private enum Layout {
         case single(primary: String, subtitle: String?)
         case list(items: [String], subtitle: String?)
@@ -62,7 +64,7 @@ public struct DSResultCard: View {
         }
         .padding(DSSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.surface)
+        .background(Color.surface(level: level))
         .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
         .accessibilityElement(children: .combine)
     }
@@ -70,7 +72,7 @@ public struct DSResultCard: View {
     @ViewBuilder
     private func singleView(primary: String, subtitle: String?) -> some View {
         Text(primary)
-            .font(DSTypography.resultPrimary())
+            .font(DSTypography.resultPrimary().monospacedDigit())
             .foregroundStyle(Color.onSurfaceHigh)
             .minimumScaleFactor(0.5)
             .lineLimit(2)
@@ -91,7 +93,7 @@ public struct DSResultCard: View {
                     Text(item)
                         .foregroundStyle(Color.onSurfaceHigh)
                 }
-                .font(DSTypography.title3())
+                .font(DSTypography.title3().monospacedDigit())
             }
         }
         if let subtitle {
@@ -111,7 +113,7 @@ public struct DSResultCard: View {
                         .foregroundStyle(.secondary)
                     ForEach(Array(section.items.enumerated()), id: \.offset) { _, item in
                         Text(item)
-                            .font(DSTypography.body())
+                            .font(DSTypography.body().monospacedDigit())
                             .foregroundStyle(Color.onSurfaceHigh)
                     }
                 }

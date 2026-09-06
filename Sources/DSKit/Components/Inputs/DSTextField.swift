@@ -3,6 +3,7 @@ import SwiftUI
 /// Styled text field with title, optional helper/error and optional clear button.
 public struct DSTextField: View {
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
+    @Environment(\.dsSurfaceLevel) private var level
     @FocusState private var isFocused: Bool
 
     private let title: LocalizedStringKey?
@@ -54,7 +55,7 @@ public struct DSTextField: View {
             }
             .padding(.horizontal, DSSpacing.md)
             .padding(.vertical, DSSpacing.sm + 2)
-            .background(Color.surface)
+            .background(Color.surface(level: level))
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
@@ -82,7 +83,7 @@ public struct DSTextField: View {
     private var borderColor: Color {
         if errorMessage != nil { return Color.errorHigh.opacity(0.7) }
         if isFocused           { return Color.accent.opacity(0.7) }
-        return Color.border.opacity(0.5)
+        return Color.hairline
     }
 
     private var borderWidth: CGFloat {

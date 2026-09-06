@@ -73,6 +73,28 @@ emission for the entire subtree — wire it to your app's setting.
 
 > `.microToolsTheme(_:)` is still available but marked deprecated and forwards to `.dsTheme(_:)`.
 
+### Surfaces and canvases
+
+Two canvases, two surface steps:
+
+| Canvas | Cells / cards | When |
+| --- | --- | --- |
+| `Color.background` (white / near-black) | `Color.surface` (tinted / mid-gray) | Default. Tool screens, results, onboarding. |
+| `Color.backgroundGrouped` (light gray / darker black) | `Color.surfaceElevated` (white / lighter gray) | Settings-style screens. |
+
+Apply `.dsGroupedCanvas()` to a screen and every DSKit card, input and
+settings group on it switches to `surfaceElevated` on its own. Nesting is
+also automatic: an input inside a `DSCard` steps up one level so it never
+disappears surface-on-surface. Custom views can read
+`@Environment(\.dsSurfaceLevel)` and call `Color.surface(level:)` to join in.
+
+```swift
+DSScreen(title: "Settings") {
+    DSSettingsSection("Preferences") { ... }
+}
+.dsGroupedCanvas()
+```
+
 ### Custom fonts
 
 Every `DSTypography` token resolves to the system font by default. To switch
@@ -100,9 +122,9 @@ touch it) and nothing changes — system fonts, as before.
 
 | Group          | Components |
 | -------------- | ---------- |
-| Tokens         | `DSSpacing`, `DSRadius`, `DSColor`, `DSTypography`, `DSShadow`, `DSMotion` |
+| Tokens         | `DSSpacing`, `DSRadius`, `Color` tokens (`.background`, `.surface`, `.hairline`, …), `DSTypography`, `DSShadow`, `DSMotion` |
 | Theme          | `DSTheme`, `EnvironmentValues.dsTheme`, `.microToolsTheme(_:)` |
-| Buttons        | `DSPrimaryButton`, `DSSecondaryButton`, `DSDestructiveButton`, `DSIconButton` |
+| Buttons        | `DSPrimaryButton`, `DSSecondaryButton`, `DSDestructiveButton`, `DSPillButton` (`.primary` / `.secondary` / `.outlined`), `DSIconButton`, `GlassActionButton` |
 | Cards          | `DSCard`, `DSFeatureCard`, `DSResultCard` |
 | Inputs         | `DSTextField`, `DSNumberField`, `DSListInput` |
 | Feedback       | `DSEmptyState`, `DSErrorState`, `DSLoadingState`, `DSToast` |
@@ -127,7 +149,7 @@ Open any file in Xcode and the canvas will pick them up.
 1. **Look like Apple, not like a brand.** Semantic system colors, system fonts, system materials. Themes only override tint and app name.
 2. **Respect the user.** Dynamic Type scales every text style; Reduce Motion suppresses press scale; VoiceOver gets `.combine`d cards.
 3. **One primary action per screen.** `DSPrimaryButton` is bold; secondary actions are tinted; destructive actions are explicit and red.
-4. **Soft surfaces.** `DSColor.surface` / `DSColor.elevatedSurface` over `DSColor.groupedBackground`. Shadows are extremely subtle and reserved for `DSCard(.elevated)` and floating overlays.
+4. **Soft surfaces.** `Color.surface` over `Color.background`, or `Color.surfaceElevated` over `Color.backgroundGrouped` (the iOS Settings look, via `.dsGroupedCanvas()`). Anything nested inside a surface steps up to `surfaceElevated` automatically. Outlines use the appearance-aware `Color.hairline`. Shadows are extremely subtle and reserved for `DSCard(.elevated)` and floating overlays.
 5. **No fixed heights that break accessibility.** Buttons use `minHeight` rather than `frame(height:)`. Result text uses `minimumScaleFactor`.
 6. **Haptics are punctuation, not noise.** Every interactive component nudges with `DSHaptics.light()` / `.medium()`. Disable globally with `.dsHapticsEnabled(false)`.
 7. **Strings are localizable by default.** Title/label/message props accept `LocalizedStringKey`, so passing string literals automatically participates in String Catalog localization in the consumer app. Dynamic content (a drawn name, a user-typed item) stays `String`.

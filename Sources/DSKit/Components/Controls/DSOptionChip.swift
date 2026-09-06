@@ -27,7 +27,7 @@ public struct DSOptionChip: View {
                 }
                 Text(title)
             }
-            .font(DSTypography.subheadline().weight(.medium))
+            .font(DSTypography.subheadline().weight(.semibold))
             .padding(.horizontal, DSSpacing.md)
             .padding(.vertical, DSSpacing.sm)
             .foregroundStyle(isSelected ? Color.white : theme.primary)

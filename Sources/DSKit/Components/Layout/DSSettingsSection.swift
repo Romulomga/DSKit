@@ -3,6 +3,8 @@ import SwiftUI
 /// Grouped settings-style section. Contains `DSSettingsRow`s and renders a
 /// rounded grouped surface like iOS Settings.
 public struct DSSettingsSection<Content: View>: View {
+    @Environment(\.dsSurfaceLevel) private var level
+
     private let title: LocalizedStringKey?
     private let footer: LocalizedStringKey?
     private let content: Content
@@ -30,7 +32,8 @@ public struct DSSettingsSection<Content: View>: View {
             VStack(spacing: 0) {
                 content
             }
-            .background(Color.surface)
+            .dsSurfaceContainer()
+            .background(Color.surface(level: level))
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             if let footer {
                 Text(footer)

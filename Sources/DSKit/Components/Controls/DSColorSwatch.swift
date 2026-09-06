@@ -42,7 +42,7 @@ public struct DSColorSwatch: View {
                     }
                 }
                 Text(label)
-                    .font(DSTypography.caption().weight(.medium))
+                    .font(DSTypography.caption())
                     .foregroundStyle(Color.onSurfaceHigh)
             }
         }

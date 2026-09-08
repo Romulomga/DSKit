@@ -132,9 +132,12 @@ public struct DSTextField: View {
             isRevealed.toggle()
             DSHaptics.light(if: hapticsEnabled)
         } label: {
+            // Fixed width only: the box already spans the tap-target height, and a
+            // 44 pt minimum here would make secure fields taller than the others.
             (isRevealed ? secureToggleIcons.hide : secureToggleIcons.show)
                 .foregroundStyle(.secondary)
-                .frame(minWidth: DSInputMetrics.tapTarget, minHeight: DSInputMetrics.tapTarget)
+                .frame(width: DSInputMetrics.tapTarget)
+                .frame(maxHeight: .infinity)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

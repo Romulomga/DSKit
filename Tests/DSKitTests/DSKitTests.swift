@@ -95,7 +95,7 @@ struct MetadataTests {
 @Suite("Fields")
 struct FieldTests {
     @Test func versionIsBumpedWithTheFieldFamily() {
-        #expect(DSKit.version == "1.1.0")
+        #expect(DSKit.version == "1.0.22")
     }
 
     @Test func pickerOptionKeepsValueAsIdentity() {

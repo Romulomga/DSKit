@@ -91,3 +91,26 @@ struct MetadataTests {
         #expect(!DSKit.version.isEmpty)
     }
 }
+
+@Suite("Fields")
+struct FieldTests {
+    @Test func versionIsBumpedWithTheFieldFamily() {
+        #expect(DSKit.version == "1.1.0")
+    }
+
+    @Test func pickerOptionKeepsValueAsIdentity() {
+        let option = DSPickerOption("RJ", label: "Rio de Janeiro")
+        #expect(option.id == "RJ")
+    }
+
+    @Test func borderTellsTheState() {
+        #expect(DSInputMetrics.borderWidth(isFocused: false, isInvalid: false) == 1)
+        #expect(DSInputMetrics.borderWidth(isFocused: true, isInvalid: false) == 1.5)
+        #expect(DSInputMetrics.borderWidth(isFocused: false, isInvalid: true) == 1.5)
+        #expect(DSInputMetrics.borderColor(isFocused: true, isInvalid: true) == Color.errorHigh.opacity(0.7))
+    }
+
+    @Test func labelStyleDefaultsToCompact() {
+        #expect(EnvironmentValues().dsFieldLabelStyle == .compact)
+    }
+}

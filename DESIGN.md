@@ -729,6 +729,12 @@ Todos os componentes com cara de botão compartilham o `DSPressableButtonStyle`:
 
 **`paywall-card`** — `DSPaywallCard`. Glifo `sparkles` em accent + título `{typography.title3}` + `{component.pro-badge}` no final → lista de recursos (`checkmark.circle.fill` accent, `{typography.body}`) → linha de preço opcional `{typography.footnote}` secondary → `{component.button-primary}` → link de restaurar `{typography.footnote}` secondary centralizado. Padding de 16pt, `{colors.surface}`, `{rounded.lg}`.
 
+### Campos de formulário
+
+Todo campo nasce do mesmo container, `DSInputBox`: superfície do nível atual, raio `md`, altura mínima de 45 pt e uma borda que conta o estado — `hairline` em repouso, `accent` a 70% com 1,5 pt em foco, `errorHigh` a 70% em erro. O fundo nunca muda de cor para indicar estado; só a borda. `DSTextField` e `DSPickerField` são o container com um campo ou um menu dentro; inputs próprios de um app (código SMS, campos pareados) devem usar o `DSInputBox` para manter a silhueta.
+
+Rótulo e legenda vêm de `DSFieldLabel` e `DSFieldCaption` e seguem o `dsFieldLabelStyle` do ambiente: `.compact` (footnote semibold, secundário; erro em footnote com ícone) é o padrão; `.prominent` (subheadline bold no texto primário; erro em subheadline itálica) serve a apps com formulários longos ou público que precisa de mais presença. O app escolhe uma vez, na raiz, e todos os campos obedecem.
+
 ### Controles
 
 **`chip`** / **`chip-selected`** — `DSChip`. Cápsula de largura total, padding 12pt × 14pt, emoji leading opcional (18pt) ou SF Symbol (14pt/600), rótulo `{typography.subheadline}` em 600. Repouso: preenchimento `{colors.surface}`, texto `{colors.on-surface-high}`, sem borda. Selecionado: preenchimento accent @ 12%, borda accent de 1.5pt, texto accent e um checkmark 12pt/700 no final para que o estado tenha um sinal além da cor. Listas de onboarding multi-seleção. Haptic light.

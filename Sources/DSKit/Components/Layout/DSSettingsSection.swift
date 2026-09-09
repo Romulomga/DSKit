@@ -48,12 +48,22 @@ public struct DSSettingsSection<Content: View>: View {
 /// One row inside a `DSSettingsSection`. Supports leading icon, title,
 /// subtitle, trailing content (toggle/value/chevron) and an optional action.
 /// Set `showsDivider: false` on the last row of a section for the iOS Settings look.
+/// How the row title reads next to its subtitle.
+public enum DSSettingsRowTitleStyle: Sendable {
+    /// Body weight: a plain option in a list of settings.
+    case regular
+    /// Headline weight with a regular subtitle: an entry that leads somewhere
+    /// (a help category, a section of content).
+    case prominent
+}
+
 public struct DSSettingsRow: View {
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
 
     private let systemImage: String?
     private let iconColor: Color?
     private let title: LocalizedStringKey
+    private let titleStyle: DSSettingsRowTitleStyle
     private let subtitle: LocalizedStringKey?
     private let trailing: AnyView
     private let action: (() -> Void)?
@@ -63,6 +73,7 @@ public struct DSSettingsRow: View {
         systemImage: String? = nil,
         iconColor: Color? = nil,
         title: LocalizedStringKey,
+        titleStyle: DSSettingsRowTitleStyle = .regular,
         subtitle: LocalizedStringKey? = nil,
         showsDivider: Bool = true,
         action: (() -> Void)? = nil
@@ -70,6 +81,7 @@ public struct DSSettingsRow: View {
         self.systemImage = systemImage
         self.iconColor = iconColor
         self.title = title
+        self.titleStyle = titleStyle
         self.subtitle = subtitle
         self.trailing = AnyView(EmptyView())
         self.action = action
@@ -80,6 +92,7 @@ public struct DSSettingsRow: View {
         systemImage: String? = nil,
         iconColor: Color? = nil,
         title: LocalizedStringKey,
+        titleStyle: DSSettingsRowTitleStyle = .regular,
         subtitle: LocalizedStringKey? = nil,
         showsDivider: Bool = true,
         action: (() -> Void)? = nil,
@@ -88,6 +101,7 @@ public struct DSSettingsRow: View {
         self.systemImage = systemImage
         self.iconColor = iconColor
         self.title = title
+        self.titleStyle = titleStyle
         self.subtitle = subtitle
         self.trailing = AnyView(trailing())
         self.action = action
@@ -139,7 +153,7 @@ public struct DSSettingsRow: View {
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(DSTypography.body())
+                    .font(titleStyle == .prominent ? DSTypography.headline() : DSTypography.body())
                     .foregroundStyle(Color.onSurfaceHigh)
                 if let subtitle {
                     Text(subtitle)
@@ -167,6 +181,11 @@ private struct DSSettingsPreviewHost: View {
 
     var body: some View {
         VStack(spacing: DSSpacing.lg) {
+            DSSettingsSection("Help") {
+                DSSettingsRow(title: "Account and profile", titleStyle: .prominent, subtitle: "Manage your profile") {}
+                DSSettingsRow(title: "Billing", titleStyle: .prominent, subtitle: "Invoices and receipts", showsDivider: false) {}
+            }
+
             DSSettingsSection("Preferences") {
                 DSSettingsRow(systemImage: "iphone.radiowaves.left.and.right",
                               iconColor: Color.accent,

@@ -185,7 +185,9 @@ private struct DSSettingsPreviewHost: View {
         VStack(spacing: DSSpacing.lg) {
             DSSettingsSection("Help") {
                 DSSettingsRow(title: "Account and profile", titleStyle: .prominent, subtitle: "Manage your profile") {}
-                DSSettingsRow(title: "Billing", titleStyle: .prominent, subtitle: "Invoices and receipts", showsDivider: false) {}
+                DSSettingsRow(
+                    title: "Billing", titleStyle: .prominent, subtitle: "Invoices and receipts", showsDivider: false
+                ) {}
             }
 
             DSSettingsSection("Preferences") {

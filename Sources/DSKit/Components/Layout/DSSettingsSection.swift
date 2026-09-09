@@ -169,7 +169,9 @@ public struct DSSettingsRow: View {
                     .foregroundStyle(.tertiary)
             }
         }
-        .padding(DSSpacing.md)
+        .padding(.horizontal, DSSpacing.md)
+        // Prominent rows breathe more: a category with a subtitle reads as a card, not a switch.
+        .padding(.vertical, titleStyle == .prominent ? DSSpacing.lg : DSSpacing.md)
         .contentShape(Rectangle())
     }
 }

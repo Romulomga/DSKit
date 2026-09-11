@@ -5,22 +5,22 @@ public extension Color {
         self = Color(name, bundle: Bundle.mainIfAvailable)
     }
 
-    /// Background color, hex value Light **#FFFFFF** Dark **#1A1A1A**
+    /// Background color, hex value Light **#FFFFFF** Dark **#121212**
     static let background = Color("Background", bundle: .module)
 
     /// Light brand wash, hex value Light **#EFE7FA** Dark **#EFE7FA**
     static let appColorLight = Color("AppColorLight", bundle: .module)
 
-    /// Grouped canvas — the iOS Settings backdrop. Hex value Light **#F2F2F7** Dark **#111111**.
+    /// Grouped canvas — the iOS Settings backdrop. Hex value Light **#F2F2F7** Dark **#0A0A0A**.
     /// Pair with `surfaceElevated` cells; `surface` is too close in tone to read on it.
     static let backgroundGrouped = Color("BackgroundGrouped", bundle: .module)
 
-    /// Surface color, hex value Light **#F0F0F9** Dark **#313131**
+    /// Surface color, hex value Light **#F0F0F9** Dark **#1E1E1E**
     static let surface = Color("Surface", bundle: .module)
 
     /// One step up from `surface`: cells on a grouped canvas, or an input /
     /// chip nested inside a card so it doesn't vanish surface-on-surface.
-    /// Hex value Light **#FFFFFF** Dark **#3B3B3B**
+    /// Hex value Light **#FFFFFF** Dark **#2A2A2A**
     static let surfaceElevated = Color("SurfaceElevated", bundle: .module)
 
     /// Surface for a given nesting level (see `EnvironmentValues.dsSurfaceLevel`):
@@ -30,16 +30,16 @@ public extension Color {
         level > 0 ? .surfaceElevated : .surface
     }
 
-    /// On Surface High color, hex value Light **#101010** Dark **#D1D1D1**
+    /// On Surface High color, hex value Light **#101010** Dark **#EDEDED**
     static let onSurfaceHigh = Color("OnSurfaceHigh", bundle: .module)
 
-    /// On Surface Medium color, hex value Light **#5E5E5E** Dark **#A3A3A3**
+    /// On Surface Medium color, hex value Light **#5E5E5E** Dark **#B0B0B0**
     static let onSurfaceMedium = Color("OnSurfaceMedium", bundle: .module)
 
-    /// On Surface Light color, hex value Light **#BCBCBC** Dark **#535353**
+    /// On Surface Light color, hex value Light **#BCBCBC** Dark **#4A4A4A**
     static let onSurfaceLight = Color("OnSurfaceLight", bundle: .module)
 
-    /// Border color, hex value Light **#E5E5E5** Dark **#414141**.
+    /// Border color, hex value Light **#E5E5E5** Dark **#363636**.
     /// Full-strength; use for dividers. For the resting outline of a surface
     /// prefer `hairline`.
     static let border = Color("Border", bundle: .module)

@@ -1,8 +1,10 @@
 import SwiftUI
 
-/// Two-thumb slider over discrete steps `0...stepCount`. The caller owns the
-/// meaning of each step (a price table, an area table) and renders it through
-/// `valueText`; the control keeps `lower < upper` by at least `minimumDistance`.
+/// Two-thumb slider over discrete steps `0...stepCount`. The caller owns the meaning
+/// of each step (a price table, an area table) and renders it through `valueText`.
+/// While dragging, the thumb follows the finger and ticks at every step it crosses;
+/// on release it snaps to the nearest step. The thumbs never overlap: the moving one
+/// stops one thumb-width away from the other (and never closer than `minimumDistance` steps).
 public struct DSRangeSlider: View {
     @Environment(\.dsTheme) private var theme
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
@@ -18,6 +20,8 @@ public struct DSRangeSlider: View {
     private let onThumbMoved: ((Thumb) -> Void)?
 
     @State private var activeThumb: Thumb?
+    /// Where the finger is while a thumb is dragged; nil once it snapped.
+    @State private var dragX: CGFloat?
 
     public enum Thumb: Sendable {
         case lower
@@ -57,8 +61,8 @@ public struct DSRangeSlider: View {
 
             GeometryReader { proxy in
                 let width = proxy.size.width
-                let lowerX = position(of: lowerIndex, in: width)
-                let upperX = position(of: upperIndex, in: width)
+                let lowerX = thumbX(.lower, width: width)
+                let upperX = thumbX(.upper, width: width)
 
                 ZStack(alignment: .leading) {
                     Capsule()
@@ -74,6 +78,9 @@ public struct DSRangeSlider: View {
                     thumb(.upper, at: upperX, width: width)
                 }
                 .frame(height: Self.thumbSize)
+                .animation(reduceMotion || dragX != nil ? nil : DSMotion.snappy, value: lowerIndex)
+                .animation(reduceMotion || dragX != nil ? nil : DSMotion.snappy, value: upperIndex)
+                .animation(reduceMotion ? nil : DSMotion.snappy, value: dragX == nil)
             }
             .frame(height: Self.thumbSize)
             .padding(.horizontal, Self.thumbSize / 2)
@@ -90,6 +97,8 @@ public struct DSRangeSlider: View {
         .accessibilityElement(children: .contain)
     }
 
+    // MARK: - Geometry
+
     private func position(of index: Int, in width: CGFloat) -> CGFloat {
         width * CGFloat(min(max(index, 0), stepCount)) / CGFloat(stepCount)
     }
@@ -98,6 +107,30 @@ public struct DSRangeSlider: View {
         guard width > 0 else { return 0 }
         return Int((x / width * CGFloat(stepCount)).rounded())
     }
+
+    /// Steps the thumbs must keep between them so they never overlap on this width.
+    private func gapSteps(in width: CGFloat) -> Int {
+        guard width > 0 else { return minimumDistance }
+        let stepWidth = width / CGFloat(stepCount)
+        return max(minimumDistance, Int((Self.thumbSize / stepWidth).rounded(.up)))
+    }
+
+    /// The dragged thumb rides the finger, clamped to the track and to the other thumb.
+    private func thumbX(_ which: Thumb, width: CGFloat) -> CGFloat {
+        guard activeThumb == which, let dragX else {
+            return position(of: which == .lower ? lowerIndex : upperIndex, in: width)
+        }
+        switch which {
+        case .lower:
+            let limit = position(of: upperIndex, in: width) - Self.thumbSize
+            return min(max(dragX, 0), max(limit, 0))
+        case .upper:
+            let limit = position(of: lowerIndex, in: width) + Self.thumbSize
+            return max(min(dragX, width), min(limit, width))
+        }
+    }
+
+    // MARK: - Thumb
 
     private func thumb(_ which: Thumb, at x: CGFloat, width: CGFloat) -> some View {
         Circle()
@@ -116,9 +149,11 @@ public struct DSRangeSlider: View {
                             activeThumb = which
                             onEditingChanged?(true)
                         }
+                        dragX = value.location.x
                         move(which, toX: value.location.x, width: width)
                     }
                     .onEnded { _ in
+                        dragX = nil
                         activeThumb = nil
                         onEditingChanged?(false)
                         onThumbMoved?(which)
@@ -129,7 +164,7 @@ public struct DSRangeSlider: View {
             .accessibilityValue(Text("\(which == .lower ? lowerIndex : upperIndex) of \(stepCount)"))
             .accessibilityAdjustableAction { direction in
                 let delta = direction == .increment ? 1 : -1
-                set(which, to: (which == .lower ? lowerIndex : upperIndex) + delta)
+                set(which, to: (which == .lower ? lowerIndex : upperIndex) + delta, gap: gapSteps(in: width))
                 onThumbMoved?(which)
             }
     }
@@ -138,16 +173,19 @@ public struct DSRangeSlider: View {
         let target = index(atX: x, in: width)
         let current = which == .lower ? lowerIndex : upperIndex
         guard target != current else { return }
-        DSHaptics.light(if: hapticsEnabled)
-        set(which, to: target)
+        let before = (lowerIndex, upperIndex)
+        set(which, to: target, gap: gapSteps(in: width))
+        if before != (lowerIndex, upperIndex) {
+            DSHaptics.light(if: hapticsEnabled)
+        }
     }
 
-    private func set(_ which: Thumb, to index: Int) {
+    private func set(_ which: Thumb, to index: Int, gap: Int) {
         switch which {
         case .lower:
-            lowerIndex = min(max(index, 0), upperIndex - minimumDistance)
+            lowerIndex = min(max(index, 0), max(upperIndex - gap, 0))
         case .upper:
-            upperIndex = max(min(index, stepCount), lowerIndex + minimumDistance)
+            upperIndex = max(min(index, stepCount), min(lowerIndex + gap, stepCount))
         }
     }
 }

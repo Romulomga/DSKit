@@ -50,18 +50,7 @@ public struct DSNumberField: View {
                 )
                 .animation(.easeOut(duration: 0.15), value: isFocused)
                 .animation(.easeOut(duration: 0.15), value: hasAnyError)
-                .toolbar {
-                    if isFocused {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            Button {
-                                isFocused = false
-                            } label: {
-                                Text("Done", bundle: .dsKit)
-                            }
-                        }
-                    }
-                }
+                .dsKeyboardDone(isActive: isFocused) { isFocused = false }
                 .onAppear {
                     let target = value.map(String.init) ?? ""
                     if text != target { text = target }

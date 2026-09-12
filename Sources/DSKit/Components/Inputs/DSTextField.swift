@@ -99,6 +99,7 @@ public struct DSTextField: View {
                     .submitLabel(submitLabel)
                     .focused($isFocused)
                     .onSubmit { onSubmit?() }
+                    .dsKeyboardDone(isActive: isFocused && DSKeyboardToolbar.needsDoneButton(keyboardType)) { isFocused = false }
 
                 if isSecure {
                     revealToggle

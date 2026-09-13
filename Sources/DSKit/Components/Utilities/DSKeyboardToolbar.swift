@@ -1,12 +1,12 @@
 import SwiftUI
 import UIKit
 
-/// One "done" bar over the keyboard per screen. SwiftUI merges the keyboard items of
-/// every field in a hierarchy (two fields, two buttons) and does not refresh
-/// conditional ones reliably, so the bar is declared once, where screens are built,
-/// and its button resigns whatever is first responder.
+/// A "done" pill over numeric keyboards, which have no return key to dismiss them.
+/// Drawn by the app over the keyboard (not the SwiftUI keyboard toolbar, which merges
+/// the items of every field and does not refresh reliably), only while the focused
+/// field's keyboard is numeric. Apply once per screen.
 public enum DSKeyboardToolbar {
-    /// The button's title; nil uses the DSKit "Done" localization.
+    /// The pill's title; nil uses the DSKit "Done" localization.
     nonisolated(unsafe) public static var doneTitle: LocalizedStringKey?
 
     @MainActor
@@ -16,26 +16,40 @@ public enum DSKeyboardToolbar {
 }
 
 public struct DSKeyboardDoneToolbar: ViewModifier {
+    @Environment(\.dsTheme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var keyboard = DSKeyboardState()
+
     public init() {}
 
     public func body(content: Content) -> some View {
-        content.toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
+        content.overlay(alignment: .bottomTrailing) {
+            if keyboard.isVisible, keyboard.isNumeric {
                 Button(action: DSKeyboardToolbar.dismissKeyboard) {
-                    if let title = DSKeyboardToolbar.doneTitle {
-                        Text(title).bold()
-                    } else {
-                        Text("Done", bundle: .dsKit).bold()
+                    Group {
+                        if let title = DSKeyboardToolbar.doneTitle {
+                            Text(title)
+                        } else {
+                            Text("Done", bundle: .dsKit)
+                        }
                     }
+                    .font(DSTypography.subheadline().bold())
+                    .foregroundStyle(theme.primary)
+                    .padding(.horizontal, DSSpacing.lg)
+                    .padding(.vertical, DSSpacing.sm)
+                    .background(Color.surfaceElevated, in: Capsule())
+                    .shadow(color: .black.opacity(0.15), radius: 6, y: 2)
                 }
+                .padding(DSSpacing.md)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
+        .animation(reduceMotion ? nil : DSMotion.short, value: keyboard.isVisible && keyboard.isNumeric)
     }
 }
 
 extension View {
-    /// The screen's "done" bar over the keyboard. Apply once per screen, never per field.
+    /// The screen's "done" pill over numeric keyboards. Apply once per screen, never per field.
     public func dsKeyboardDone() -> some View {
         modifier(DSKeyboardDoneToolbar())
     }

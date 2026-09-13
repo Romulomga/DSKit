@@ -26,19 +26,20 @@ public struct DSKeyboardDoneToolbar: ViewModifier {
         self.dismiss = dismiss
     }
 
+    /// The items are declared unconditionally: SwiftUI shows a field's keyboard items
+    /// only while that field is focused, and a conditional group renders an empty bar.
     public func body(content: Content) -> some View {
         content.toolbar {
-            if isActive {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button(action: dismiss) {
-                        if let title = DSKeyboardToolbar.doneTitle {
-                            Text(title).bold()
-                        } else {
-                            Text("Done", bundle: .dsKit).bold()
-                        }
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button(action: dismiss) {
+                    if let title = DSKeyboardToolbar.doneTitle {
+                        Text(title).bold()
+                    } else {
+                        Text("Done", bundle: .dsKit).bold()
                     }
                 }
+                .disabled(!isActive)
             }
         }
     }

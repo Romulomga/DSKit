@@ -50,7 +50,6 @@ public struct DSNumberField: View {
                 )
                 .animation(.easeOut(duration: 0.15), value: isFocused)
                 .animation(.easeOut(duration: 0.15), value: hasAnyError)
-                .dsKeyboardDone(isActive: isFocused) { isFocused = false }
                 .onAppear {
                     let target = value.map(String.init) ?? ""
                     if text != target { text = target }

@@ -1,53 +1,42 @@
 import SwiftUI
+import UIKit
 
-/// A "done" bar over keyboards that have no return key (number, decimal, phone pads).
-/// SwiftUI text fields own their accessory view, so the bar goes through the
-/// keyboard toolbar placement: `DSTextField` and `DSNumberField` add it on their own
-/// when the keyboard needs it; custom fields call `dsKeyboardDone(isActive:dismiss:)`.
+/// One "done" bar over the keyboard per screen. SwiftUI merges the keyboard items of
+/// every field in a hierarchy (two fields, two buttons) and does not refresh
+/// conditional ones reliably, so the bar is declared once, where screens are built,
+/// and its button resigns whatever is first responder.
 public enum DSKeyboardToolbar {
-    /// Keyboards with no return key of their own.
-    public static let keyboardTypes: Set<UIKeyboardType> = [.numberPad, .decimalPad, .phonePad, .asciiCapableNumberPad]
-
     /// The button's title; nil uses the DSKit "Done" localization.
     nonisolated(unsafe) public static var doneTitle: LocalizedStringKey?
 
-    public static func needsDoneButton(_ keyboardType: UIKeyboardType) -> Bool {
-        keyboardTypes.contains(keyboardType)
+    @MainActor
+    public static func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
-/// The bar itself, shown while `isActive` (the field has focus).
 public struct DSKeyboardDoneToolbar: ViewModifier {
-    private let isActive: Bool
-    private let dismiss: () -> Void
+    public init() {}
 
-    public init(isActive: Bool, dismiss: @escaping () -> Void) {
-        self.isActive = isActive
-        self.dismiss = dismiss
-    }
-
-    /// The items are declared unconditionally: SwiftUI shows a field's keyboard items
-    /// only while that field is focused, and a conditional group renders an empty bar.
     public func body(content: Content) -> some View {
         content.toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button(action: dismiss) {
+                Button(action: DSKeyboardToolbar.dismissKeyboard) {
                     if let title = DSKeyboardToolbar.doneTitle {
                         Text(title).bold()
                     } else {
                         Text("Done", bundle: .dsKit).bold()
                     }
                 }
-                .disabled(!isActive)
             }
         }
     }
 }
 
 extension View {
-    /// "Done" over the keyboard while `isActive`; `dismiss` should drop the field's focus.
-    public func dsKeyboardDone(isActive: Bool, dismiss: @escaping () -> Void) -> some View {
-        modifier(DSKeyboardDoneToolbar(isActive: isActive, dismiss: dismiss))
+    /// The screen's "done" bar over the keyboard. Apply once per screen, never per field.
+    public func dsKeyboardDone() -> some View {
+        modifier(DSKeyboardDoneToolbar())
     }
 }

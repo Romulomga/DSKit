@@ -9,12 +9,17 @@ import UIKit
 /// hears the tab it landed on. Up to three sections share the width equally; more scroll.
 ///
 /// `header` sits between the strip and the pages (a search row, filters) and does not swipe.
+/// The strip is either `.underline` (labels over a hairline, the indicator under the current
+/// one) or `.segmented` (the pill of `DSSegmentedPicker(style: .filled)`, whose capsule
+/// slides with the pages).
 public struct DSPagedTabs<Section: Identifiable & Hashable, Header: View, Content: View>: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let sections: [Section]
     @Binding private var selection: Section.ID
     private let label: (Section) -> String
+    private let style: DSPagedTabsStyle
+    private let stripInset: CGFloat?
     private let header: () -> Header
     private let content: (Section) -> Content
 
@@ -22,23 +27,37 @@ public struct DSPagedTabs<Section: Identifiable & Hashable, Header: View, Conten
     @State private var progress: Double = 0
     @State private var scrollID: Section.ID?
 
+    /// `stripInset`: horizontal margin of the strip; nil is the style's own (0 for `.underline`,
+    /// `DSSpacing.lg` for `.segmented`).
     public init(
         sections: [Section],
         selection: Binding<Section.ID>,
         label: @escaping (Section) -> String,
+        style: DSPagedTabsStyle = .underline,
+        stripInset: CGFloat? = nil,
         @ViewBuilder header: @escaping () -> Header,
         @ViewBuilder content: @escaping (Section) -> Content
     ) {
         self.sections = sections
         self._selection = selection
         self.label = label
+        self.style = style
+        self.stripInset = stripInset
         self.header = header
         self.content = content
     }
 
     public var body: some View {
         VStack(spacing: 0) {
-            DSTabStrip(sections: sections, selection: $selection, progress: progress, label: label)
+            switch style {
+            case .underline:
+                DSTabStrip(sections: sections, selection: $selection, progress: progress, label: label)
+                    .padding(.horizontal, stripInset ?? 0)
+            case .segmented:
+                DSSegmentedTabStrip(sections: sections, selection: $selection, progress: progress, label: label)
+                    .padding(.horizontal, stripInset ?? DSSpacing.lg)
+                    .padding(.vertical, DSSpacing.sm)
+            }
 
             header()
 
@@ -101,9 +120,82 @@ public extension DSPagedTabs where Header == EmptyView {
         sections: [Section],
         selection: Binding<Section.ID>,
         label: @escaping (Section) -> String,
+        style: DSPagedTabsStyle = .underline,
+        stripInset: CGFloat? = nil,
         @ViewBuilder content: @escaping (Section) -> Content
     ) {
-        self.init(sections: sections, selection: selection, label: label, header: { EmptyView() }, content: content)
+        self.init(
+            sections: sections, selection: selection, label: label, style: style, stripInset: stripInset, header: { EmptyView() }, content: content
+        )
+    }
+}
+
+/// How the strip of a `DSPagedTabs` is drawn.
+public enum DSPagedTabsStyle: Sendable {
+    /// Labels over a hairline, a capsule indicator under the current one.
+    case underline
+    /// The pill of `DSSegmentedPicker(style: .filled)`: the primary capsule slides with the pages.
+    case segmented
+}
+
+/// The segmented strip: equal-width labels on a `surface` track with a hairline, the primary
+/// capsule positioned by `progress` (so it follows the swipe), white label on it.
+struct DSSegmentedTabStrip<Section: Identifiable & Hashable>: View {
+    @Environment(\.dsTheme) private var theme
+
+    let sections: [Section]
+    @Binding var selection: Section.ID
+    let progress: Double
+    let label: (Section) -> String
+
+    @State private var trackWidth: CGFloat = 0
+
+    private static var height: CGFloat { 36 }
+
+    var body: some View {
+        ZStack(alignment: .leading) {
+            if trackWidth > 0, !sections.isEmpty {
+                Capsule()
+                    .fill(theme.primary)
+                    .frame(width: tabWidth)
+                    .offset(x: CGFloat(min(max(progress, 0), Double(sections.count - 1))) * tabWidth)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
+
+            HStack(spacing: 0) {
+                ForEach(Array(sections.enumerated()), id: \.element.id) { index, section in
+                    tab(section, index: index)
+                }
+            }
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { trackWidth = $0 }
+        }
+        .padding(DSSpacing.xxs)
+        .background(Color.surface, in: Capsule())
+        .overlay(Capsule().strokeBorder(Color.hairline, lineWidth: 1))
+        .accessibilityElement(children: .contain)
+    }
+
+    private var tabWidth: CGFloat { trackWidth / CGFloat(max(sections.count, 1)) }
+
+    private func tab(_ section: Section, index: Int) -> some View {
+        let isCurrent = abs(progress - Double(index)) < 0.5
+
+        return Button {
+            selection = section.id
+        } label: {
+            Text(label(section))
+                .font(DSTypography.footnote().weight(.semibold))
+                .foregroundStyle(isCurrent ? Color.white : Color.onSurfaceMedium)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .padding(.horizontal, DSSpacing.sm)
+                .frame(maxWidth: .infinity, minHeight: Self.height)
+                .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(selection == section.id ? .isSelected : [])
+        .accessibilityValue(Text("\(index + 1)/\(sections.count)"))
     }
 }
 
@@ -240,7 +332,7 @@ private struct DSPagedTabsPreviewHost: View {
     private let pages = [Page(id: "active", title: "4 Active items"), Page(id: "inactive", title: "1 Inactive item")]
 
     var body: some View {
-        DSPagedTabs(sections: pages, selection: $selection, label: \.title) {
+        DSPagedTabs(sections: pages, selection: $selection, label: \.title, style: .segmented) {
             Text("Header between the strip and the pages")
                 .font(DSTypography.footnote())
                 .padding(DSSpacing.md)

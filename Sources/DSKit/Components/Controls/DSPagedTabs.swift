@@ -153,7 +153,15 @@ struct DSSegmentedTabStrip<Section: Identifiable & Hashable>: View {
     private static var height: CGFloat { 36 }
 
     var body: some View {
-        ZStack(alignment: .leading) {
+        HStack(spacing: 0) {
+            ForEach(Array(sections.enumerated()), id: \.element.id) { index, section in
+                tab(section, index: index)
+            }
+        }
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { trackWidth = $0 }
+        // As a background the capsule takes the labels' height; as a sibling in a ZStack the
+        // shape had no height of its own and grew to share the screen with the pages.
+        .background(alignment: .leading) {
             if trackWidth > 0, !sections.isEmpty {
                 Capsule()
                     .fill(theme.primary)
@@ -162,13 +170,6 @@ struct DSSegmentedTabStrip<Section: Identifiable & Hashable>: View {
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
             }
-
-            HStack(spacing: 0) {
-                ForEach(Array(sections.enumerated()), id: \.element.id) { index, section in
-                    tab(section, index: index)
-                }
-            }
-            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { trackWidth = $0 }
         }
         .padding(DSSpacing.xxs)
         .background(Color.surface, in: Capsule())

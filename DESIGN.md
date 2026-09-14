@@ -743,7 +743,7 @@ Rótulo e legenda vêm de `DSFieldLabel` e `DSFieldCaption` e seguem o `dsFieldL
 
 **`color-swatch`** / **`color-swatch-selected`** — `DSColorSwatch`. Círculo preenchido de 56pt, rótulo `{typography.caption}` abaixo com `{spacing.xs}`. Selecionado: anel `{colors.on-surface-high}` de 3pt em 64pt, animado com `{motion.selection}`. Bloqueado: `lock.fill` branco 14pt/700 centralizado. Seletores de tema / accent.
 
-**`segmented-picker`** — `DSSegmentedPicker`. `Picker(.segmented)` nativo tingido de `{colors.accent}`, com legenda opcional `{typography.footnote}` 600 secondary acima com `{spacing.xs}`.
+**`segmented-picker`** — `DSSegmentedPicker`. `Picker(.segmented)` nativo tingido de `{colors.accent}`, com legenda opcional `{typography.footnote}` 600 secondary acima com `{spacing.xs}`. Com `style: .filled` vira uma pílula: trilho `{colors.surface}` com hairline e `{spacing.xxs}` de folga, opções de largura igual (`{typography.footnote}` 600, 36 pt), a selecionada sobre uma cápsula `{colors.accent}` com texto branco que desliza (`matchedGeometryEffect`, sem deslize no Reduce Motion); cada opção é um botão com o trait `selected`.
 
 **`progress-bar`** — `DSProgressBar`. Trilha em cápsula de 4pt em accent @ 16% com preenchimento em cápsula accent; valor limitado a 0…1 e animado com `{motion.spring}` (desativado sob Reduce Motion). Indicadores de passo de onboarding. Expõe a porcentagem como valor de acessibilidade.
 

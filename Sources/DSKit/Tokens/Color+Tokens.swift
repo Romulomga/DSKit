@@ -5,23 +5,27 @@ public extension Color {
         self = Color(name, bundle: Bundle.mainIfAvailable)
     }
 
-    /// Background color, hex value Light **#FFFFFF** Dark **#121212**
-    static let background = Color("Background", bundle: .module)
+    /// Background color, hex value Light **#FFFFFF** Dark **#121212**.
+    /// Overridable: a host app ships a `DSBackground` colorset to replace it.
+    static let background = Color.overridable("Background")
 
     /// Light brand wash, hex value Light **#EFE7FA** Dark **#EFE7FA**
     static let appColorLight = Color("AppColorLight", bundle: .module)
 
     /// Grouped canvas — the iOS Settings backdrop. Hex value Light **#F2F2F7** Dark **#0A0A0A**.
     /// Pair with `surfaceElevated` cells; `surface` is too close in tone to read on it.
-    static let backgroundGrouped = Color("BackgroundGrouped", bundle: .module)
+    /// Overridable: a host app ships a `DSBackgroundGrouped` colorset to replace it.
+    static let backgroundGrouped = Color.overridable("BackgroundGrouped")
 
-    /// Surface color, hex value Light **#F0F0F9** Dark **#1E1E1E**
-    static let surface = Color("Surface", bundle: .module)
+    /// Surface color, hex value Light **#F0F0F9** Dark **#1E1E1E**.
+    /// Overridable: a host app ships a `DSSurface` colorset to replace it.
+    static let surface = Color.overridable("Surface")
 
     /// One step up from `surface`: cells on a grouped canvas, or an input /
     /// chip nested inside a card so it doesn't vanish surface-on-surface.
     /// Hex value Light **#FFFFFF** Dark **#2A2A2A**
-    static let surfaceElevated = Color("SurfaceElevated", bundle: .module)
+    /// Overridable: a host app ships a `DSSurfaceElevated` colorset to replace it.
+    static let surfaceElevated = Color.overridable("SurfaceElevated")
 
     /// Surface for a given nesting level (see `EnvironmentValues.dsSurfaceLevel`):
     /// level 0 sits on the canvas and uses `surface`; anything deeper uses
@@ -88,6 +92,29 @@ public extension Color {
 
     /// On Disabled, hex value Light **#BCBCBC** Dark **#707070**
     static let onDisabled = Color("OnDisabled", bundle: .module)
+}
+
+extension Color {
+    /// The colorset name a host app uses to override a canvas/surface token:
+    /// `DS` + the token's own name. Prefixed — unlike the accent tokens — so
+    /// an app that happens to have a "Background" or "Surface" colorset of its
+    /// own never restyles DSKit by accident.
+    static func overrideName(for token: String) -> String {
+        "DS" + token
+    }
+
+    /// A canvas/surface token: the host app's `DS<token>` colorset when it
+    /// ships one, DSKit's own otherwise.
+    static func overridable(_ token: String) -> Color {
+        let host = Bundle.mainIfAvailable
+        let name = overrideName(for: token)
+
+        if host != .module, UIColor(named: name, in: host, compatibleWith: nil) != nil {
+            return Color(name, bundle: host)
+        }
+
+        return Color(token, bundle: .module)
+    }
 }
 
 extension Bundle {

@@ -114,3 +114,22 @@ struct FieldTests {
         #expect(EnvironmentValues().dsFieldLabelStyle == .compact)
     }
 }
+
+@Suite("Overridable canvas and surface tokens")
+struct OverridableTokenTests {
+    @Test func overrideNamesArePrefixed() {
+        // Prefixed, so a host app's own "Background"/"Surface" colorset never
+        // restyles DSKit by accident.
+        #expect(Color.overrideName(for: "Background") == "DSBackground")
+        #expect(Color.overrideName(for: "BackgroundGrouped") == "DSBackgroundGrouped")
+        #expect(Color.overrideName(for: "Surface") == "DSSurface")
+        #expect(Color.overrideName(for: "SurfaceElevated") == "DSSurfaceElevated")
+    }
+
+    @Test func withoutAHostColorTheTokenIsDSKitsOwn() {
+        // The test host ships no `DS*` colorsets: nothing changes for apps
+        // that don't opt in.
+        #expect(Color.overridable("Surface") == Color("Surface", bundle: .module))
+        #expect(Color.overridable("Background") == Color("Background", bundle: .module))
+    }
+}

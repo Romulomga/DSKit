@@ -6,6 +6,9 @@ public struct DSSecondaryButton: View {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
 
+    /// Grows with Dynamic Type, like `DSPrimaryButton`.
+    @ScaledMetric(relativeTo: .headline) private var verticalPadding = DSSpacing.md
+
     private let title: LocalizedStringKey
     private let systemImage: String?
     private let action: () -> Void
@@ -29,16 +32,18 @@ public struct DSSecondaryButton: View {
                 if let systemImage {
                     Image(systemName: systemImage)
                 }
-                Text(title).fontWeight(.semibold)
+                Text(title)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
             }
             .font(DSTypography.headline())
-            .foregroundStyle(theme.primary)
+            .foregroundStyle(isEnabled ? theme.primary : Color.onDisabledFill)
+            .padding(.vertical, verticalPadding)
             .frame(maxWidth: .infinity)
             .frame(minHeight: 50)
             .padding(.horizontal, DSSpacing.lg)
-            .background(theme.primary.opacity(0.12))
+            .background(isEnabled ? theme.primary.opacity(0.12) : Color.disabledFill)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
-            .opacity(isEnabled ? 1.0 : 0.5)
         }
         .buttonStyle(DSPressableButtonStyle())
         .accessibilityLabel(title)

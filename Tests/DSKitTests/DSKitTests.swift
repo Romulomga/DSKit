@@ -95,7 +95,7 @@ struct MetadataTests {
 @Suite("Fields")
 struct FieldTests {
     @Test func versionMatchesTheReleasedTag() {
-        #expect(DSKit.version == "1.0.40")
+        #expect(DSKit.version == "1.0.41")
     }
 
     @Test func pickerOptionKeepsValueAsIdentity() {
@@ -142,5 +142,13 @@ struct OverridableTokenTests {
         // `theme.onPrimary`, never a literal white.
         #expect(DSTheme().onPrimary == Color.onAccent)
         #expect(DSTheme(primary: .yellow, onPrimary: .black).onPrimary == .black)
+    }
+
+    @Test func proBadgeFollowsTheAccentUnlessTheHostOverridesIt() {
+        // The test host ships no `DSProBadge`/`DSOnProBadge`: the badge keeps
+        // the brand tint and the on-accent label.
+        #expect(Color.hostOverride("ProBadge") == nil)
+        #expect(Color.proBadge == Color.accentColor)
+        #expect(Color.onProBadge == Color.onAccent)
     }
 }

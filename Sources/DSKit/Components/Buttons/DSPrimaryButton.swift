@@ -7,6 +7,10 @@ public struct DSPrimaryButton: View {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
 
+    /// Vertical breathing room that grows with Dynamic Type, so a label that
+    /// wraps at large sizes never touches the button's edges.
+    @ScaledMetric(relativeTo: .headline) private var verticalPadding = DSSpacing.md
+
     private let title: LocalizedStringKey
     private let systemImage: String?
     private let isLoading: Bool
@@ -39,13 +43,15 @@ public struct DSPrimaryButton: View {
                 }
                 Text(title)
                     .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
             }
             .font(DSTypography.headline())
-            .foregroundStyle(theme.onPrimary)
+            .foregroundStyle(isEnabled ? theme.onPrimary : Color.onDisabledFill)
+            .padding(.vertical, verticalPadding)
             .frame(maxWidth: .infinity)
             .frame(minHeight: 50)
             .padding(.horizontal, DSSpacing.lg)
-            .background(theme.primary.opacity(isEnabled ? 1.0 : 0.5))
+            .background(isEnabled ? theme.primary : Color.disabledFill)
             .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
         }
         .buttonStyle(DSPressableButtonStyle())

@@ -13,13 +13,13 @@ public struct DSProBadge: View {
             .font(.caption2.weight(.bold))
             .padding(.horizontal, DSSpacing.xs + 2)
             .padding(.vertical, 2)
-            .foregroundStyle(Color.onAccent)
+            .foregroundStyle(Color.onProBadge)
             .background(
-                // `Color.accentColor` mirrors the environment `.tint(_:)`,
-                // so the badge follows the brand color across the app
-                // instead of falling back to system blue.
+                // `Color.proBadge` defaults to `Color.accentColor`, which mirrors
+                // the environment `.tint(_:)`, so the badge follows the brand
+                // color unless the host ships a `DSProBadge` colorset.
                 LinearGradient(
-                    colors: [Color.accentColor, Color.accentColor.opacity(0.78)],
+                    colors: [Color.proBadge, Color.proBadge.opacity(0.78)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )

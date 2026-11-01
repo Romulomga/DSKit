@@ -99,7 +99,38 @@ public extension Color {
     static let onDisabled = Color("OnDisabled", bundle: .module)
 }
 
+public extension Color {
+    /// Fill of `DSProBadge`. DSKit default is the brand accent (the environment
+    /// tint). Overridable: a host app ships a `DSProBadge` colorset to replace it.
+    static var proBadge: Color {
+        hostOverride("ProBadge") ?? Color.accentColor
+    }
+
+    /// Label of `DSProBadge`. DSKit default is `onAccent`.
+    /// Overridable: a host app ships a `DSOnProBadge` colorset to replace it.
+    static var onProBadge: Color {
+        hostOverride("OnProBadge") ?? Color.onAccent
+    }
+
+    /// Fill of a disabled filled control: the high text color at low strength,
+    /// so it reads as "off" on any canvas and in any brand.
+    static let disabledFill = Color.onSurfaceHigh.opacity(0.12)
+
+    /// Label of a disabled control on `disabledFill`: dimmed but still ≥ 3:1.
+    static let onDisabledFill = Color.onSurfaceHigh.opacity(0.62)
+}
+
 extension Color {
+    /// The host app's `DS<token>` colorset, or nil when it ships none.
+    static func hostOverride(_ token: String) -> Color? {
+        let host = Bundle.mainIfAvailable
+        let name = overrideName(for: token)
+
+        guard host != .module, UIColor(named: name, in: host, compatibleWith: nil) != nil else { return nil }
+
+        return Color(name, bundle: host)
+    }
+
     /// The colorset name a host app uses to override a canvas, surface, text or outline token:
     /// `DS` + the token's own name. Prefixed — unlike the accent tokens — so
     /// an app that happens to have a "Background" or "Surface" colorset of its

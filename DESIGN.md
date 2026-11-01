@@ -191,11 +191,11 @@ components:
     typography: "{typography.headline}"
     rounded: "{rounded.lg}"
     minHeight: 50pt
-    padding: 0 16pt
+    padding: 12pt 16pt (vertical cresce com o Dynamic Type; rótulo centralizado, quebra em várias linhas)
     haptic: medium
   button-primary-disabled:
-    backgroundColor: "{colors.accent} @ 50%"
-    textColor: "{colors.white}"
+    backgroundColor: "{colors.on-surface-high} @ 12%"
+    textColor: "{colors.on-surface-high} @ 62%"
     rounded: "{rounded.lg}"
   button-primary-loading:
     backgroundColor: "{colors.accent}"
@@ -208,7 +208,7 @@ components:
     typography: "{typography.headline}"
     rounded: "{rounded.lg}"
     minHeight: 50pt
-    padding: 0 16pt
+    padding: 12pt 16pt (como o primário; desabilitado usa o mesmo neutro do primário)
     haptic: light
   button-destructive:
     backgroundColor: "{colors.error-high} @ 12%"
@@ -524,7 +524,7 @@ A elevação é quase imperceptível. As superfícies se distinguem por tom (`{c
 
 ## Cores
 
-> **Fonte:** `Sources/DSKit/Tokens/Color+Tokens.swift` e `Resources/Colors.xcassets`. Todo token é um `.colorset` nomeado. Tokens marcados como *sobrescrevível* resolvem primeiro no bundle principal do app hospedeiro, então um app pode redefini-los adicionando um `.colorset` de mesmo nome ao próprio asset catalog. Os tokens de canvas, superfície, texto e contorno (*sobrescrevível com prefixo*) seguem a mesma ideia com o nome prefixado por `DS` (`DSBackground`, `DSBackgroundGrouped`, `DSSurface`, `DSSurfaceElevated`, `DSOnSurfaceHigh`, `DSOnSurfaceMedium`, `DSOnSurfaceLight`, `DSBorder`, `DSHairline`), para que um app que já tenha um colorset "Background" ou "Surface" próprio nunca re-tematize o DSKit sem querer.
+> **Fonte:** `Sources/DSKit/Tokens/Color+Tokens.swift` e `Resources/Colors.xcassets`. Todo token é um `.colorset` nomeado. Tokens marcados como *sobrescrevível* resolvem primeiro no bundle principal do app hospedeiro, então um app pode redefini-los adicionando um `.colorset` de mesmo nome ao próprio asset catalog. Os tokens de canvas, superfície, texto e contorno (*sobrescrevível com prefixo*) seguem a mesma ideia com o nome prefixado por `DS` (`DSBackground`, `DSBackgroundGrouped`, `DSSurface`, `DSSurfaceElevated`, `DSOnSurfaceHigh`, `DSOnSurfaceMedium`, `DSOnSurfaceLight`, `DSBorder`, `DSHairline`, e desde a 1.0.41 `DSProBadge` / `DSOnProBadge`), para que um app que já tenha um colorset "Background" ou "Surface" próprio nunca re-tematize o DSKit sem querer.
 
 ### Marca e Accent
 - **Accent** (`{colors.accent}` — #5856D6 claro / #5E5CE6 escuro, *sobrescrevível*): A única cor interativa. É o `systemIndigo` da Apple. Preenche o botão primário, tinge os tiles de ícone, desenha anéis de foco, o preenchimento da progress bar, a borda do chip selecionado e o toast de `.info`. `DSTheme.primary` usa esse token por padrão e todo componente temável lê `theme.primary`, então um app que faz `.dsTheme(DSTheme(primary: .orange))` recolore o sistema inteiro em uma linha.
@@ -556,7 +556,7 @@ Cada status traz um par `high` (preenchimento / glifo) e `light` (lavagem). Os p
 - **Error** (`{colors.error-high}` #FF4425 · `{colors.error-light}` #FFB2A3): Toast de erro, ícone do error-state, mensagens de validação, borda de foco em campos inválidos, texto do botão destrutivo (com lavagem de 12% como preenchimento).
 
 ### Desabilitado
-- **Disabled** (`{colors.disabled}` — #DCDBDC claro / #A4A4A4 escuro) e **On Disabled** (`{colors.on-disabled}` — #BCBCBC claro / #707070 escuro): Declarados para os apps hospedeiros. Os componentes do DSKit expressam o estado desabilitado por opacidade — o rótulo inteiro cai para 50%, ou o preenchimento do botão primário cai para 50% — para que a gramática de forma e cor continue reconhecível.
+- **Disabled** (`{colors.disabled}` — #DCDBDC claro / #A4A4A4 escuro) e **On Disabled** (`{colors.on-disabled}` — #BCBCBC claro / #707070 escuro): Declarados para os apps hospedeiros. Desde a 1.0.41 os botões primário e secundário desabilitados trocam a cor da marca por um neutro: preenchimento `disabledFill` (`onSurfaceHigh` @ 12%) e rótulo `onDisabledFill` (`onSurfaceHigh` @ 62%), que ficam claramente "desligados" em qualquer marca e mantêm o rótulo legível (≥ 3:1 no claro e no escuro). Antes caíam para 50% de opacidade, o que num accent escuro parecia só outro tom do botão ativo.
 
 ### Receitas de alpha
 O DSKit nunca introduz um hex novo para um tint. Ele deriva lavagens do accent (ou da cor de status) em alphas fixos:
@@ -773,7 +773,7 @@ Todos os inputs compartilham uma única gramática de borda: 1pt `{colors.hairli
 
 **`badge`** — `DSBadge`. Cápsula, padding 4pt × 2pt, `{typography.caption2}` em 600 num tint do chamador (padrão `{colors.accent}`) sobre esse tint @ 14%. Chamadas de teste grátis / desconto dentro de plan cards.
 
-**`pro-badge`** — `DSProBadge`. Cápsula, padding 6pt × 2pt, `{typography.caption2}` em 700 branco sobre um gradiente do canto superior esquerdo ao inferior direito do `accentColor` do SwiftUI até `accentColor` @ 78%. Texto padrão "PRO" (localizado no DSKit); também usado para "NEW" / "BETA".
+**`pro-badge`** — `DSProBadge`. Cápsula, padding 6pt × 2pt, `{typography.caption2}` em 700 branco sobre um gradiente do canto superior esquerdo ao inferior direito do `accentColor` do SwiftUI até `accentColor` @ 78%. Texto padrão "PRO" (localizado no DSKit); também usado para "NEW" / "BETA". Desde a 1.0.41 o preenchimento é `Color.proBadge` e o rótulo `Color.onProBadge`, que um app redefine com os colorsets `DSProBadge` / `DSOnProBadge` (o padrão continua o `accentColor` e o on-accent).
 
 ### Fundos e glass
 

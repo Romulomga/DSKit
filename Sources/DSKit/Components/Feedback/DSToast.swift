@@ -20,10 +20,10 @@ public struct DSToast: View {
         HStack(spacing: DSSpacing.sm) {
             Image(systemName: systemImage ?? defaultSymbol)
                 .font(.body.weight(.semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(onTint)
             Text(message)
                 .font(DSTypography.subheadline().weight(.semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(onTint)
                 .lineLimit(2)
                 .minimumScaleFactor(0.85)
         }
@@ -41,6 +41,11 @@ public struct DSToast: View {
         case .error: "exclamationmark.circle.fill"
         case .warning: "exclamationmark.triangle.fill"
         }
+    }
+
+    /// The accent's own on-color for `.info`; the status fills keep white.
+    private var onTint: Color {
+        style == .info ? Color.onAccent : .white
     }
 
     private var tint: Color {

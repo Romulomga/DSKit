@@ -8,17 +8,23 @@ public struct DSTheme {
     public var primary: Color
     public var secondary: Color
     public var accent: Color
+    /// Label and glyph color on a `primary` fill (filled buttons, selected
+    /// chips and segments, icon tiles). Pair it with `primary`: a light
+    /// primary needs a dark `onPrimary`.
+    public var onPrimary: Color
 
     public init(
         appName: String = "MicroTool",
         primary: Color = Color.accent,
         secondary: Color = Color.accent,
-        accent: Color? = nil
+        accent: Color? = nil,
+        onPrimary: Color = Color.onAccent
     ) {
         self.appName = appName
         self.primary = primary
         self.secondary = secondary
         self.accent = accent ?? primary
+        self.onPrimary = onPrimary
     }
 
     public static let `default` = DSTheme()

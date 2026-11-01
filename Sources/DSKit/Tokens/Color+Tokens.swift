@@ -35,23 +35,28 @@ public extension Color {
     }
 
     /// On Surface High color, hex value Light **#101010** Dark **#EDEDED**
-    static let onSurfaceHigh = Color("OnSurfaceHigh", bundle: .module)
+    /// Overridable: a host app ships a `DSOnSurfaceHigh` colorset to replace it.
+    static let onSurfaceHigh = Color.overridable("OnSurfaceHigh")
 
     /// On Surface Medium color, hex value Light **#5E5E5E** Dark **#B0B0B0**
-    static let onSurfaceMedium = Color("OnSurfaceMedium", bundle: .module)
+    /// Overridable: a host app ships a `DSOnSurfaceMedium` colorset to replace it.
+    static let onSurfaceMedium = Color.overridable("OnSurfaceMedium")
 
     /// On Surface Light color, hex value Light **#BCBCBC** Dark **#4A4A4A**
-    static let onSurfaceLight = Color("OnSurfaceLight", bundle: .module)
+    /// Overridable: a host app ships a `DSOnSurfaceLight` colorset to replace it.
+    static let onSurfaceLight = Color.overridable("OnSurfaceLight")
 
     /// Border color, hex value Light **#E5E5E5** Dark **#363636**.
     /// Full-strength; use for dividers. For the resting outline of a surface
     /// prefer `hairline`.
-    static let border = Color("Border", bundle: .module)
+    /// Overridable: a host app ships a `DSBorder` colorset to replace it.
+    static let border = Color.overridable("Border")
 
     /// Appearance-aware resting outline for cards and inputs. Light mode is a
     /// faint dark line (`border` at 50%); dark mode is a faint *light* line
     /// (**#FFFFFF** at 10%) because a dark hairline vanishes into a dark canvas.
-    static let hairline = Color("Hairline", bundle: .module)
+    /// Overridable: a host app ships a `DSHairline` colorset to replace it.
+    static let hairline = Color.overridable("Hairline")
 
     /// Brand accent — overridable per host app. DSKit default is `systemIndigo`.
     static let accent = Color("Accent", bundle: .mainIfAvailable)
@@ -95,7 +100,7 @@ public extension Color {
 }
 
 extension Color {
-    /// The colorset name a host app uses to override a canvas/surface token:
+    /// The colorset name a host app uses to override a canvas, surface, text or outline token:
     /// `DS` + the token's own name. Prefixed — unlike the accent tokens — so
     /// an app that happens to have a "Background" or "Surface" colorset of its
     /// own never restyles DSKit by accident.
@@ -103,7 +108,7 @@ extension Color {
         "DS" + token
     }
 
-    /// A canvas/surface token: the host app's `DS<token>` colorset when it
+    /// A canvas, surface, text or outline token: the host app's `DS<token>` colorset when it
     /// ships one, DSKit's own otherwise.
     static func overridable(_ token: String) -> Color {
         let host = Bundle.mainIfAvailable

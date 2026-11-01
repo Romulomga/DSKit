@@ -95,7 +95,7 @@ struct MetadataTests {
 @Suite("Fields")
 struct FieldTests {
     @Test func versionMatchesTheReleasedTag() {
-        #expect(DSKit.version == "1.0.38")
+        #expect(DSKit.version == "1.0.40")
     }
 
     @Test func pickerOptionKeepsValueAsIdentity() {
@@ -124,6 +124,8 @@ struct OverridableTokenTests {
         #expect(Color.overrideName(for: "BackgroundGrouped") == "DSBackgroundGrouped")
         #expect(Color.overrideName(for: "Surface") == "DSSurface")
         #expect(Color.overrideName(for: "SurfaceElevated") == "DSSurfaceElevated")
+        #expect(Color.overrideName(for: "OnSurfaceHigh") == "DSOnSurfaceHigh")
+        #expect(Color.overrideName(for: "Hairline") == "DSHairline")
     }
 
     @Test func withoutAHostColorTheTokenIsDSKitsOwn() {
@@ -131,5 +133,14 @@ struct OverridableTokenTests {
         // that don't opt in.
         #expect(Color.overridable("Surface") == Color("Surface", bundle: .module))
         #expect(Color.overridable("Background") == Color("Background", bundle: .module))
+        #expect(Color.overridable("OnSurfaceMedium") == Color("OnSurfaceMedium", bundle: .module))
+        #expect(Color.overridable("Border") == Color("Border", bundle: .module))
+    }
+
+    @Test func labelsOnPrimaryDefaultToOnAccent() {
+        // A light primary needs a dark label: filled components read
+        // `theme.onPrimary`, never a literal white.
+        #expect(DSTheme().onPrimary == Color.onAccent)
+        #expect(DSTheme(primary: .yellow, onPrimary: .black).onPrimary == .black)
     }
 }

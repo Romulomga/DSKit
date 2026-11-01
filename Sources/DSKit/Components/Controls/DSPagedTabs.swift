@@ -187,7 +187,7 @@ struct DSSegmentedTabStrip<Section: Identifiable & Hashable>: View {
         } label: {
             Text(label(section))
                 .font(DSTypography.footnote().weight(.semibold))
-                .foregroundStyle(isCurrent ? Color.white : Color.onSurfaceMedium)
+                .foregroundStyle(isCurrent ? theme.onPrimary : Color.onSurfaceMedium)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
                 .padding(.horizontal, DSSpacing.sm)

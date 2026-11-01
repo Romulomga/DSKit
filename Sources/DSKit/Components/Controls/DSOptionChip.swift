@@ -30,7 +30,7 @@ public struct DSOptionChip: View {
             .font(DSTypography.subheadline().weight(.semibold))
             .padding(.horizontal, DSSpacing.md)
             .padding(.vertical, DSSpacing.sm)
-            .foregroundStyle(isSelected ? Color.white : theme.primary)
+            .foregroundStyle(isSelected ? theme.onPrimary : theme.primary)
             .background(isSelected ? theme.primary : theme.primary.opacity(0.12))
             .clipShape(Capsule())
         }

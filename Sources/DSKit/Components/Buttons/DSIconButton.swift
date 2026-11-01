@@ -48,7 +48,7 @@ public struct DSIconButton: View {
     private var foreground: Color {
         switch style {
         case .plain, .tinted: theme.primary
-        case .filled: .white
+        case .filled: theme.onPrimary
         }
     }
 

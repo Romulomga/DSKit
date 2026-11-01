@@ -89,7 +89,7 @@ public struct DSSegmentedPicker<Value: Hashable>: View {
                 } label: {
                     Text(option.label)
                         .font(DSTypography.footnote().weight(.semibold))
-                        .foregroundStyle(isSelected ? Color.white : Color.onSurfaceMedium)
+                        .foregroundStyle(isSelected ? theme.onPrimary : Color.onSurfaceMedium)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                         .padding(.horizontal, DSSpacing.sm)

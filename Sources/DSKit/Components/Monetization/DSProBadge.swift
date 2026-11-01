@@ -13,7 +13,7 @@ public struct DSProBadge: View {
             .font(.caption2.weight(.bold))
             .padding(.horizontal, DSSpacing.xs + 2)
             .padding(.vertical, 2)
-            .foregroundStyle(.white)
+            .foregroundStyle(Color.onAccent)
             .background(
                 // `Color.accentColor` mirrors the environment `.tint(_:)`,
                 // so the badge follows the brand color across the app

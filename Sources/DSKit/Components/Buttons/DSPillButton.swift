@@ -5,7 +5,7 @@ import SwiftUI
 /// shape suits the content (wellness, mindfulness, lifestyle apps).
 ///
 /// Three variants:
-/// - `.primary` — filled accent, white text. Dominant action.
+/// - `.primary` — filled accent, `onPrimary` text. Dominant action.
 /// - `.secondary` — accent-tinted fill, accent text. Supporting action.
 /// - `.outlined` — transparent fill, accent stroke and text. Supporting
 ///   action over photography or `AtmosphericBackground`, where a tinted
@@ -73,7 +73,7 @@ public struct DSPillButton: View {
 
     private var foreground: Color {
         switch variant {
-        case .primary:              return .white
+        case .primary:              return theme.onPrimary
         case .secondary, .outlined: return theme.primary
         }
     }

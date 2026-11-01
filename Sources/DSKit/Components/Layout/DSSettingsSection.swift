@@ -146,7 +146,7 @@ public struct DSSettingsRow: View {
             if let systemImage {
                 Image(systemName: systemImage)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(iconColor == nil ? Color.onAccent : .white)
                     .frame(width: 28, height: 28)
                     .background(iconColor ?? Color.accent)
                     .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))

@@ -27,7 +27,7 @@ public struct DSToggleRow: View {
             if let systemImage {
                 Image(systemName: systemImage)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(theme.onPrimary)
                     .frame(width: 28, height: 28)
                     .background(theme.primary)
                     .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))

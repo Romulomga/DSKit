@@ -33,7 +33,7 @@ public struct DSPrimaryButton: View {
                 if isLoading {
                     ProgressView()
                         .progressViewStyle(.circular)
-                        .tint(.white)
+                        .tint(theme.onPrimary)
                 } else if let systemImage {
                     Image(systemName: systemImage)
                 }
@@ -41,7 +41,7 @@ public struct DSPrimaryButton: View {
                     .fontWeight(.semibold)
             }
             .font(DSTypography.headline())
-            .foregroundStyle(.white)
+            .foregroundStyle(theme.onPrimary)
             .frame(maxWidth: .infinity)
             .frame(minHeight: 50)
             .padding(.horizontal, DSSpacing.lg)

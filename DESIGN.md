@@ -153,10 +153,10 @@ typography:
     textStyle: caption
 
 rounded:
-  sm: 6pt
-  md: 10pt
-  lg: 14pt
-  xl: 20pt
+  sm: 4pt
+  md: 8pt
+  lg: 10pt
+  xl: 14pt
   capsule: 999pt
 
 spacing:
@@ -514,7 +514,7 @@ A elevação é quase imperceptível. As superfícies se distinguem por tom (`{c
 **Características principais:**
 - Parecer Apple, não parecer uma marca. Text styles do sistema, cores semânticas de asset catalog, materials do sistema.
 - Um tint de accent por app (`{colors.accent}`, padrão `systemIndigo`) carrega todo elemento interativo. Os apps sobrescrevem via `DSTheme.primary`; nada mais muda.
-- Duas gramáticas de botão: retângulos arredondados contínuos de largura total em `{rounded.lg}` (14pt) para telas utilitárias, e cápsulas de largura total (`{rounded.capsule}`) para fluxos de onboarding e lifestyle.
+- Duas gramáticas de botão: retângulos arredondados contínuos de largura total em `{rounded.lg}` (10pt) para telas utilitárias, e cápsulas de largura total (`{rounded.capsule}`) para fluxos de onboarding e lifestyle.
 - Lavagens (washes) de tint, não preenchimentos, para ênfase secundária: `{colors.accent}` a 12% é o fundo universal de "ação de apoio" (botões secundários, chips, tiles de ícone, anéis do plan-card).
 - Dois canvases, dois degraus de superfície: `{colors.surface}` sobre `{colors.background}` por padrão, ou `{colors.surface-elevated}` sobre `{colors.background-grouped}` (o visual dos Ajustes, via `.dsGroupedCanvas()`). Um input dentro de um card sobe um degrau sozinho, então nunca some superfície-sobre-superfície.
 - Contorno de repouso é sempre `{colors.hairline}`, um token que já troca de escuro para claro conforme a aparência; sombras param em `{shadow.card}` (6% de preto) e ficam reservadas para `card-elevated` e overlays flutuantes.
@@ -664,13 +664,13 @@ O conteúdo respira, mas não flutua. Uma tela abre com um large title de 34pt, 
 
 | Token | Valor | Uso |
 |---|---|---|
-| `{rounded.sm}` | 6pt | Tiles de ícone de 28pt em settings rows e toggle rows |
-| `{rounded.md}` | 10pt | Inputs, plan cards, grupos de ajustes, tiles de ícone do feature-card, botões de ícone arredondados |
-| `{rounded.lg}` | 14pt | Cards, botões (primário / secundário / destrutivo), feature, result e paywall cards |
-| `{rounded.xl}` | 20pt | Reservado para sheets e grandes superfícies de herói nos apps hospedeiros |
+| `{rounded.sm}` | 4pt | Tiles de ícone de 28pt em settings rows e toggle rows |
+| `{rounded.md}` | 8pt | Inputs, plan cards, grupos de ajustes, tiles de ícone do feature-card, botões de ícone arredondados |
+| `{rounded.lg}` | 10pt | Cards, botões (primário / secundário / destrutivo), feature, result e paywall cards |
+| `{rounded.xl}` | 14pt | Reservado para sheets e grandes superfícies de herói nos apps hospedeiros |
 | `{rounded.capsule}` | 999pt | Botões pílula, chips, option chips, toasts, badges, progress bar, botões de ícone circulares e swatches |
 
-Todos os retângulos arredondados usam o estilo de canto `.continuous` — o squircle da Apple — nunca cantos circulares. A regra prática: o raio de um elemento cresce com seu padding (tile 6pt → superfície compacta 10pt → card com padding 14pt), e qualquer coisa que deva ler como *token tocável* em vez de *container* é uma cápsula.
+Todos os retângulos arredondados usam o estilo de canto `.continuous` — o squircle da Apple — nunca cantos circulares. A regra prática: o raio de um elemento cresce com seu padding (tile 4pt → superfície compacta 8pt → card com padding 10pt). Desde a 1.0.42 a escala é mais contida (era 6 / 10 / 14 / 20): cantos firmes, que não cortam o conteúdo nem lembram balões, e qualquer coisa que deva ler como *token tocável* em vez de *container* é uma cápsula.
 
 ### Geometria de iconografia
 - Só SF Symbols. O peso do glifo acompanha o peso do texto ao redor: semibold ao lado de rótulos headline, bold em tamanhos minúsculos (checkmark de 12pt, badge), light em tamanhos de ilustração (48–56pt).

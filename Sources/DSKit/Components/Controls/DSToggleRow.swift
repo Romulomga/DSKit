@@ -26,11 +26,11 @@ public struct DSToggleRow: View {
         HStack(spacing: DSSpacing.md) {
             if let systemImage {
                 Image(systemName: systemImage)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(DSTypography.subheadline().weight(.semibold))
                     .foregroundStyle(theme.onPrimary)
                     .frame(width: 28, height: 28)
                     .background(theme.primary)
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)

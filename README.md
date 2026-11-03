@@ -128,7 +128,7 @@ touch it) and nothing changes — system fonts, as before.
 | Cards          | `DSCard`, `DSFeatureCard`, `DSResultCard` |
 | Inputs         | `DSTextField` (icon, secure entry, focus, keyboard), `DSPickerField`, `DSNumberField`, `DSListInput`; primitives `DSInputBox`, `DSFieldLabel`, `DSFieldCaption`; `.dsFieldLabelStyle(.compact / .prominent)` |
 | Feedback       | `DSEmptyState`, `DSErrorState`, `DSLoadingState`, `DSToast` |
-| Layout         | `DSScreen`, `DSSection`, `DSSettingsSection` (+ `DSSettingsRow`), `DSAdaptiveGrid` |
+| Layout         | `DSScreen`, `DSSection`, `DSGroupedSection` (+ `.dsRow()`, `DSRowButtonStyle`), `DSSettingsSection` (+ `DSSettingsRow`), `DSAdaptiveGrid` |
 | Controls       | `DSToggleRow`, `DSOptionChip`, `DSSegmentedPicker`, `DSPagedTabs` |
 | Monetization   | `DSPaywallCard`, `DSProBadge` |
 | Utilities      | `DSHaptics`, `DSAccessibility`, `DSPreviewContainer` |

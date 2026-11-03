@@ -34,7 +34,7 @@ public struct DSSettingsSection<Content: View>: View {
             }
             .dsSurfaceContainer()
             .background(Color.surface(level: level))
-            .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: DSRadius.lg, style: .continuous))
             if let footer {
                 Text(footer)
                     .font(DSTypography.footnote())
@@ -145,11 +145,11 @@ public struct DSSettingsRow: View {
         HStack(spacing: DSSpacing.md) {
             if let systemImage {
                 Image(systemName: systemImage)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(DSTypography.subheadline().weight(.semibold))
                     .foregroundStyle(iconColor == nil ? Color.onAccent : .white)
                     .frame(width: 28, height: 28)
                     .background(iconColor ?? Color.accent)
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
@@ -165,7 +165,7 @@ public struct DSSettingsRow: View {
             trailing
             if action != nil {
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(DSTypography.footnote().weight(.semibold))
                     .foregroundStyle(.tertiary)
             }
         }

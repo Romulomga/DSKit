@@ -145,8 +145,9 @@ A model that already tracks its own changes passes `hasChanges:` instead of a
 snapshot. On a pushed screen, `.dsBackDiscardGuard(hasChanges:)` swaps the
 system back button (and its swipe) for one that asks while there are changes.
 `.dsDiscardConfirmation(isPresented:)` is only the question, for a screen that
-decides by itself when to ask. All of them take `presentation: .alert` where
-the default anchored dialog misplaces itself.
+decides by itself when to ask. The question is a centered alert with both
+answers, and the keyboard is dismissed when it shows; `presentation: .dialog` opts into the system's anchored
+dialog, which on iOS 26 shows only the discard button.
 
 `.dsConfirmDelete` confirms a deletion in a centered alert. The trigger stores
 what is leaving; the modifier hands it back on confirmation and clears it.

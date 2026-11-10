@@ -1,15 +1,17 @@
 import SwiftUI
+import UIKit
 
 /// How the discard question is shown.
 public enum DSDiscardPresentation: Sendable {
-    /// `confirmationDialog`: the action sheet the system apps use when a
-    /// modified sheet is cancelled. iOS 26 draws it as a popover anchored to
-    /// the modified view.
-    case dialog
-
-    /// A centered `alert`, for screens where the anchored dialog misplaces
-    /// itself (a list row, a toolbar that goes away).
+    /// A centered `alert` with both answers, the default. It covers the
+    /// screen, so nothing behind it takes a touch while the question is up.
     case alert
+
+    /// `confirmationDialog`. iOS 26 draws it as a popover anchored to the
+    /// modified view that shows only the discard button: keeping the edit
+    /// means tapping outside, with nothing saying so. Only for a screen where
+    /// that is acceptable.
+    case dialog
 }
 
 public extension DSAccessibilityID {
@@ -39,6 +41,19 @@ private struct DSDiscardConfirmationModifier: ViewModifier {
     let onDiscard: () -> Void
 
     func body(content: Content) -> some View {
+        question(over: content)
+            // The keyboard stayed up behind the question and kept typing into
+            // the field: a tap meant for "outside" changed the value the
+            // question was about.
+            .onChange(of: isPresented) { _, presented in
+                if presented {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                }
+            }
+    }
+
+    @ViewBuilder
+    private func question(over content: Content) -> some View {
         switch presentation {
         case .dialog:
             content.confirmationDialog(title, isPresented: $isPresented, titleVisibility: .visible) {
@@ -249,7 +264,7 @@ public extension View {
         message: LocalizedStringKey? = nil,
         discardLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard", bundle: .dsKit)),
         keepEditingLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Keep editing", bundle: .dsKit)),
-        presentation: DSDiscardPresentation = .dialog,
+        presentation: DSDiscardPresentation = .alert,
         onDiscard: @escaping () -> Void
     ) -> some View {
         modifier(
@@ -275,7 +290,7 @@ public extension View {
         message: LocalizedStringKey? = nil,
         discardLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard", bundle: .dsKit)),
         keepEditingLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Keep editing", bundle: .dsKit)),
-        presentation: DSDiscardPresentation = .dialog,
+        presentation: DSDiscardPresentation = .alert,
         onDiscard: @escaping () -> Void
     ) -> some View {
         modifier(
@@ -303,7 +318,7 @@ public extension View {
         discardLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard", bundle: .dsKit)),
         keepEditingLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Keep editing", bundle: .dsKit)),
         backLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Back", bundle: .dsKit)),
-        presentation: DSDiscardPresentation = .dialog,
+        presentation: DSDiscardPresentation = .alert,
         onDiscard: (() -> Void)? = nil
     ) -> some View {
         modifier(
@@ -327,7 +342,7 @@ public extension View {
         message: LocalizedStringKey? = nil,
         discardLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard", bundle: .dsKit)),
         keepEditingLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Keep editing", bundle: .dsKit)),
-        presentation: DSDiscardPresentation = .dialog,
+        presentation: DSDiscardPresentation = .alert,
         onDiscard: @escaping () -> Void
     ) -> some View {
         modifier(

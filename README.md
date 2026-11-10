@@ -122,7 +122,8 @@ touch it) and nothing changes — system fonts, as before.
 
 Two questions every app with forms ends up asking, as modifiers. Their own
 strings ("Discard changes?", "Discard", "Keep editing", "Cancel", "Back")
-ship localized in the package.
+ship localized in the package, and each one is a parameter with that default
+(`title`, `discardLabel`, `keepEditingLabel`, `cancelLabel`, `backLabel`).
 
 `.dsDiscardGuard` protects an editing sheet. It keeps an `Equatable` snapshot
 from when the sheet opened: with nothing changed, Cancel closes right away;
@@ -163,6 +164,28 @@ Confirming plays the warning haptic once, so `perform` should not play
 another. `dsConfirmDelete(isPresented:)` covers a delete button inside an
 editor. The dialog buttons carry fixed identifiers in `DSAccessibilityID`
 (`discardConfirm`, `deleteConfirm`, …) for UI tests.
+
+An app with languages the package lacks passes its own texts, so no button
+falls back to English. A `LocalizedStringKey` given by the app is looked up in
+the app's catalog; an already resolved `String` goes in wrapped, and is shown
+as it is. `backLabel` is what VoiceOver reads for the guard's back button.
+
+```swift
+.dsBackDiscardGuard(
+    hasChanges: model.hasChanges,
+    title: "Discard this entry?",
+    discardLabel: "Discard entry",
+    keepEditingLabel: "Keep editing",
+    backLabel: "Back"
+)
+
+.dsConfirmDelete(
+    item: $pendingDeletion,
+    title: LocalizedStringKey(L10n.confirmDeleteTitle),
+    label: LocalizedStringKey(L10n.deleteDose),
+    cancelLabel: LocalizedStringKey(L10n.cancel)
+) { store.delete($0) }
+```
 
 ## Component map
 

@@ -12,6 +12,7 @@ private struct DSConfirmDeleteItemModifier<Item>: ViewModifier {
     let title: LocalizedStringKey
     let message: LocalizedStringKey?
     let label: LocalizedStringKey
+    let cancelLabel: LocalizedStringKey
     let perform: (Item) -> Void
 
     private var isPresented: Binding<Bool> {
@@ -39,7 +40,7 @@ private struct DSConfirmDeleteItemModifier<Item>: ViewModifier {
             Button(role: .cancel) {
                 item = nil
             } label: {
-                Text("Cancel", bundle: .dsKit)
+                Text(cancelLabel)
             }
             .accessibilityIdentifier(DSAccessibilityID.deleteCancel)
         } message: { _ in
@@ -57,6 +58,7 @@ private struct DSConfirmDeleteModifier: ViewModifier {
     let title: LocalizedStringKey
     let message: LocalizedStringKey?
     let label: LocalizedStringKey
+    let cancelLabel: LocalizedStringKey
     let perform: () -> Void
 
     func body(content: Content) -> some View {
@@ -71,7 +73,7 @@ private struct DSConfirmDeleteModifier: ViewModifier {
 
             Button(role: .cancel) {
             } label: {
-                Text("Cancel", bundle: .dsKit)
+                Text(cancelLabel)
             }
             .accessibilityIdentifier(DSAccessibilityID.deleteCancel)
         } message: {
@@ -88,7 +90,9 @@ public extension View {
     /// while there is one, hands it to `perform` on confirmation and clears it.
     ///
     /// Confirming plays the warning haptic once: `perform` should not play
-    /// another. `label` names what goes ("Delete client").
+    /// another. `label` names what goes ("Delete client"). `cancelLabel`
+    /// defaults to the package's "Cancel"; an app with languages the package
+    /// lacks passes its own, looked up in the app's catalog.
     ///
     /// ```swift
     /// @State private var pendingDeletion: Client?
@@ -103,6 +107,7 @@ public extension View {
         title: LocalizedStringKey,
         message: LocalizedStringKey? = nil,
         label: LocalizedStringKey,
+        cancelLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Cancel", bundle: .dsKit)),
         perform: @escaping (Item) -> Void
     ) -> some View {
         modifier(
@@ -111,6 +116,7 @@ public extension View {
                 title: title,
                 message: message,
                 label: label,
+                cancelLabel: cancelLabel,
                 perform: perform
             )
         )
@@ -123,6 +129,7 @@ public extension View {
         title: LocalizedStringKey,
         message: LocalizedStringKey? = nil,
         label: LocalizedStringKey,
+        cancelLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Cancel", bundle: .dsKit)),
         perform: @escaping () -> Void
     ) -> some View {
         modifier(
@@ -131,6 +138,7 @@ public extension View {
                 title: title,
                 message: message,
                 label: label,
+                cancelLabel: cancelLabel,
                 perform: perform
             )
         )

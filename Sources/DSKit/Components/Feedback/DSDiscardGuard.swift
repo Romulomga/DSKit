@@ -34,6 +34,7 @@ private struct DSDiscardConfirmationModifier: ViewModifier {
     let title: LocalizedStringKey
     let message: LocalizedStringKey?
     let discardLabel: LocalizedStringKey
+    let keepEditingLabel: LocalizedStringKey
     let presentation: DSDiscardPresentation
     let onDiscard: () -> Void
 
@@ -64,7 +65,7 @@ private struct DSDiscardConfirmationModifier: ViewModifier {
 
         Button(role: .cancel) {
         } label: {
-            Text("Keep editing", bundle: .dsKit)
+            Text(keepEditingLabel)
         }
         .accessibilityIdentifier(DSAccessibilityID.discardKeepEditing)
     }
@@ -85,6 +86,7 @@ private struct DSDiscardGuardModifier: ViewModifier {
     let title: LocalizedStringKey
     let message: LocalizedStringKey?
     let discardLabel: LocalizedStringKey
+    let keepEditingLabel: LocalizedStringKey
     let presentation: DSDiscardPresentation
     let onDiscard: () -> Void
 
@@ -110,6 +112,7 @@ private struct DSDiscardGuardModifier: ViewModifier {
                     title: title,
                     message: message,
                     discardLabel: discardLabel,
+                    keepEditingLabel: keepEditingLabel,
                     presentation: presentation,
                     onDiscard: onDiscard
                 )
@@ -123,6 +126,7 @@ private struct DSSnapshotDiscardGuardModifier<Snapshot: Equatable>: ViewModifier
     let title: LocalizedStringKey
     let message: LocalizedStringKey?
     let discardLabel: LocalizedStringKey
+    let keepEditingLabel: LocalizedStringKey
     let presentation: DSDiscardPresentation
     let onDiscard: () -> Void
 
@@ -149,6 +153,7 @@ private struct DSSnapshotDiscardGuardModifier<Snapshot: Equatable>: ViewModifier
                     title: title,
                     message: message,
                     discardLabel: discardLabel,
+                    keepEditingLabel: keepEditingLabel,
                     presentation: presentation,
                     onDiscard: onDiscard
                 )
@@ -163,6 +168,8 @@ private struct DSBackDiscardGuardModifier: ViewModifier {
     let title: LocalizedStringKey
     let message: LocalizedStringKey?
     let discardLabel: LocalizedStringKey
+    let keepEditingLabel: LocalizedStringKey
+    let backLabel: LocalizedStringKey
     let presentation: DSDiscardPresentation
     let onDiscard: (() -> Void)?
 
@@ -184,7 +191,7 @@ private struct DSBackDiscardGuardModifier: ViewModifier {
                         } label: {
                             Image(systemName: "chevron.backward")
                         }
-                        .accessibilityLabel(Text("Back", bundle: .dsKit))
+                        .accessibilityLabel(Text(backLabel))
                         .accessibilityIdentifier(DSAccessibilityID.discardBack)
                     }
                 }
@@ -195,6 +202,7 @@ private struct DSBackDiscardGuardModifier: ViewModifier {
                     title: title,
                     message: message,
                     discardLabel: discardLabel,
+                    keepEditingLabel: keepEditingLabel,
                     presentation: presentation,
                     onDiscard: {
                         if let onDiscard {
@@ -219,6 +227,10 @@ public extension View {
     /// Wire the Cancel button to `cancelRequested = true`. `snapshot` must
     /// change whenever an editable field does.
     ///
+    /// The texts default to the package's own translations. An app with
+    /// languages the package lacks passes its own `title`, `discardLabel` and
+    /// `keepEditingLabel`: a key given here is looked up in the app's catalog.
+    ///
     /// ```swift
     /// @State private var cancelRequested = false
     ///
@@ -236,6 +248,7 @@ public extension View {
         title: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard changes?", bundle: .dsKit)),
         message: LocalizedStringKey? = nil,
         discardLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard", bundle: .dsKit)),
+        keepEditingLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Keep editing", bundle: .dsKit)),
         presentation: DSDiscardPresentation = .dialog,
         onDiscard: @escaping () -> Void
     ) -> some View {
@@ -246,6 +259,7 @@ public extension View {
                 title: title,
                 message: message,
                 discardLabel: discardLabel,
+                keepEditingLabel: keepEditingLabel,
                 presentation: presentation,
                 onDiscard: onDiscard
             )
@@ -260,6 +274,7 @@ public extension View {
         title: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard changes?", bundle: .dsKit)),
         message: LocalizedStringKey? = nil,
         discardLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard", bundle: .dsKit)),
+        keepEditingLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Keep editing", bundle: .dsKit)),
         presentation: DSDiscardPresentation = .dialog,
         onDiscard: @escaping () -> Void
     ) -> some View {
@@ -270,6 +285,7 @@ public extension View {
                 title: title,
                 message: message,
                 discardLabel: discardLabel,
+                keepEditingLabel: keepEditingLabel,
                 presentation: presentation,
                 onDiscard: onDiscard
             )
@@ -278,12 +294,15 @@ public extension View {
 
     /// Guards a pushed screen: while `hasChanges` is true the system back
     /// button (and its swipe) gives way to one that asks first. Discarding
-    /// pops the screen unless `onDiscard` says otherwise.
+    /// pops the screen unless `onDiscard` says otherwise. `backLabel` is what
+    /// VoiceOver reads for that button.
     func dsBackDiscardGuard(
         hasChanges: Bool,
         title: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard changes?", bundle: .dsKit)),
         message: LocalizedStringKey? = nil,
         discardLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard", bundle: .dsKit)),
+        keepEditingLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Keep editing", bundle: .dsKit)),
+        backLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Back", bundle: .dsKit)),
         presentation: DSDiscardPresentation = .dialog,
         onDiscard: (() -> Void)? = nil
     ) -> some View {
@@ -293,6 +312,8 @@ public extension View {
                 title: title,
                 message: message,
                 discardLabel: discardLabel,
+                keepEditingLabel: keepEditingLabel,
+                backLabel: backLabel,
                 presentation: presentation,
                 onDiscard: onDiscard
             )
@@ -305,6 +326,7 @@ public extension View {
         title: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard changes?", bundle: .dsKit)),
         message: LocalizedStringKey? = nil,
         discardLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Discard", bundle: .dsKit)),
+        keepEditingLabel: LocalizedStringKey = LocalizedStringKey(String(localized: "Keep editing", bundle: .dsKit)),
         presentation: DSDiscardPresentation = .dialog,
         onDiscard: @escaping () -> Void
     ) -> some View {
@@ -314,6 +336,7 @@ public extension View {
                 title: title,
                 message: message,
                 discardLabel: discardLabel,
+                keepEditingLabel: keepEditingLabel,
                 presentation: presentation,
                 onDiscard: onDiscard
             )

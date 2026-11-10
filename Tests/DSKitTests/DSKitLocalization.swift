@@ -16,4 +16,9 @@ enum DSKitLocalization {
 
         return value == missing ? nil : value
     }
+
+    /// Every wording the package ships for `key`: the English source and each translation.
+    static func wordings(of key: String) -> Set<String> {
+        Set(languages.compactMap { translation(of: key, in: $0) }).union([key])
+    }
 }

@@ -1,3 +1,4 @@
+import SwiftUI
 import Testing
 @testable import DSKit
 
@@ -13,5 +14,23 @@ struct DSConfirmDeleteTests {
         }
 
         #expect(DSKitLocalization.translation(of: "Cancel", in: "pt-BR") == "Cancelar")
+    }
+
+    @Test func defaultCancelResolvesInThePackageBundle() {
+        let resolved = String(localized: "Cancel", bundle: .dsKit)
+
+        #expect(DSKitLocalization.wordings(of: "Cancel").contains(resolved))
+    }
+
+    @MainActor
+    @Test func cancelLabelIsOptionalAtEveryCallSite() {
+        let pending = Binding<String?>.constant(nil)
+        let flag = Binding.constant(false)
+
+        _ = Color.clear.dsConfirmDelete(item: pending, title: "Delete?", label: "Delete") { _ in }
+        _ = Color.clear.dsConfirmDelete(item: pending, title: "Delete?", message: "Gone.", label: "Delete", cancelLabel: "Keep") { _ in }
+
+        _ = Color.clear.dsConfirmDelete(isPresented: flag, title: "Delete?", label: "Delete") {}
+        _ = Color.clear.dsConfirmDelete(isPresented: flag, title: "Delete?", label: "Delete", cancelLabel: "Keep") {}
     }
 }

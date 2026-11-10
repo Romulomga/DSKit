@@ -89,6 +89,11 @@ public extension View {
     /// a menu, a row button) stores what is leaving in `item`; the alert shows
     /// while there is one, hands it to `perform` on confirmation and clears it.
     ///
+    /// A swipe action that opens this alert must not have the destructive
+    /// role (`Button(role: .destructive)`): for that role iOS removes the row
+    /// by itself, so on Cancel the row stays hidden and the list crashes on
+    /// its next insert. Use a plain button with `.tint(.red)`.
+    ///
     /// Confirming plays the warning haptic once: `perform` should not play
     /// another. `label` names what goes ("Delete client"). `cancelLabel`
     /// defaults to the package's "Cancel"; an app with languages the package
@@ -154,11 +159,14 @@ private struct DSConfirmDeletePreviewHost: View {
         List(clients, id: \.self) { client in
             Text(client)
                 .swipeActions {
-                    Button(role: .destructive) {
+                    // No destructive role: iOS would take the row out before
+                    // the alert is answered, and Cancel would leave it hidden.
+                    Button {
                         pendingDeletion = client
                     } label: {
                         Image(systemName: "trash")
                     }
+                    .tint(.red)
                 }
         }
         .dsConfirmDelete(

@@ -150,7 +150,9 @@ answers, and the keyboard is dismissed when it shows; `presentation: .dialog` op
 dialog, which on iOS 26 shows only the discard button.
 
 `.dsConfirmDelete` confirms a deletion in a centered alert. The trigger stores
-what is leaving; the modifier hands it back on confirmation and clears it.
+what is leaving; the modifier hands it back on confirmation and clears it. A swipe action that
+opens it is a plain button with `.tint(.red)`, never `Button(role: .destructive)`: for that role iOS removes the row
+by itself, and cancelling leaves it hidden until the list crashes on its next insert.
 
 ```swift
 @State private var pendingDeletion: Client?

@@ -12,6 +12,11 @@ public enum DSAccessibility {
     }
 }
 
+/// Fixed identifiers of the controls DSKit puts where the call site cannot
+/// reach with `.accessibilityIdentifier` (the buttons of a system dialog).
+/// Each component declares its own in an extension.
+public enum DSAccessibilityID {}
+
 public extension View {
     /// Collapse a composite view into one accessibility element with a
     /// combined label, optionally with a hint.

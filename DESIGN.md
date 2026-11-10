@@ -367,6 +367,10 @@ components:
     backgroundColor: "segmented do sistema"
     textColor: "{colors.accent}"
     label: "{typography.footnote} / 600, secondary"
+  stepper:
+    backgroundColor: "Stepper do sistema"
+    range: "limita ao intervalo; o lado que chegou ao limite desabilita"
+    haptic: light
   toggle-row:
     backgroundColor: transparente
     textColor: "{colors.on-surface-high}"
@@ -396,6 +400,15 @@ components:
     padding: 10pt 12pt
     shadow: "{shadow.subtle}"
     autoDismiss: 2000ms
+  discard-guard:
+    presentation: "confirmationDialog do sistema (padrão) | alert"
+    actions: "Descartar (destrutivo) + Continuar editando (cancelar)"
+    sheet: "gesto de fechar desabilitado enquanto houver alterações"
+    pushed: "botão voltar do sistema dá lugar a um chevron.backward que pergunta"
+  confirm-delete:
+    presentation: "alert do sistema"
+    actions: "rótulo do chamador (destrutivo) + Cancelar"
+    haptic: warning
   progress-bar:
     backgroundColor: "{colors.accent} @ 16%"
     fillColor: "{colors.accent}"
@@ -749,6 +762,8 @@ Rótulo e legenda vêm de `DSFieldLabel` e `DSFieldCaption` e seguem o `dsFieldL
 
 **`paged-tabs`** — `DSPagedTabs`. Abas com páginas que deslizam na horizontal (paging nativo), faixa de rótulos em cima: rótulo `{typography.subheadline}` 400 secondary, 600 e `{colors.accent}` quando ativo, altura mínima 44; indicador em cápsula `{colors.accent}` de 3 pt cuja posição e largura seguem o deslize (contínuo no iOS 18, por seleção no 17); hairline sob a faixa; até três seções dividem a largura, mais rolam. Slot `header` entre a faixa e as páginas para busca/filtros. Estilo `.segmented`: a faixa é a pílula do `segmented-picker` `.filled` (trilho `{colors.surface}` com hairline, cápsula `{colors.accent}` de 36 pt, rótulo `{typography.footnote}` 600 branco sobre ela), com a cápsula posicionada pelo progresso do deslize; `stripInset` controla a margem lateral. VoiceOver ouve o nome da aba ao trocar; páginas fora da tela ficam ocultas.
 
+**`stepper`** — `DSStepper`. O `Stepper` nativo, sem desenho próprio, com haptic light a cada passo. Mantém o comportamento do sistema: limita o valor ao intervalo e desabilita o lado que chegou ao limite. O haptic só dispara quando o valor muda de fato pelo stepper, então digitar num campo que divide o mesmo binding continua em silêncio. Aceita qualquer `AdditiveArithmetic & Comparable` (`Int`, `Double`, `Decimal`); o passo é 1 quando omitido, e o rótulo é um `LocalizedStringKey` ou uma view do chamador.
+
 **`progress-bar`** — `DSProgressBar`. Trilha em cápsula de 4pt em accent @ 16% com preenchimento em cápsula accent; valor limitado a 0…1 e animado com `{motion.spring}` (desativado sob Reduce Motion). Indicadores de passo de onboarding. Expõe a porcentagem como valor de acessibilidade.
 
 ### Inputs e formulários
@@ -770,6 +785,12 @@ Todos os inputs compartilham uma única gramática de borda: 1pt `{colors.hairli
 **`loading-state`** — `DSLoadingState`. `ProgressView` large com legenda opcional `{typography.subheadline}` secondary, 24pt de padding vertical.
 
 **`toast`** — `DSToast` / `.dsToast(_:)`. Cápsula, padding 12pt × 10pt, `{typography.subheadline}` semibold branco (2 linhas, escala mínima 0.85) ao lado de um glifo semibold branco. Tint por estilo: `.info` `{colors.accent}` (`info.circle.fill`), `.success` `{colors.success-high}` (`checkmark.circle.fill`), `.error` `{colors.error-high}` (`exclamationmark.circle.fill`), `.warning` `{colors.warning-high}` (`exclamationmark.triangle.fill`). `{shadow.subtle}`. O modifier sobrepõe no topo da safe area (16pt nas laterais, 12pt no topo), entra com `{motion.spring}` via move-do-topo + opacidade, e some sozinho após 2s com `{motion.medium}`.
+
+**`discard-guard`** — `.dsDiscardGuard(_:cancelRequested:)`, `.dsBackDiscardGuard(hasChanges:)`, `.dsDiscardConfirmation(isPresented:)`. A pergunta antes de perder o que foi digitado: título "Discard changes?", ação destrutiva "Discard" e cancelamento "Keep editing", localizados no DSKit; título, mensagem e rótulo de descarte são sobrescrevíveis. `presentation: .dialog` (padrão) usa o `confirmationDialog` dos apps do sistema; `.alert` centraliza, para telas em que o diálogo ancorado se posiciona mal. Numa sheet, a guarda fotografa um `snapshot` `Equatable` na abertura (depois do `onAppear` do formulário) e compara com o atual: sem alterações, o Cancelar (`cancelRequested = true`) chama `onDiscard` direto; com alterações, pergunta, e o gesto de fechar a sheet fica desabilitado. Existe a variante `hasChanges:` para o modelo que já sabe se mudou. Numa tela empilhada, `dsBackDiscardGuard` troca o botão voltar do sistema (e o gesto) por um `chevron.backward` que pergunta enquanto houver alterações; descartar faz o pop, a menos que `onDiscard` diga outra coisa. Sem haptic.
+
+**`confirm-delete`** — `.dsConfirmDelete(item:)` / `.dsConfirmDelete(isPresented:)`. Confirmação de exclusão num `alert` centralizado: título e mensagem opcional do chamador, ação destrutiva com um rótulo que nomeia o que sai ("Excluir cliente") e "Cancel" localizado no DSKit. Na forma `item:`, o gatilho (swipe action, menu, botão da row) guarda o que vai sair num `Binding<Item?>`; o alert aparece enquanto houver um, entrega o item ao `perform` na confirmação e limpa o binding. A forma `isPresented:` serve ao botão de excluir dentro de um editor. Confirmar dispara o haptic warning uma única vez; o `perform` não deve disparar outro.
+
+Os botões desses diálogos recebem identificadores fixos em `DSAccessibilityID` (`discardConfirm`, `discardKeepEditing`, `discardBack`, `deleteConfirm`, `deleteCancel`), porque o ponto de chamada não alcança um botão de diálogo do sistema com `.accessibilityIdentifier`.
 
 ### Monetização
 
@@ -798,7 +819,7 @@ Todos os inputs compartilham uma única gramática de borda: 1pt `{colors.hairli
 
 Os efeitos de SF Symbol se limitam a dois: `dsSymbolFeedback` (um `.bounce` quando um contador muda — "a ação aconteceu") e `dsSymbolStateReplace` (`contentTransition(.symbolEffect(.replace))` para um glifo que muda com o estado). Sem efeitos em loop.
 
-Haptics: `DSHaptics.light` em toques, chips, botões de ícone, rows, colar/limpar; `.medium` em botões primários e pílula; `.warning` em destrutivos; `.success` / `.error` ficam expostos para os apps hospedeiros. Tudo passa por `.dsHapticsEnabled`, então um único toggle de ajustes silencia o pacote.
+Haptics: `DSHaptics.light` em toques, chips, botões de ícone, rows, colar/limpar e a cada passo do `DSStepper`; `.medium` em botões primários e pílula; `.warning` em destrutivos e ao confirmar uma exclusão em `.dsConfirmDelete`; a guarda de descarte não vibra; `.success` / `.error` ficam expostos para os apps hospedeiros. Tudo passa por `.dsHapticsEnabled`, então um único toggle de ajustes silencia o pacote.
 
 ## Faça e não faça
 
@@ -811,7 +832,7 @@ Haptics: `DSHaptics.light` em toques, chips, botões de ícone, rows, colar/limp
 - Mantenha a `DSScreen` transparente e pinte o canvas a partir do host — `{colors.background}` chapado, `{component.atmospheric-background}`, ou `.dsGroupedCanvas()` para telas de ajustes.
 - Use `{colors.hairline}` para todo contorno de repouso e `Color.surface(level:)` para todo fundo de superfície; leia `dsSurfaceLevel` em views customizadas que pintam superfície.
 - Prefira `button-pill-outlined` a `button-pill-secondary` quando o botão estiver sobre foto ou fundo atmosférico.
-- Confirme ações destrutivas no ponto de chamada (`DSDestructiveButton`, `DSListInput.onClearRequested`).
+- Confirme ações destrutivas no ponto de chamada (`DSDestructiveButton`, `DSListInput.onClearRequested`) com `.dsConfirmDelete`, e proteja formulários editados com `.dsDiscardGuard` / `.dsBackDiscardGuard`, em vez de montar um alert por tela.
 - Passe `LocalizedStringKey` para qualquer texto estático para que o String Catalog do host o capture; mantenha conteúdo dinâmico (um nome sorteado) como `String`.
 - Envolva glass em `GlassGroup` quando várias formas `glassFloat` ficarem juntas, e deixe os fallbacks embutidos cuidarem do iOS 17–18.
 

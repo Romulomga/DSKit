@@ -118,6 +118,52 @@ bold). Dynamic Type keeps working: custom fonts scale relative to the same
 text styles as their system counterparts. Leave `family` as `nil` (or never
 touch it) and nothing changes — system fonts, as before.
 
+## Discarding and deleting
+
+Two questions every app with forms ends up asking, as modifiers. Their own
+strings ("Discard changes?", "Discard", "Keep editing", "Cancel", "Back")
+ship localized in the package.
+
+`.dsDiscardGuard` protects an editing sheet. It keeps an `Equatable` snapshot
+from when the sheet opened: with nothing changed, Cancel closes right away;
+with changes, it asks first and the swipe-to-dismiss is disabled.
+
+```swift
+@State private var cancelRequested = false
+
+Form { ... }
+    .toolbar {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Cancel") { cancelRequested = true }
+        }
+    }
+    .dsDiscardGuard([name, phone, notes], cancelRequested: $cancelRequested) { dismiss() }
+```
+
+A model that already tracks its own changes passes `hasChanges:` instead of a
+snapshot. On a pushed screen, `.dsBackDiscardGuard(hasChanges:)` swaps the
+system back button (and its swipe) for one that asks while there are changes.
+`.dsDiscardConfirmation(isPresented:)` is only the question, for a screen that
+decides by itself when to ask. All of them take `presentation: .alert` where
+the default anchored dialog misplaces itself.
+
+`.dsConfirmDelete` confirms a deletion in a centered alert. The trigger stores
+what is leaving; the modifier hands it back on confirmation and clears it.
+
+```swift
+@State private var pendingDeletion: Client?
+
+List { ... }
+    .dsConfirmDelete(item: $pendingDeletion, title: "Delete this client?", label: "Delete client") { client in
+        repository.delete(client)
+    }
+```
+
+Confirming plays the warning haptic once, so `perform` should not play
+another. `dsConfirmDelete(isPresented:)` covers a delete button inside an
+editor. The dialog buttons carry fixed identifiers in `DSAccessibilityID`
+(`discardConfirm`, `deleteConfirm`, …) for UI tests.
+
 ## Component map
 
 | Group          | Components |
@@ -127,11 +173,11 @@ touch it) and nothing changes — system fonts, as before.
 | Buttons        | `DSPrimaryButton`, `DSSecondaryButton`, `DSDestructiveButton`, `DSPillButton` (`.primary` / `.secondary` / `.outlined`), `DSIconButton`, `GlassActionButton` |
 | Cards          | `DSCard`, `DSFeatureCard`, `DSResultCard` |
 | Inputs         | `DSTextField` (icon, secure entry, focus, keyboard), `DSPickerField`, `DSNumberField`, `DSListInput`; primitives `DSInputBox`, `DSFieldLabel`, `DSFieldCaption`; `.dsFieldLabelStyle(.compact / .prominent)` |
-| Feedback       | `DSEmptyState`, `DSErrorState`, `DSLoadingState`, `DSToast` |
+| Feedback       | `DSEmptyState`, `DSErrorState`, `DSLoadingState`, `DSToast`, `.dsDiscardGuard` / `.dsBackDiscardGuard` / `.dsDiscardConfirmation` (`DSDiscardPresentation`), `.dsConfirmDelete` |
 | Layout         | `DSScreen`, `DSSection`, `DSGroupedSection` (+ `.dsRow()`, `DSRowButtonStyle`), `DSSettingsSection` (+ `DSSettingsRow`), `DSAdaptiveGrid` |
-| Controls       | `DSToggleRow`, `DSOptionChip`, `DSSegmentedPicker`, `DSPagedTabs` |
+| Controls       | `DSToggleRow`, `DSOptionChip`, `DSSegmentedPicker`, `DSPagedTabs`, `DSStepper` |
 | Monetization   | `DSPaywallCard`, `DSProBadge` |
-| Utilities      | `DSHaptics`, `DSAccessibility`, `DSPreviewContainer` |
+| Utilities      | `DSHaptics`, `DSAccessibility`, `DSAccessibilityID`, `DSPreviewContainer` |
 
 Every component has at least one SwiftUI preview. Composite screen previews live in `Sources/DSKit/Previews/`:
 
@@ -153,7 +199,7 @@ Open any file in Xcode and the canvas will pick them up.
 5. **No fixed heights that break accessibility.** Buttons use `minHeight` rather than `frame(height:)`. Result text uses `minimumScaleFactor`.
 6. **Haptics are punctuation, not noise.** Every interactive component nudges with `DSHaptics.light()` / `.medium()`. Disable globally with `.dsHapticsEnabled(false)`.
 7. **Strings are localizable by default.** Title/label/message props accept `LocalizedStringKey`, so passing string literals automatically participates in String Catalog localization in the consumer app. Dynamic content (a drawn name, a user-typed item) stays `String`.
-8. **No destructive shortcuts without consent.** `DSListInput`'s clear button calls `onClearRequested` if provided — let the app decide whether to confirm. Without the closure, it clears directly.
+8. **No destructive shortcuts without consent.** `DSListInput`'s clear button calls `onClearRequested` if provided — let the app decide whether to confirm. Without the closure, it clears directly. `.dsConfirmDelete` and `.dsDiscardGuard` are the package's confirmations for deleting and for leaving an edited form.
 9. **UI-only.** Logic for random draws, parsing or storage lives in the app, not in the package. `DSListInput` exposes `lines`/`itemCount`/`duplicateCount` as conveniences, nothing more.
 
 ## Architecture

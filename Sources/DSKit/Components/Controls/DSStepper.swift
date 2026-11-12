@@ -1,16 +1,33 @@
 import SwiftUI
 
 enum DSStepperLogic {
-    /// One step up or down, kept inside the range.
+    /// Decimal places a floating-point step keeps, like `DSStepper` on Android.
+    static let floatingPointPrecision = 10_000.0
+
+    /// One step up or down, kept inside the range. A floating-point value is
+    /// rounded first: 88.4 − 0.1 is 88.30000000000001 in binary, and that
+    /// number, not the 88.3 on screen, is what the app would save.
     static func stepped<Value: AdditiveArithmetic & Comparable>(
         _ value: Value,
         by step: Value,
         in range: ClosedRange<Value>,
         increasing: Bool
     ) -> Value {
-        let next = increasing ? value + step : value - step
+        let next = roundedIfFloatingPoint(increasing ? value + step : value - step)
 
         return min(max(next, range.lowerBound), range.upperBound)
+    }
+
+    private static func roundedIfFloatingPoint<Value>(_ value: Value) -> Value {
+        guard let floating = value as? any BinaryFloatingPoint else { return value }
+
+        return (rounded(floating) as? Value) ?? value
+    }
+
+    private static func rounded<F: BinaryFloatingPoint>(_ value: F) -> F {
+        let precision = F(floatingPointPrecision)
+
+        return (value * precision).rounded() / precision
     }
 }
 

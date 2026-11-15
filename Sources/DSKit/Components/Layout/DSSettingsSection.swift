@@ -59,6 +59,9 @@ public enum DSSettingsRowTitleStyle: Sendable {
 
 public struct DSSettingsRow: View {
     @Environment(\.dsHapticsEnabled) private var hapticsEnabled
+    /// The icon tile grows with Dynamic Type, like the symbol inside it. A fixed 28pt tile cut the
+    /// symbol off at the accessibility sizes.
+    @ScaledMetric(relativeTo: .subheadline) private var iconSize: CGFloat = 28
 
     private let systemImage: String?
     private let iconColor: Color?
@@ -147,7 +150,7 @@ public struct DSSettingsRow: View {
                 Image(systemName: systemImage)
                     .font(DSTypography.subheadline().weight(.semibold))
                     .foregroundStyle(iconColor == nil ? Color.onAccent : .white)
-                    .frame(width: 28, height: 28)
+                    .frame(width: iconSize, height: iconSize)
                     .background(iconColor ?? Color.accent)
                     .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
             }

@@ -778,7 +778,7 @@ Todos os inputs compartilham uma única gramática de borda: 1pt `{colors.hairli
 
 ### Feedback
 
-**`empty-state`** — `DSEmptyState`. SF Symbol tertiary 56pt/300 centralizado → título `{typography.title3}` → mensagem `{typography.subheadline}` secondary (16pt de padding lateral) → `{component.button-primary}` opcional com `{spacing.sm}` no topo / 16pt nas laterais. 24pt de padding vertical; elemento de acessibilidade combinado.
+**`empty-state`** — `DSEmptyState`. SF Symbol tertiary 56pt/300 centralizado, ou uma ilustração do próprio app (`illustration:`, nas cores dela, 120pt de altura e 80pt nos tamanhos de acessibilidade, decorativa para o VoiceOver) → título `{typography.title3}` → mensagem `{typography.subheadline}` secondary (16pt de padding lateral) → `{component.button-primary}` opcional com `{spacing.sm}` no topo / 16pt nas laterais. 24pt de padding vertical; elemento de acessibilidade combinado.
 
 **`error-state`** — `DSErrorState`. Mesma pilha com símbolo `{colors.error-high}` 48pt/300 (padrão `exclamationmark.triangle`) e um `{component.button-secondary}` de tentar de novo com `arrow.clockwise` (título padrão "Try again", localizado no DSKit).
 

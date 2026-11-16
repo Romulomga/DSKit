@@ -1,8 +1,17 @@
 import SwiftUI
 
 /// "Nothing here yet" view. Centered icon + title + message + optional CTA.
+///
+/// The icon is an SF Symbol (56pt, tertiary) or the app's own illustration (`illustration:`), shown in its own
+/// colors at up to 120pt tall and scaled down with Dynamic Type's accessibility sizes, so the text keeps the room.
 public struct DSEmptyState: View {
-    private let systemImage: String
+    private enum Artwork {
+        case symbol(String)
+        case illustration(Image)
+    }
+
+    private let artwork: Artwork
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private let title: LocalizedStringKey
     private let message: LocalizedStringKey
     private let actionTitle: LocalizedStringKey?
@@ -15,7 +24,22 @@ public struct DSEmptyState: View {
         actionTitle: LocalizedStringKey? = nil,
         action: (() -> Void)? = nil
     ) {
-        self.systemImage = systemImage
+        self.artwork = .symbol(systemImage)
+        self.title = title
+        self.message = message
+        self.actionTitle = actionTitle
+        self.action = action
+    }
+
+    /// With the app's own illustration (an asset, not a template): decorative, VoiceOver reads the title and message.
+    public init(
+        illustration: Image,
+        title: LocalizedStringKey,
+        message: LocalizedStringKey,
+        actionTitle: LocalizedStringKey? = nil,
+        action: (() -> Void)? = nil
+    ) {
+        self.artwork = .illustration(illustration)
         self.title = title
         self.message = message
         self.actionTitle = actionTitle
@@ -24,9 +48,8 @@ public struct DSEmptyState: View {
 
     public var body: some View {
         VStack(spacing: DSSpacing.md) {
-            Image(systemName: systemImage)
-                .font(.system(size: 56, weight: .light))
-                .foregroundStyle(.tertiary)
+            artworkView
+
             Text(title)
                 .font(DSTypography.title3())
                 .foregroundStyle(Color.onSurfaceHigh)
@@ -46,6 +69,26 @@ public struct DSEmptyState: View {
         .padding(.vertical, DSSpacing.xl)
         .accessibilityElement(children: .combine)
     }
+
+    @ViewBuilder
+    private var artworkView: some View {
+        switch artwork {
+        case .symbol(let name):
+            Image(systemName: name)
+                .font(.system(size: 56, weight: .light))
+                .foregroundStyle(.tertiary)
+
+        case .illustration(let image):
+            image
+                .resizable()
+                .scaledToFit()
+                .frame(height: dynamicTypeSize.isAccessibilitySize ? Self.compactIllustrationHeight : Self.illustrationHeight)
+                .accessibilityHidden(true)
+        }
+    }
+
+    static let illustrationHeight: CGFloat = 120
+    static let compactIllustrationHeight: CGFloat = 80
 }
 
 #if DEBUG
@@ -57,6 +100,12 @@ public struct DSEmptyState: View {
             message: "Add at least two names to draw a winner.",
             actionTitle: "Add names"
         ) {}
+
+        DSEmptyState(
+            illustration: Image(systemName: "photo.artframe"),
+            title: "Nothing in the album",
+            message: "An app's own illustration sits here, in its own colors."
+        )
     }
 }
 #endif

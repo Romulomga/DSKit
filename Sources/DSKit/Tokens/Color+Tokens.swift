@@ -68,25 +68,26 @@ public extension Color {
     /// Overridable per host app. DSKit default is **#FFFFFF**.
     static let onAccent = Color("OnAccent", bundle: .mainIfAvailable)
 
-    /// Success Light, hex value Light **#B0F3F5** Dark **#B0F3F5**
+    /// Success Light, hex value Light **#B0F3F5** Dark **#114917**: a soft background (banner, badge); text on it is
+    /// `onSurfaceHigh`/`onSurfaceMedium`, readable in both appearances.
     static let successLight = Color("SuccessLight", bundle: .module)
 
     /// Success High, hex value Light **#27BAA7** Dark **#27BAA7**
     static let successHigh = Color("SuccessHigh", bundle: .module)
 
-    /// Warning Light, hex value Light **#FCFBBC** Dark **#FCFBBC**
+    /// Warning Light, hex value Light **#FCFBBC** Dark **#523B00** (the dark containers are the DSKit-Android ones).
     static let warningLight = Color("WarningLight", bundle: .module)
 
     /// Warning High, hex value Light **#F1DA10** Dark **#F1DA10**
     static let warningHigh = Color("WarningHigh", bundle: .module)
 
-    /// Info Light, hex value Light **#D7E4EC** Dark **#D7E4EC**
+    /// Info Light, hex value Light **#D7E4EC** Dark **#004170**
     static let infoLight = Color("InfoLight", bundle: .module)
 
     /// Info High, hex value Light **#54AADF** Dark **#54AADF**
     static let infoHigh = Color("InfoHigh", bundle: .module)
 
-    /// Error Light, hex value Light **#FFB2A3** Dark **#FFB2A3**
+    /// Error Light, hex value Light **#FFDAD6** Dark **#840009**
     static let errorLight = Color("ErrorLight", bundle: .module)
 
     /// Error High, hex value Light **#FF4425** Dark **#FF4425**

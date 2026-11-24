@@ -24,7 +24,7 @@ colors:
   info-high: "#54AADF"
   info-light: "#D7E4EC"
   error-high: "#FF4425"
-  error-light: "#FFB2A3"
+  error-light: "#FFDAD6"
   disabled: "#DCDBDC"
   on-disabled: "#BCBCBC"
   white: "#FFFFFF"
@@ -43,6 +43,10 @@ colors-dark:
   hairline: "#FFFFFF @ 10%"
   disabled: "#A4A4A4"
   on-disabled: "#707070"
+  success-light: "#114917"
+  warning-light: "#523B00"
+  info-light: "#004170"
+  error-light: "#840009"
 
 typography:
   large-title:
@@ -566,7 +570,11 @@ Cada status traz um par `high` (preenchimento / glifo) e `light` (lavagem). Os p
 - **Success** (`{colors.success-high}` #27BAA7 · `{colors.success-light}` #B0F3F5): Toast de sucesso, badges de "teste grátis".
 - **Warning** (`{colors.warning-high}` #F1DA10 · `{colors.warning-light}` #FCFBBC): Toast de aviso, contador de duplicados no `{component.list-input}`, badges de "economize 70%", ícones de ajustes tingidos de aviso.
 - **Info** (`{colors.info-high}` #54AADF · `{colors.info-light}` #D7E4EC): Declarado para os apps hospedeiros. O toast `.info` usa `{colors.accent}` em vez disso, para que info soe como "o app falando".
-- **Error** (`{colors.error-high}` #FF4425 · `{colors.error-light}` #FFB2A3): Toast de erro, ícone do error-state, mensagens de validação, borda de foco em campos inválidos, texto do botão destrutivo (com lavagem de 12% como preenchimento).
+- Os quatro `*-light` são fundos suaves e, desde a 1.0.51, têm variante escura (os contêineres escuros do
+  DSKit-Android, 10% mais fundos para o texto secundário passar de 4.5:1: #114917, #523B00, #004170, #840009; o
+  `error-light` claro passou a #FFDAD6, o contêiner de erro do Material, pela mesma razão). Antes eram iguais nos dois temas e, no escuro, o texto
+  `on-surface` (claro) ficava ilegível sobre eles. Texto por cima: `{colors.on-surface-high}`/`{colors.on-surface-medium}`.
+- **Error** (`{colors.error-high}` #FF4425 · `{colors.error-light}` #FFDAD6): Toast de erro, ícone do error-state, mensagens de validação, borda de foco em campos inválidos, texto do botão destrutivo (com lavagem de 12% como preenchimento).
 
 ### Desabilitado
 - **Disabled** (`{colors.disabled}` — #DCDBDC claro / #A4A4A4 escuro) e **On Disabled** (`{colors.on-disabled}` — #BCBCBC claro / #707070 escuro): Declarados para os apps hospedeiros. Desde a 1.0.41 os botões primário e secundário desabilitados trocam a cor da marca por um neutro: preenchimento `disabledFill` (`onSurfaceHigh` @ 12%) e rótulo `onDisabledFill` (`onSurfaceHigh` @ 62%), que ficam claramente "desligados" em qualquer marca e mantêm o rótulo legível (≥ 3:1 no claro e no escuro). Antes caíam para 50% de opacidade, o que num accent escuro parecia só outro tom do botão ativo.

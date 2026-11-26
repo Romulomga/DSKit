@@ -174,6 +174,31 @@ public enum DSInputMetrics {
     }
 }
 
+/// A field with its placeholder drawn as text that wraps at the field's own size.
+/// The system prompt of a single-line `TextField` shrinks a long placeholder to fit
+/// one line, so at large Dynamic Type sizes it ends up much smaller than the rest of
+/// the screen. The field keeps its own prompt, drawn clear, so VoiceOver and UI tests
+/// still read the placeholder value.
+struct DSFieldWithPlaceholder<Field: View>: View {
+    let placeholder: LocalizedStringKey
+    let isShown: Bool
+    @ViewBuilder let field: Field
+
+    var body: some View {
+        ZStack(alignment: Alignment(horizontal: .leading, vertical: .firstTextBaseline)) {
+            // Always laid out, hidden once there is text: the field keeps its height on the first letter.
+            Text(placeholder)
+                .foregroundStyle(Color(uiColor: .placeholderText))
+                .fixedSize(horizontal: false, vertical: true)
+                .opacity(isShown ? 1 : 0)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+
+            field
+        }
+    }
+}
+
 #if DEBUG
 private struct DSInputBoxPreviewHost: View {
     @State private var text = ""

@@ -35,35 +35,37 @@ public struct DSNumberField: View {
                     .font(DSTypography.footnote().weight(.semibold))
                     .foregroundStyle(.secondary)
             }
-            TextField(placeholder, text: $text)
-                .keyboardType(.numberPad)
-                .textFieldStyle(.plain)
-                .font(DSTypography.body().monospacedDigit())
-                .focused($isFocused)
-                .padding(.horizontal, DSSpacing.md)
-                .padding(.vertical, DSSpacing.sm + 2)
-                .background(Color.surface(level: level))
-                .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
-                        .strokeBorder(borderColor, lineWidth: borderWidth)
-                )
-                .animation(.easeOut(duration: 0.15), value: isFocused)
-                .animation(.easeOut(duration: 0.15), value: hasAnyError)
-                .onAppear {
-                    let target = value.map(String.init) ?? ""
-                    if text != target { text = target }
+            DSFieldWithPlaceholder(placeholder: placeholder, isShown: text.isEmpty) {
+                TextField(text: $text, prompt: Text(placeholder).foregroundStyle(Color.clear)) { Text(placeholder) }
+                    .focused($isFocused)
+            }
+            .keyboardType(.numberPad)
+            .textFieldStyle(.plain)
+            .font(DSTypography.body().monospacedDigit())
+            .padding(.horizontal, DSSpacing.md)
+            .padding(.vertical, DSSpacing.sm + 2)
+            .background(Color.surface(level: level))
+            .clipShape(RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: DSRadius.md, style: .continuous)
+                    .strokeBorder(borderColor, lineWidth: borderWidth)
+            )
+            .animation(.easeOut(duration: 0.15), value: isFocused)
+            .animation(.easeOut(duration: 0.15), value: hasAnyError)
+            .onAppear {
+                let target = value.map(String.init) ?? ""
+                if text != target { text = target }
+            }
+            .onChange(of: text) { _, newValue in
+                validate(newValue)
+            }
+            .onChange(of: value) { _, newValue in
+                let target = newValue.map(String.init) ?? ""
+                if text != target {
+                    text = target
+                    hasInternalError = false
                 }
-                .onChange(of: text) { _, newValue in
-                    validate(newValue)
-                }
-                .onChange(of: value) { _, newValue in
-                    let target = newValue.map(String.init) ?? ""
-                    if text != target {
-                        text = target
-                        hasInternalError = false
-                    }
-                }
+            }
 
             if let externalError {
                 errorLabel(externalError)

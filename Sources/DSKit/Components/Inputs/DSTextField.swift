@@ -97,7 +97,6 @@ public struct DSTextField: View {
                     .textInputAutocapitalization(autocapitalization)
                     .autocorrectionDisabled(autocorrectionDisabled)
                     .submitLabel(submitLabel)
-                    .focused($isFocused)
                     .onSubmit { onSubmit?() }
 
                 if isSecure {
@@ -119,11 +118,15 @@ public struct DSTextField: View {
         }
     }
 
-    @ViewBuilder private var field: some View {
-        if isSecure, !isRevealed {
-            SecureField(placeholder, text: $text)
-        } else {
-            TextField(placeholder, text: $text)
+    private var field: some View {
+        DSFieldWithPlaceholder(placeholder: placeholder, isShown: text.isEmpty) {
+            if isSecure, !isRevealed {
+                SecureField(text: $text, prompt: Text(placeholder).foregroundStyle(Color.clear)) { Text(placeholder) }
+                    .focused($isFocused)
+            } else {
+                TextField(text: $text, prompt: Text(placeholder).foregroundStyle(Color.clear)) { Text(placeholder) }
+                    .focused($isFocused)
+            }
         }
     }
 
